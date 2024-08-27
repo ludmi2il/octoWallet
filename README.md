@@ -10,5 +10,5 @@ OctoWallet está pensada para ser una herramienta intuitiva, accesible inicialme
 - **Ludmila Dosil Hiriart**
 - **Francisco Gabriel Estrada**
 - **Giovanna Gotusso**
-- 
+  
 #✨Magia en proceso... ✨📐⛏️
