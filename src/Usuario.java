@@ -1,6 +1,7 @@
 public class Usuario {
     private String nombres;
     private String apellidos;
+    private long DNI;
     private String correo;
     private String contrasena;
     private String telefono;
@@ -8,14 +9,23 @@ public class Usuario {
     private String pais;
     private byte metodoAutenticacion;
 
-    public Usuario(String nombres, String apellidos, String correo, String contrasena, String telefono, String fechaNacimiento, String pais) {
+    public Usuario(String nombres, String apellidos, String correo, String contrasena, long DNI,String telefono, String fechaNacimiento, String pais) {
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.correo = correo;
         this.contrasena = contrasena;
+        this.DNI=DNI;
         this.telefono = telefono;
         this.fechaNacimiento = fechaNacimiento;
         this.pais = pais;
+    }
+
+    public long getDNI() {
+        return DNI;
+    }
+
+    public void setDNI(long DNI) {
+        this.DNI = DNI;
     }
 
     public String getNombres() {

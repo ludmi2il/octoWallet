@@ -4,11 +4,11 @@ import java.util.Map;
 
      public Map<String, Usuario> users = new HashMap<>();
 
-        public boolean register(String nombres, String apellidos, String correo, String contrasena, String telefono, String fechaNacimiento, String pais) {
+        public boolean register(String nombres, String apellidos, String correo, String contrasena, long DNI, String telefono, String fechaNacimiento, String pais) {
             if (users.containsKey(correo)) {
                 return false; // User already exists
             }
-            Usuario user = new Usuario(nombres, apellidos, correo, contrasena, telefono, fechaNacimiento, pais);
+            Usuario user = new Usuario(nombres, apellidos, correo, contrasena,DNI,telefono, fechaNacimiento, pais);
             users.put(correo, user);
             return true;
         }
