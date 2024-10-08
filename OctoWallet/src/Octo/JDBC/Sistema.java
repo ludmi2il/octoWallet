@@ -1,5 +1,4 @@
 package Octo.JDBC;
-import org.sqlite.SQLiteException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,9 +11,9 @@ public class Sistema {
     private static boolean baseCreada;
 
     public static void main(String[] args) {
-        crearBBDD();
+        System.out.println("la base de datos ya ha sido creada: " + crearBBDD());
     }
-    public static void crearBBDD(){
+    public static boolean crearBBDD(){
         if(!baseCreada) {
             try {
                 Connection con = DriverManager.getConnection(URL);
@@ -25,12 +24,13 @@ public class Sistema {
             }
             baseCreada=true;
         }
+        return baseCreada;
     }
     private static void creaciónDeTablasEnBD(Connection connection) throws
             SQLException {
         Statement stmt;
         stmt = connection.createStatement();
-        String sql = "CREATE TABLE MONEDA "
+        String sql = "CREATE TABLE IF NOT EXISTS MONEDA "
                 + "("
                 + " TIPO       VARCHAR(1)    NOT NULL, "
                 + " NOMBRE       VARCHAR(50)    NOT NULL, "
@@ -39,17 +39,17 @@ public class Sistema {
                 + " VOLATILIDAD	REAL     NULL, "
                 + " STOCK	REAL     NULL "  + ")";
         stmt.executeUpdate(sql);
-        sql = "CREATE TABLE ACTIVO_CRIPTO"
+        sql = "CREATE TABLE IF NOT EXISTS ACTIVO_CRIPTO"
                 + "("
                 + " NOMENCLATURA VARCHAR(10)  PRIMARY KEY     NOT NULL, "
                 + " CANTIDAD	REAL    NOT NULL " + ")";
         stmt.executeUpdate(sql);
-        sql = "CREATE TABLE ACTIVO_FIAT"
+        sql = "CREATE TABLE IF NOT EXISTS ACTIVO_FIAT"
                 + "("
                 + " NOMENCLATURA VARCHAR(10)  PRIMARY KEY     NOT NULL, "
                 + " CANTIDAD	REAL    NOT NULL " + ")";
         stmt.executeUpdate(sql);
-        sql = "CREATE TABLE TRANSACCION"
+        sql = "CREATE TABLE IF NOT EXISTS TRANSACCION"
                 + "("
                 + " RESUMEN VARCHAR(1000)   NOT NULL, "
                 + " FECHA_HORA		DATETIME  NOT NULL " + ")";
