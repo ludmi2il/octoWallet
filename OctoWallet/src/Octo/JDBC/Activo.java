@@ -1,7 +1,7 @@
 package Octo.JDBC;
 
 public class Activo {
-    private Moneda tipo;
+    private Moneda tipo; // deberia cambiar por moneda
     private double saldo;
 
     public Activo(Moneda tipo, double saldo) {
