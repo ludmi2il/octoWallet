@@ -1,4 +1,4 @@
-package Octo;
+package Octo.Modelo.Entidad.otros;
 /**
  * @author Giovanna Gotusso,Francisco Estrada,Ludmila Dosil
  * @version 1.0

@@ -1,4 +1,4 @@
-package Octo;
+package Octo.Modelo.Entidad.otros;
 import java.util.List;
 /**
  * @author Giovanna Gotusso,Francisco Estrada,Ludmila Dosil

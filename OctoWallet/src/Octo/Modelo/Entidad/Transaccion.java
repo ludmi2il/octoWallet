@@ -1,4 +1,4 @@
-package Octo.JDBC;
+package Octo.Modelo.Entidad;
 import java.time.LocalDateTime;
 public class Transaccion {
     private String resumen;

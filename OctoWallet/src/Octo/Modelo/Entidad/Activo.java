@@ -1,4 +1,4 @@
-package Octo.JDBC;
+package Octo.Modelo.Entidad;
 
 public class Activo {
     private Moneda tipo; // deberia cambiar por moneda

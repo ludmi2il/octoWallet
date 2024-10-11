@@ -1,20 +1,23 @@
-package Octo.JDBC;
+package Octo.Modelo.Entidad;
 
 public class Moneda {
-    private int tipo; // deberia ser un enum
+    private String tipo; // deberia ser un enum
     private String nombre;
     private String nomenclatura;
     private double cotizacion;
     private double volatilidad;
     private double stock;
 
-    public Moneda(int tipo,String nombre, String nomenclatura, double cotizacion, double volatilidad, double stock) {
+    public Moneda(String tipo,String nombre, String nomenclatura, double cotizacion, double volatilidad, double stock) {
         this.tipo = tipo;
         this.nombre = nombre;
         this.nomenclatura = nomenclatura;
         this.cotizacion = cotizacion;
         this.volatilidad = volatilidad;
         this.stock = stock;
+    }
+    public Moneda(){
+
     }
 
     public String getNomenclatura() {
@@ -25,11 +28,11 @@ public class Moneda {
         this.nomenclatura = nomenclatura;
     }
 
-    public int getTipo() {
+    public String getTipo() {
         return tipo;
     }
 
-    public void setTipo(int tipo) {
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
 
