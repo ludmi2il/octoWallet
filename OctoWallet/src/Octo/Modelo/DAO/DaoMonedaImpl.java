@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 // acá me encargo de darle forma a la conexion pasando los objetos a la bbdd
-public class DaoMonedaImpl extends Conexion implements DaoMoneda{
+public class DaoMonedaImpl implements DaoMoneda{
     @Override
     public void crear(Moneda dato) {
         try {
-            Statement st = this.conexion.createStatement();
+            Statement st = Conexion.getConexion().createStatement();
             String sql = "INSERT INTO MONEDA (TIPO, NOMBRE, NOMENCLATURA, VALOR_DOLAR, VOLATILIDAD, STOCK)" +
                         "VALUES('" + dato.getTipo() + "', '"+ dato.getNombre() + "', '"+ dato.getNomenclatura() + "', '"
                         + dato.getCotizacion() + "', '" + dato.getVolatilidad()+ "', '" + dato.getStock() + "');";
@@ -31,14 +31,14 @@ public class DaoMonedaImpl extends Conexion implements DaoMoneda{
     public List<Moneda> listar() {
         List<Moneda> monedas = new ArrayList<>(); Moneda moneda;
         try {
-            Statement st= getConexion().createStatement();
+            Statement st= Conexion.getConexion().createStatement();
             ResultSet res = st.executeQuery("SELECT * FROM MONEDA");
             while( res.next()) {
                 moneda = new Moneda();
                 moneda.setTipo(res.getString("TIPO"));
                 moneda.setNombre(res.getString("NOMBRE"));
                 moneda.setNomenclatura(res.getString("NOMENCLATURA"));
-                moneda.setCotizacion(res.getDouble("COTIZACION"));
+                moneda.setCotizacion(res.getDouble("VALOR_DOLAR"));
                 moneda.setVolatilidad(res.getDouble("VOLATILIDAD"));
                 moneda.setStock(res.getDouble("STOCK"));
                 monedas.add(moneda);

@@ -4,7 +4,7 @@ import Octo.Modelo.Entidad.Stock;
 
 import java.util.List;
 
-public class DaoStockImpl extends Conexion implements  DaoStock{
+public class DaoStockImpl implements  DaoStock{
     @Override
     public void crear(Stock dato) {
 
