@@ -2,10 +2,7 @@ package Octo.Modelo.DAO;
 
 import Octo.Modelo.Entidad.Moneda;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,14 +31,7 @@ public class DaoMonedaImpl implements DaoMoneda{
             Statement st= Conexion.getConexion().createStatement();
             ResultSet res = st.executeQuery("SELECT * FROM MONEDA");
             while( res.next()) {
-                moneda = new Moneda();
-                moneda.setTipo(res.getString("TIPO"));
-                moneda.setNombre(res.getString("NOMBRE"));
-                moneda.setNomenclatura(res.getString("NOMENCLATURA"));
-                moneda.setCotizacion(res.getDouble("VALOR_DOLAR"));
-                moneda.setVolatilidad(res.getDouble("VOLATILIDAD"));
-                moneda.setStock(res.getDouble("STOCK"));
-                monedas.add(moneda);
+                monedas.add(convertir(res));
             }
             res.close();
             st.close();
@@ -50,5 +40,31 @@ public class DaoMonedaImpl implements DaoMoneda{
             e.printStackTrace();
         }
         return monedas;
+    }
+    private Moneda convertir(ResultSet rs) throws SQLException{
+        Moneda moneda = new Moneda();
+        moneda.setTipo(rs.getString("TIPO"));
+        moneda.setNombre(rs.getString("NOMBRE"));
+        moneda.setNomenclatura(rs.getString("NOMENCLATURA"));
+        moneda.setCotizacion(rs.getDouble("VALOR_DOLAR"));
+        moneda.setVolatilidad(rs.getDouble("VOLATILIDAD"));
+        moneda.setStock(rs.getDouble("STOCK"));
+        return moneda;
+    }
+    @Override
+    public Moneda obtener(String nomenclatura){
+        Moneda mon = null;
+        try {
+            String str = "SELECT FROM MONEDA WHERE NOMENCLATURA = ?";
+            PreparedStatement st = Conexion.getConexion().prepareStatement(str);
+            st.setString(1,nomenclatura);
+            ResultSet res = st.executeQuery();
+            if (res.next()){
+                mon = convertir(res);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return mon;
     }
 }

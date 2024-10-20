@@ -8,4 +8,5 @@ public interface Crud <T>{
     List<T> listar();
     /* void borrar();
     void actualizar();*/
+    T obtener(String id);
 }

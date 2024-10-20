@@ -14,4 +14,9 @@ public class DaoStockImpl implements  DaoStock{
     public List<Stock> listar() {
         return null;
     }
+
+    @Override
+    public Stock obtener(String id) {
+        return null;
+    }
 }
