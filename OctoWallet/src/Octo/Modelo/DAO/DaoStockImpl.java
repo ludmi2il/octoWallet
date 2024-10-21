@@ -1,7 +1,9 @@
 package Octo.Modelo.DAO;
 
+import Octo.Modelo.Entidad.Moneda;
 import Octo.Modelo.Entidad.Stock;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -38,7 +40,12 @@ public class DaoStockImpl implements  DaoStock{
             e.printStackTrace();
         }
     }
-
+    private Stock convertir(ResultSet rs) throws SQLException {
+        Stock stock = new Stock();
+        stock.setCantidad(rs.getInt("CANTIDAD"));
+        stock.setNomenclatura(rs.getString("NOMENCLATURA"));
+        return stock;
+    }
     @Override
     public Stock obtener(String nomenclatura) {
         Stock stock = null;
