@@ -10,6 +10,8 @@ public class Transaccion {
         this.resumen = resumen;
         this.fechaHora = fechaHora;
     }
+    public Transaccion(){
+    }
 
     public String getResumen() {
         return resumen;

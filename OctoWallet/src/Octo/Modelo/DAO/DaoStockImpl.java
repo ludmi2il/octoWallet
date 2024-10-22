@@ -3,8 +3,11 @@ package Octo.Modelo.DAO;
 import Octo.Modelo.Entidad.Moneda;
 import Octo.Modelo.Entidad.Stock;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DaoStockImpl implements  DaoStock{
@@ -13,7 +16,7 @@ public class DaoStockImpl implements  DaoStock{
         try {
             Statement st = Conexion.getConexion().createStatement();
             String sql = "INSERT INTO STOCK (CANTIDAD,NOMENCLATURA)" +
-                         "VALUES('" + dato.getCantidad() + "', '"+ dato.getNomenclatura() + "', ';";
+                         "VALUES('" + dato.getNomenclaturaMoneda() + "', '"+ dato.getMonto() + "', ';";
             // se puede usar sets de Statement y los campos para evitar errores de tipeo.
              st.executeUpdate(sql);
              st.close();
@@ -39,11 +42,12 @@ public class DaoStockImpl implements  DaoStock{
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
+        return stocks;
     }
     private Stock convertir(ResultSet rs) throws SQLException {
         Stock stock = new Stock();
-        stock.setCantidad(rs.getInt("CANTIDAD"));
-        stock.setNomenclatura(rs.getString("NOMENCLATURA"));
+        stock.setMonto(rs.getInt("CANTIDAD"));
+        stock.setNomenclaturaMoneda(rs.getString("NOMENCLATURA"));
         return stock;
     }
     @Override
