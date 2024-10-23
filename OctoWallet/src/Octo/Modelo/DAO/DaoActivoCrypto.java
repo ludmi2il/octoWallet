@@ -7,17 +7,17 @@ import java.sql.*;
 public class DaoActivoCrypto extends DaoActivoImpl{
     @Override
     public void crear(Activo dato){
-        try{
-            Statement st = Conexion.getConexion().createStatement();
-            String sql = "INSERT INTO ACTIVO_CRIPTO (NOMENCLATURA, CANTIDAD)" + "VALUES('" + dato.getNomenclatura() + "', '" + dato.getSaldo() + "');";
-            st.executeUpdate(sql);
-            st.close();
-        }
-        catch(SQLException e){
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
-
+        if(verificarNomenclatura(dato.getNomenclatura())) {
+            try {
+                Statement st = Conexion.getConexion().createStatement();
+                String sql = "INSERT INTO ACTIVO_CRIPTO (NOMENCLATURA, CANTIDAD)" + "VALUES('" + dato.getNomenclatura() + "', '" + dato.getSaldo() + "');";
+                st.executeUpdate(sql);
+                st.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+            }
+        } else System.out.println("La nomenclatura no existe.");
     }
     @Override
     public Activo obtener(String nomenclatura){

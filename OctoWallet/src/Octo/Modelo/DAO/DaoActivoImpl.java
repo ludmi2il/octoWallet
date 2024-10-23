@@ -9,7 +9,9 @@ import Octo.Modelo.Entidad.Moneda;
 public abstract class DaoActivoImpl implements DaoActivo{
     
     public abstract void crear(Activo dato);
-
+    protected boolean verificarNomenclatura(String nom){
+        return (FactorySQLManager.getInstancia().getStock().obtener(nom) != null);
+    }
 
     public abstract Activo obtener(String id);
     @Override
@@ -29,7 +31,7 @@ public abstract class DaoActivoImpl implements DaoActivo{
         }
         try {
             Statement st= Conexion.getConexion().createStatement();
-            ResultSet res = st.executeQuery("SELECT * FROM ACTIVO_FIAT);
+            ResultSet res = st.executeQuery("SELECT * FROM ACTIVO_FIAT");
             while( res.next()) {
                 activos.add(convertir(res));
             }
