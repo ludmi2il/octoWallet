@@ -4,6 +4,8 @@ public class FactorySQLManager {
     private DaoMoneda moneda;
     private DaoTransaccion transaccion;
     private DaoStock stock;
+    private DaoActivoCrypto crypto;
+    private DaoActivoFiat fiat;
     private static FactorySQLManager instancia;
     //private DaoActivo daoAactivo;
     private FactorySQLManager(){
@@ -21,6 +23,18 @@ public class FactorySQLManager {
         return moneda;
     }
 
+    public DaoActivoCrypto getCrypto() {
+        if( crypto == null){
+            crypto = new DaoActivoCrypto();
+        }
+        return crypto;
+    }
+    public DaoActivoFiat getFiat() {
+        if( fiat == null){
+            fiat = new DaoActivoFiat();
+        }
+        return fiat;
+    }
     public DaoTransaccion getTransaccion() {
         if(transaccion==null){
             transaccion = new DaoTransaccionImpl();

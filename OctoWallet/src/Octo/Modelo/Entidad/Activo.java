@@ -1,20 +1,23 @@
 package Octo.Modelo.Entidad;
 
 public class Activo {
-    private Moneda tipo; // deberia cambiar por moneda
+    private String nomenclatura; // deberia cambiar por moneda
     private double saldo;
 
-    public Activo(Moneda tipo, double saldo) {
-        this.tipo = tipo;
+    public Activo(String nomenclatura, double saldo) {
+        this.nomenclatura = nomenclatura;
         this.saldo = saldo;
     }
 
-    public Moneda getTipo() {
-        return tipo;
+    public Activo() {
     }
 
-    public void setTipo(Moneda tipo) {
-        this.tipo = tipo;
+    public String getNomenclatura() {
+        return nomenclatura;
+    }
+
+    public void setNomenclatura(String nomenclatura) {
+        this.nomenclatura = nomenclatura;
     }
 
     public double getSaldo() {
