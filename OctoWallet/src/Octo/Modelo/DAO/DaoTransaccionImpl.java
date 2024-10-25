@@ -22,30 +22,31 @@ public class DaoTransaccionImpl implements DaoTransaccion {
         Moneda monFiat = factory.getMoneda().obtener(fiat);
         Moneda monCripto = factory.getMoneda().obtener(cripto);
         // obtengo la cantidad de $$$ a utilizar para comprar cripto
-        double valorAGastar = monFiat.getCotizacion()*cantidad;
-        double cantAComprar = valorAGastar/monCripto.getCotizacion();
+        double valorAGastar = monFiat.getCotizacion() * cantidad;
+        double cantAComprar = valorAGastar / monCripto.getCotizacion();
         // obtengo los stocks y activos requeridos
-        Stock stFiat = factory.getStock().obtener(fiat);
         Stock stCripto = factory.getStock().obtener(cripto);
-        //Activo actiFiat = factory.getActivoFiat().obtener(fiat);
+        Activo actiFiat = factory.getFiat().obtener(fiat);
         try {
             Conexion.getConexion().setAutoCommit(false);
-            //if (( valorAGastar < actiFiat.getCantidad()) && (cantAComprar < stCripto.getMonto()))  { // esto verifica que lo que voy a comprar puede ser cubierto por la app
-                /* Activo actiCripto = factory.getActivoCripto().obtener(fiat);
-                if (actiCripto == null){
-                    factory.getActivoCripto().crear(cripto,cantAComprar)
-                }else{
-                    factory.getActivoCripto().actualizar(cantidad,cantAComprar);
+            if ((valorAGastar < actiFiat.getSaldo()) && (cantAComprar < stCripto.getMonto())) { // esto verifica que lo que voy a comprar puede ser cubierto por la app
+
+                Activo actiCripto = factory.getCrypto().obtener(cripto);
+                if (actiCripto == null) {
+                    factory.getCrypto().crear(new Activo(cripto, cantAComprar));
+                } else {
+                    factory.getCrypto().actualizar(cantAComprar, cripto);
                 }
-                factory.getActivoCripto().actualizar(cantidad,-cantidad);
-                Transaccion transaccion = new Transaccion ("se compraron " + cantAComprar + "criptomonedas " + monCripto.getNomenclatura +() "gastando  $" + valorAGastar + " de la moneda FIAT: " + monFiat.getNomenclatura(), LocalDateTime.now());
+                factory.getFiat().actualizar(-cantidad, fiat);
+                Transaccion transaccion = new Transaccion("se compraron " + cantAComprar + "criptomonedas " + monCripto.getNomenclatura() + " gastando  $" + valorAGastar + " de la moneda FIAT: " + monFiat.getNomenclatura(), LocalDateTime.now());
                 crear(transaccion);
-                boolean res = true; // leeria una confirmacion, creo
-                if(res) Conexion.getConexion().commit();
+                System.out.println("está seguro con su compra? (true/false)");
+                boolean res = true; // leeria una confirmacion de los datos al usuario, creo
+                if (res) Conexion.getConexion().commit();
                 else Conexion.getConexion().rollback();
-                 */  //}
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            }
+        }catch (SQLException e){
+            System.out.println("error durante la carga!");
         }
         try {
             Conexion.getConexion().setAutoCommit(true);
@@ -54,37 +55,28 @@ public class DaoTransaccionImpl implements DaoTransaccion {
         }
     }
     @Override
-    public void swap(Moneda criptoOriginal, double cantidad, Moneda criptoEsperada) {
+    public void swap(String criptoOriginal, double cantidad, String criptoEsperada) {
         // verificar que criptoOriginal y criptoEsperada existan como activos en mis activos
-        // editar despues
+        FactorySQLManager factory = FactorySQLManager.getInstancia();
         try {
-            // Retrieve the original and expected cryptocurrencies
-            Moneda original = FactorySQLManager.getInstancia().getMoneda().obtener(criptoOriginal.getNomenclatura());
-            Moneda esperada = FactorySQLManager.getInstancia().getMoneda().obtener(criptoEsperada.getNomenclatura());
 
-            // Check if the original cryptocurrency exists and has enough stock
-            if (original == null || original.getStock() < cantidad) {
-                throw new RuntimeException("stock insuficiente para el que .");
-            }
+            Moneda monedaOriginal =  factory.getMoneda().obtener(criptoOriginal);
+            Moneda monedaEsperada = factory.getMoneda().obtener(criptoEsperada);
 
+            Conexion.getConexion().setAutoCommit(false);
             // Calculate the equivalent amount of the expected cryptocurrency
-            double valorOriginal = original.getCotizacion() * cantidad;
-            double cantidadEsperada = valorOriginal / esperada.getCotizacion();
+            double valorOriginal = monedaOriginal.getCotizacion() * cantidad;
+            double cantidadEsperada = valorOriginal / monedaEsperada.getCotizacion();
 
-            // Update the stock for both cryptocurrencies
-            String updateOriginal = "UPDATE MONEDA SET STOCK = STOCK - ? WHERE NOMENCLATURA = ?";
-            String updateEsperada = "UPDATE MONEDA SET STOCK = STOCK + ? WHERE NOMENCLATURA = ?";
-
-            try (PreparedStatement stOriginal = Conexion.getConexion().prepareStatement(updateOriginal);
-                 PreparedStatement stEsperada = Conexion.getConexion().prepareStatement(updateEsperada)) {
-
-                stOriginal.setDouble(1, cantidad);
-                stOriginal.setString(2, original.getNomenclatura());
-                stOriginal.executeUpdate();
-
-                stEsperada.setDouble(1, cantidadEsperada);
-                stEsperada.setString(2, esperada.getNomenclatura());
-                stEsperada.executeUpdate();
+            if( factory.getStock().obtener(criptoEsperada).getMonto() >= cantidadEsperada) {
+                factory.getCrypto().actualizar(cantidadEsperada,criptoEsperada);
+                factory.getCrypto().actualizar(-cantidad,criptoOriginal);
+                Transaccion transaccion = new Transaccion("se Intercambiaron " + cantidad + " de criptomonedas " + monedaOriginal.getNomenclatura() + " por " + cantidadEsperada + " de la criptomoneda " + monedaOriginal.getNomenclatura(), LocalDateTime.now());
+                crear(transaccion);
+                System.out.println("está seguro del SWAP? (true/false)");
+                boolean res = true; // leeria una confirmacion de los datos al usuario, creo
+                if (res) Conexion.getConexion().commit();
+                else Conexion.getConexion().rollback();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -135,6 +127,20 @@ public class DaoTransaccionImpl implements DaoTransaccion {
 
     @Override
     public Transaccion obtener(String id) {
-        return null;
+        Transaccion transaccion = null;
+        try {
+            String str = "SELECT * FROM STOCK WHERE id = ?";
+            PreparedStatement st = Conexion.getConexion().prepareStatement(str);
+            st.setInt(1,Integer.parseInt(id));
+            ResultSet res = st.executeQuery();
+            if (res.next()) {
+                transaccion = convertir(res);
+            }
+            res.close();
+            st.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return transaccion;
     }
 }

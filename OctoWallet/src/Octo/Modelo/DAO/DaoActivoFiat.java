@@ -18,6 +18,20 @@ public class DaoActivoFiat extends DaoActivoImpl{
             }
         } else System.out.println("La nomenclatura no existe.");
     }
+    public int actualizar(double valor, String nomenclatura ){
+        int res = -1;
+        try{
+            String sql = "UPDATE ACTIVO_FIAT SET CANTIDAD = CANTIDAD - ? WHERE NOMENCLATURA = ?";
+            PreparedStatement st = Conexion.getConexion().prepareStatement(sql);
+            st.setDouble(1,valor);
+            st.setString(2,nomenclatura);
+            res = st.executeUpdate();
+            st.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return res;
+    }
     @Override
     public Activo obtener(String nomenclatura){
         Activo activo = null;

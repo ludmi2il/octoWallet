@@ -4,8 +4,8 @@ public class FactorySQLManager {
     private DaoMoneda moneda;
     private DaoTransaccion transaccion;
     private DaoStock stock;
-    private DaoActivo crypto;
-    private DaoActivo fiat;
+    private DaoActivoCrypto crypto;
+    private DaoActivoFiat fiat;
     private static FactorySQLManager instancia;
     private FactorySQLManager(){
     }

@@ -10,7 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DaoStockImpl implements  DaoStock{
+public class DaoStockImpl implements DaoStock{
     @Override
     public void crear(Stock dato) {
         try {
@@ -26,7 +26,21 @@ public class DaoStockImpl implements  DaoStock{
         }
 
     }
-
+    @Override
+    public int actualizar(double valor, String nomenclatura ){
+        int res = -1;
+        try{
+            String sql = "UPDATE STOCK SET CANTIDAD = CANTIDAD - ? WHERE NOMENCLATURA = ?";
+            PreparedStatement st = Conexion.getConexion().prepareStatement(sql);
+            st.setDouble(1,valor);
+            st.setString(2,nomenclatura);
+            res = st.executeUpdate();
+            st.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return res;
+    }
     @Override
     public List<Stock> listar() {
         List <Stock> stocks = new ArrayList<>();
