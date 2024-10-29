@@ -7,6 +7,11 @@ public class Stock {
     public Stock() {
     }
 
+    public Stock(String nomenclaturaMoneda, double monto) {
+        this.nomenclaturaMoneda = nomenclaturaMoneda;
+        this.monto = monto;
+    }
+
     public String getNomenclaturaMoneda() {
         return nomenclaturaMoneda;
     }

@@ -33,25 +33,29 @@ public class DaoTransaccionImpl implements DaoTransaccion {
 
                 Activo actiCripto = factory.getCrypto().obtener(cripto);
                 if (actiCripto == null) {
-                    factory.getCrypto().crear(new Activo(cripto, cantAComprar));
+                    factory.getCrypto().crear(new Activo("CRYPTO",cripto, cantAComprar));
                 } else {
                     factory.getCrypto().actualizar(cantAComprar, cripto);
                 }
                 factory.getFiat().actualizar(-cantidad, fiat);
                 Transaccion transaccion = new Transaccion("se compraron " + cantAComprar + "criptomonedas " + monCripto.getNomenclatura() + " gastando  $" + valorAGastar + " de la moneda FIAT: " + monFiat.getNomenclatura(), LocalDateTime.now());
                 crear(transaccion);
-                System.out.println("está seguro con su compra? (true/false)");
-                boolean res = true; // leeria una confirmacion de los datos al usuario, creo
-                if (res) Conexion.getConexion().commit();
-                else Conexion.getConexion().rollback();
+                Conexion.getConexion().commit();
             }
         }catch (SQLException e){
             System.out.println("error durante la carga!");
+            try {
+                Conexion.getConexion().rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
         }
-        try {
-            Conexion.getConexion().setAutoCommit(true);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+     finally {
+            try {
+                Conexion.getConexion().setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("error! no se pudo modificar el commit");;
+            }
         }
     }
     @Override
@@ -73,13 +77,22 @@ public class DaoTransaccionImpl implements DaoTransaccion {
                 factory.getCrypto().actualizar(-cantidad,criptoOriginal);
                 Transaccion transaccion = new Transaccion("se Intercambiaron " + cantidad + " de criptomonedas " + monedaOriginal.getNomenclatura() + " por " + cantidadEsperada + " de la criptomoneda " + monedaOriginal.getNomenclatura(), LocalDateTime.now());
                 crear(transaccion);
-                System.out.println("está seguro del SWAP? (true/false)");
-                boolean res = true; // leeria una confirmacion de los datos al usuario, creo
-                if (res) Conexion.getConexion().commit();
-                else Conexion.getConexion().rollback();
+                Conexion.getConexion().commit();
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        }catch (SQLException e){
+            System.out.println("error durante la carga!");
+            try {
+                Conexion.getConexion().rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        finally {
+            try {
+                Conexion.getConexion().setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("error! no se pudo modificar el commit");;
+            }
         }
     }
 

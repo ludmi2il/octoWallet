@@ -1,10 +1,12 @@
 package Octo.Modelo.Entidad;
 
 public class Activo {
+    private String tipo;
     private String nomenclatura; // deberia cambiar por moneda
     private double saldo;
 
-    public Activo(String nomenclatura, double saldo) {
+    public Activo(String tipo, String nomenclatura, double saldo) {
+        this.tipo= tipo;
         this.nomenclatura = nomenclatura;
         this.saldo = saldo;
     }
@@ -31,7 +33,7 @@ public class Activo {
     @Override
     public String toString() {
         return "Activo{" +
-                "tipo=" + tipo +
+                "tipo=" + tipo + "nomenclatura=" + nomenclatura +
                 ", saldo=" + saldo +
                 '}';
     }
