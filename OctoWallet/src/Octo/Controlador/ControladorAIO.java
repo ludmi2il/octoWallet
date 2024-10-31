@@ -59,5 +59,24 @@ public class ControladorAIO {
         acts.sort(Comparadores.compararActivoPorSaldo());
         return acts;
     }
-    // falta modulo de swap y compra
+    public boolean swap(String criptoOriginal, double cantidad, String criptoEsperada) {
+        boolean exito = false;
+        try {
+            factory.getTransaccion().swap(criptoOriginal, cantidad, criptoEsperada);
+            exito = true;
+        } catch (Exception e) {
+            System.out.println("Error durante el intercambio: " + e.getMessage());
+        }
+        return exito;
+    }
+    public boolean comprarCripto(String cripto, String fiat, double cantidad){
+        boolean exito = false;
+        try{
+            factory.getTransaccion().comprarCriptoMonedas(cripto,fiat,cantidad);
+            exito = true;
+        }catch (Exception e){
+            System.out.println("Error durante la compra: " + e.getMessage());
+        }
+        return exito;
+    }
 }
