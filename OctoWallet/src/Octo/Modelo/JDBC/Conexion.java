@@ -1,4 +1,4 @@
-package Octo.Modelo.DAO;
+package Octo.Modelo.JDBC;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,8 +13,12 @@ public class Conexion {
     static{
         try {
             conexion = DriverManager.getConnection(URL);
-            creacionDeTablasEnBD();
+            if (conexion != null) {
+                creacionDeTablasEnBD();
+                System.out.println("Conexión establecida con la base de datos.");
+            }
         } catch( SQLException e) {
+            System.out.println(e.getMessage());
             System.out.println("ERROR AL HACER CONEXION CON LA BBDD");
 
         }
@@ -76,4 +80,3 @@ public class Conexion {
     }
 
 }
-// consultar herencia de conexion o conexion singleton

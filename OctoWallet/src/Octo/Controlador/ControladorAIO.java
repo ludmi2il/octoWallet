@@ -1,6 +1,6 @@
 package Octo.Controlador;
 
-import Octo.Modelo.DAO.FactorySQLManager;
+import Octo.Modelo.JDBC.FactorySQLManager;
 import Octo.Modelo.Entidad.Activo;
 import Octo.Modelo.Entidad.Moneda;
 import Octo.Modelo.Entidad.Stock;
@@ -12,11 +12,11 @@ public class ControladorAIO {
      será la interfaz de programador desde la cual main se comunicará y creará los objetos necesarios, y llamará
     a los objetos pertinentes*/
     private FactorySQLManager factory = FactorySQLManager.getInstancia();
-    public int darCantidad (){ //falta ver realmente donde va a ir esto
+    private int darCantidad (){ //falta ver realmente donde va a ir esto
         return (int)(Math.random()*10000) + 1;
     }
     public boolean crearMoneda(String tipo,String nombre, String nomenclatura, double cotizacion, double volatilidad, double stock){
-        boolean exito = false;
+        boolean exito;
         factory.getMoneda().crear(new Moneda(tipo,nombre,nomenclatura,cotizacion,volatilidad,stock));
         exito= true;
         return exito;
@@ -31,7 +31,7 @@ public class ControladorAIO {
         return monedas;
     }
     public boolean crearStock(String nomenclaturaStock){
-        boolean exito = false;
+        boolean exito;
         factory.getStock().crear(new Stock(nomenclaturaStock, darCantidad()));
         exito = true;
         return exito;
@@ -45,7 +45,7 @@ public class ControladorAIO {
         return stocks;
     }
     public boolean crearActivo(String tipo, String nomenclatura, double saldo){
-        boolean exito = false;
+        boolean exito;
         if( tipo.toUpperCase().equals("CRYPTO")){
             factory.getCrypto().crear(new Activo(tipo.toUpperCase(),nomenclatura,saldo));
         }else if(tipo.toUpperCase().equals("FIAT")){

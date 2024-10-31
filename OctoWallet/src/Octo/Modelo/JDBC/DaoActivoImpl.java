@@ -1,12 +1,12 @@
-package Octo.Modelo.DAO;
+package Octo.Modelo.JDBC;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import Octo.Modelo.DAO.DaoActivo;
 import Octo.Modelo.Entidad.Activo;
-import Octo.Modelo.Entidad.Moneda;
 
-public abstract class DaoActivoImpl implements DaoActivo{
+public abstract class DaoActivoImpl implements DaoActivo {
     
     public abstract void crear(Activo dato);
     protected boolean verificarNomenclatura(String nom){
@@ -44,7 +44,7 @@ public abstract class DaoActivoImpl implements DaoActivo{
     }
     protected Activo convertir(ResultSet res) throws SQLException {
         Activo activo = new Activo();
-        activo.setNomenclatura(res.getString("NOMENCATURA"));
+        activo.setNomenclatura(res.getString("NOMENCLATURA"));
         activo.setSaldo(res.getDouble("CANTIDAD"));
         return activo;
     }

@@ -1,4 +1,4 @@
-package Octo.Modelo.DAO;
+package Octo.Modelo.JDBC;
 import Octo.Modelo.Entidad.Activo;
 
 import java.sql.*;

@@ -1,5 +1,6 @@
-package Octo.Modelo.DAO;
+package Octo.Modelo.JDBC;
 
+import Octo.Modelo.DAO.DaoMoneda;
 import Octo.Modelo.Entidad.Moneda;
 
 import java.sql.*;
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // acá me encargo de darle forma a la conexion pasando los objetos a la bbdd
-public class DaoMonedaImpl implements DaoMoneda{
+public class DaoMonedaImpl implements DaoMoneda {
     @Override
     public void crear(Moneda dato) {
         try {

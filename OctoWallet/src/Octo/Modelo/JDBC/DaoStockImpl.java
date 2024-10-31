@@ -1,6 +1,6 @@
-package Octo.Modelo.DAO;
+package Octo.Modelo.JDBC;
 
-import Octo.Modelo.Entidad.Moneda;
+import Octo.Modelo.DAO.DaoStock;
 import Octo.Modelo.Entidad.Stock;
 
 import java.sql.PreparedStatement;
@@ -10,13 +10,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DaoStockImpl implements DaoStock{
+public class DaoStockImpl implements DaoStock {
     @Override
     public void crear(Stock dato) {
         try {
             Statement st = Conexion.getConexion().createStatement();
-            String sql = "INSERT INTO STOCK (CANTIDAD,NOMENCLATURA)" +
-                         "VALUES('" + dato.getNomenclaturaMoneda() + "', '"+ dato.getMonto() + "', ';";
+            String sql = "INSERT INTO STOCK (NOMENCLATURA,CANTIDAD)" +
+                         "VALUES('" + dato.getNomenclaturaMoneda() + "', '"+ dato.getMonto() + "');";
             // se puede usar sets de Statement y los campos para evitar errores de tipeo.
              st.executeUpdate(sql);
              st.close();

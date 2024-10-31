@@ -1,4 +1,6 @@
-package Octo.Modelo.DAO;
+package Octo.Modelo.JDBC;
+
+import Octo.Modelo.DAO.*;
 
 public class FactorySQLManager {
     private DaoMoneda moneda;

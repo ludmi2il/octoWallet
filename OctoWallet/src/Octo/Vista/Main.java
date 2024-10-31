@@ -1,6 +1,5 @@
 package Octo.Vista;
 
-import Octo.Modelo.DAO.DaoMonedaImpl;
 import Octo.Modelo.Entidad.Activo;
 import Octo.Modelo.Entidad.Moneda;
 import Octo.Controlador.ControladorAIO;
@@ -14,11 +13,6 @@ public class Main {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         ControladorAIO controlador = new ControladorAIO();
-
-        DaoMonedaImpl mon = new DaoMonedaImpl();
-        mon.crear(new Moneda("k", "MIAU", "Lmao", 4000.00, 1, 5000));
-        System.out.println(mon.listar());
-
         boolean exit = false;
         while (!exit) {
             System.out.println("Bienvenido al sistema de criptomonedas");

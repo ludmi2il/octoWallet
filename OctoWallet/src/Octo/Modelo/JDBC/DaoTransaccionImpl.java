@@ -1,5 +1,6 @@
-package Octo.Modelo.DAO;
+package Octo.Modelo.JDBC;
 
+import Octo.Modelo.DAO.DaoTransaccion;
 import Octo.Modelo.Entidad.Activo;
 import Octo.Modelo.Entidad.Moneda;
 import Octo.Modelo.Entidad.Stock;
