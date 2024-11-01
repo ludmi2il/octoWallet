@@ -21,7 +21,7 @@ public class DaoActivoFiat extends DaoActivoImpl{
     public int actualizar(double valor, String nomenclatura ){
         int res = -1;
         try{
-            String sql = "UPDATE ACTIVO_FIAT SET CANTIDAD = CANTIDAD - ? WHERE NOMENCLATURA = ?";
+            String sql = "UPDATE ACTIVO_FIAT SET CANTIDAD = CANTIDAD + ? WHERE NOMENCLATURA = ?";
             PreparedStatement st = Conexion.getConexion().prepareStatement(sql);
             st.setDouble(1,valor);
             st.setString(2,nomenclatura);

@@ -38,7 +38,7 @@ public class DaoTransaccionImpl implements DaoTransaccion {
                 } else {
                     factory.getCrypto().actualizar(cantAComprar, cripto);
                 }
-                factory.getFiat().actualizar(-cantidad, fiat);
+                factory.getFiat().actualizar((-1)*cantidad, fiat);
                 Transaccion transaccion = new Transaccion("se compraron " + cantAComprar + "criptomonedas " + monCripto.getNomenclatura() + " gastando  $" + valorAGastar + " de la moneda FIAT: " + monFiat.getNomenclatura(), LocalDateTime.now());
                 crear(transaccion);
                 Conexion.getConexion().commit();
