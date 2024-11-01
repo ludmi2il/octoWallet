@@ -30,7 +30,6 @@ public class DaoTransaccionImpl implements DaoTransaccion {
         Activo actiFiat = factory.getFiat().obtener(fiat);
         try {
             Conexion.getConexion().setAutoCommit(false);
-            System.out.println(" valora agastar: " + valorAGastar + "cantacomprar " + cantAComprar);
             if ((valorAGastar < actiFiat.getSaldo()) && (cantAComprar < stCripto.getMonto())) { // esto verifica que lo que voy a comprar puede ser cubierto por la app
                 Activo actiCripto = factory.getCrypto().obtener(cripto);
                 if (actiCripto == null) {
