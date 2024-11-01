@@ -30,8 +30,8 @@ public class DaoTransaccionImpl implements DaoTransaccion {
         Activo actiFiat = factory.getFiat().obtener(fiat);
         try {
             Conexion.getConexion().setAutoCommit(false);
+            System.out.println(" valora agastar: " + valorAGastar + "cantacomprar " + cantAComprar);
             if ((valorAGastar < actiFiat.getSaldo()) && (cantAComprar < stCripto.getMonto())) { // esto verifica que lo que voy a comprar puede ser cubierto por la app
-
                 Activo actiCripto = factory.getCrypto().obtener(cripto);
                 if (actiCripto == null) {
                     factory.getCrypto().crear(new Activo("CRYPTO",cripto, cantAComprar));
@@ -42,6 +42,8 @@ public class DaoTransaccionImpl implements DaoTransaccion {
                 Transaccion transaccion = new Transaccion("se compraron " + cantAComprar + "criptomonedas " + monCripto.getNomenclatura() + " gastando  $" + valorAGastar + " de la moneda FIAT: " + monFiat.getNomenclatura(), LocalDateTime.now());
                 crear(transaccion);
                 Conexion.getConexion().commit();
+            }else{
+                System.out.println("problemas con los valores! no hay suficiente stock");
             }
         }catch (SQLException e){
             System.out.println("error durante la carga!");
@@ -103,7 +105,7 @@ public class DaoTransaccionImpl implements DaoTransaccion {
         // a subir la transaccion finalmente con los datos correspondientes
         try {
             Statement st = Conexion.getConexion().createStatement();
-            String sql = "INSERT INTO MONEDA (TIPO, NOMBRE, NOMENCLATURA, VALOR_DOLAR, VOLATILIDAD, STOCK)" +
+            String sql = "INSERT INTO TRANSACCION (RESUMEN, FECHA_HORA)" +
                     "VALUES('" + dato.getResumen() + "', '"+ Timestamp.valueOf(dato.getFechaHora())
                     +"');";
             // se puede usar sets de Statement y los campos para evitar errores de tipeo.
@@ -117,7 +119,7 @@ public class DaoTransaccionImpl implements DaoTransaccion {
     private Transaccion convertir(ResultSet rs) throws SQLException {
         Transaccion tr = new Transaccion();
         tr.setResumen(rs.getString("RESUMEN"));
-        tr.setFechaHora(LocalDateTime.of(rs.getDate("FECHAYHORA").toLocalDate(), LocalTime.MIDNIGHT));
+        tr.setFechaHora(LocalDateTime.of(rs.getDate("FECHA_HORA").toLocalDate(), LocalTime.MIDNIGHT));
         return tr;
     }
 

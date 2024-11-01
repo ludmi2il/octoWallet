@@ -36,7 +36,7 @@ public class DaoActivoFiat extends DaoActivoImpl{
     public Activo obtener(String nomenclatura){
         Activo activo = null;
         try {
-            String str = "SELECT FROM ACTIVO_FIAT WHERE NOMENCLATURA = ?";
+            String str = "SELECT * FROM ACTIVO_FIAT WHERE NOMENCLATURA = ?";
             PreparedStatement st = Conexion.getConexion().prepareStatement(str);
             st.setString(1,nomenclatura);
             ResultSet res = st.executeQuery();

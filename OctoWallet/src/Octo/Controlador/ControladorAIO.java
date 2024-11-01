@@ -66,6 +66,7 @@ public class ControladorAIO {
             exito = true;
         } catch (Exception e) {
             System.out.println("Error durante el intercambio: " + e.getMessage());
+            e.printStackTrace();
         }
         return exito;
     }
@@ -76,6 +77,7 @@ public class ControladorAIO {
             exito = true;
         }catch (Exception e){
             System.out.println("Error durante la compra: " + e.getMessage());
+            e.printStackTrace();
         }
         return exito;
     }

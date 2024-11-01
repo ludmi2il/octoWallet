@@ -56,7 +56,7 @@ public class DaoMonedaImpl implements DaoMoneda {
     public Moneda obtener(String nomenclatura){
         Moneda mon = null;
         try {
-            String str = "SELECT FROM MONEDA WHERE NOMENCLATURA = ?";
+            String str = "SELECT * FROM MONEDA WHERE NOMENCLATURA = ?";
             PreparedStatement st = Conexion.getConexion().prepareStatement(str);
             st.setString(1,nomenclatura);
             ResultSet res = st.executeQuery();

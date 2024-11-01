@@ -23,7 +23,7 @@ public class DaoActivoCrypto extends DaoActivoImpl{
     public Activo obtener(String nomenclatura){
         Activo activo = null;
         try {
-            String str = "SELECT FROM ACTIVO_CRIPTO WHERE NOMENCLATURA = ?";
+            String str = "SELECT * FROM ACTIVO_CRIPTO WHERE NOMENCLATURA = ?";
             PreparedStatement st = Conexion.getConexion().prepareStatement(str);
             st.setString(1,nomenclatura);
             ResultSet res = st.executeQuery();
@@ -38,7 +38,7 @@ public class DaoActivoCrypto extends DaoActivoImpl{
     public int actualizar(double valor, String nomenclatura ){
         int res = -1;
         try{
-            String sql = "UPDATE ACTIVO_CRYPTO SET CANTIDAD = CANTIDAD - ? WHERE NOMENCLATURA = ?";
+            String sql = "UPDATE ACTIVO_CRIPTO SET CANTIDAD = CANTIDAD - ? WHERE NOMENCLATURA = ?";
             PreparedStatement st = Conexion.getConexion().prepareStatement(sql);
             st.setDouble(1,valor);
             st.setString(2,nomenclatura);
