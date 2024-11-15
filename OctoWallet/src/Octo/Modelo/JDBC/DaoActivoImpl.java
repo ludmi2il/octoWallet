@@ -10,7 +10,7 @@ public abstract class DaoActivoImpl implements DaoActivo {
     
     public abstract void crear(Activo dato);
     protected boolean verificarNomenclatura(String nom){
-        return (FactorySQLManager.getInstancia().getStock().obtener(nom) != null);
+        return (SQLManager.getInstancia().getStock().obtener(nom) != null);
     }
     @Override
     public List<Activo> listar() {

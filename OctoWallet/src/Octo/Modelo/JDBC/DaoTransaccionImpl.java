@@ -1,5 +1,6 @@
 package Octo.Modelo.JDBC;
 
+import Octo.Exceptions.OctoNotFound;
 import Octo.Modelo.DAO.DaoTransaccion;
 import Octo.Modelo.Entidad.Activo;
 import Octo.Modelo.Entidad.Moneda;
@@ -19,7 +20,7 @@ public class DaoTransaccionImpl implements DaoTransaccion {
         // vamos a usar rollback
         // consultar por transaccion fallida si debe documentarse.
         // obtengo las monedas utilizadas para comprar
-        FactorySQLManager factory = FactorySQLManager.getInstancia();
+        SQLManager factory = SQLManager.getInstancia();
         Moneda monFiat = factory.getMoneda().obtener(fiat);
         Moneda monCripto = factory.getMoneda().obtener(cripto);
         // obtengo la cantidad de $$$ a utilizar para comprar cripto
@@ -63,7 +64,7 @@ public class DaoTransaccionImpl implements DaoTransaccion {
     @Override
     public void swap(String criptoOriginal, double cantidad, String criptoEsperada) {
         // verificar que criptoOriginal y criptoEsperada existan como activos en mis activos
-        FactorySQLManager factory = FactorySQLManager.getInstancia();
+        SQLManager factory = SQLManager.getInstancia();
         try {
 
             Moneda monedaOriginal =  factory.getMoneda().obtener(criptoOriginal);
@@ -154,7 +155,7 @@ public class DaoTransaccionImpl implements DaoTransaccion {
             res.close();
             st.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new OctoNotFound("error! no se encontró la transacción con id: " + id);
         }
         return transaccion;
     }

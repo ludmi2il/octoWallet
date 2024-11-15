@@ -1,5 +1,6 @@
 package Octo.Modelo.JDBC;
 
+import Octo.Exceptions.OctoNotFound;
 import Octo.Modelo.DAO.DaoMoneda;
 import Octo.Modelo.Entidad.Moneda;
 
@@ -10,7 +11,7 @@ import java.util.List;
 // acá me encargo de darle forma a la conexion pasando los objetos a la bbdd
 public class DaoMonedaImpl implements DaoMoneda {
     @Override
-    public void crear(Moneda dato) {
+    public void crear(Moneda dato){
         try {
             Statement st = Conexion.getConexion().createStatement();
             String sql = "INSERT INTO MONEDA (TIPO, NOMBRE, NOMENCLATURA, VALOR_DOLAR, VOLATILIDAD, STOCK)" +
@@ -20,8 +21,7 @@ public class DaoMonedaImpl implements DaoMoneda {
             st.executeUpdate(sql);
             st.close();
         } catch (SQLException e) {
-                System.out.println(e.getMessage());
-                e.printStackTrace();
+            System.out.println("error al crear la moneda solicitada");
         }
     }
 
@@ -37,8 +37,7 @@ public class DaoMonedaImpl implements DaoMoneda {
             res.close();
             st.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
+            System.out.println("error al listar las monedas");
         }
         return monedas;
     }
@@ -64,7 +63,7 @@ public class DaoMonedaImpl implements DaoMoneda {
                 mon = convertir(res);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new OctoNotFound("error! no se encontró el elemento con nomenclatura: " + nomenclatura);
         }
         return mon;
     }

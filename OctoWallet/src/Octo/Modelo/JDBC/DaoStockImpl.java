@@ -1,5 +1,6 @@
 package Octo.Modelo.JDBC;
 
+import Octo.Exceptions.OctoNotFound;
 import Octo.Modelo.DAO.DaoStock;
 import Octo.Modelo.Entidad.Stock;
 
@@ -78,7 +79,7 @@ public class DaoStockImpl implements DaoStock {
             res.close();
             st.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new OctoNotFound("error! no se encontró el Stock con nomenclatura: " + nomenclatura);
         }
         return stock;
     }

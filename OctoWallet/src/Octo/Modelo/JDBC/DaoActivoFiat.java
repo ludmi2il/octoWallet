@@ -1,4 +1,5 @@
 package Octo.Modelo.JDBC;
+import Octo.Exceptions.OctoNotFound;
 import Octo.Modelo.Entidad.Activo;
 
 import java.sql.*;
@@ -44,7 +45,7 @@ public class DaoActivoFiat extends DaoActivoImpl{
                 activo = convertir(res);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new OctoNotFound("error! no se encontró el activo con nomenclatura: " + nomenclatura);
         }
         return activo;
     }

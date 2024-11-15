@@ -1,6 +1,6 @@
 package Octo.Controlador;
 
-import Octo.Modelo.JDBC.FactorySQLManager;
+import Octo.Modelo.JDBC.SQLManager;
 import Octo.Modelo.Entidad.Activo;
 import Octo.Modelo.Entidad.Moneda;
 import Octo.Modelo.Entidad.Stock;
@@ -11,7 +11,7 @@ public class ControladorAIO {
     /* controlador all in one
      será la interfaz de programador desde la cual main se comunicará y creará los objetos necesarios, y llamará
     a los objetos pertinentes*/
-    private FactorySQLManager factory = FactorySQLManager.getInstancia();
+    private SQLManager factory = SQLManager.getInstancia();
     private int darCantidad (){ //falta ver realmente donde va a ir esto
         return (int)(Math.random()*10000) + 1;
     }

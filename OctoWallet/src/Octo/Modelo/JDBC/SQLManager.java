@@ -2,18 +2,18 @@ package Octo.Modelo.JDBC;
 
 import Octo.Modelo.DAO.*;
 
-public class FactorySQLManager {
+public class SQLManager {
     private DaoMoneda moneda;
     private DaoTransaccion transaccion;
     private DaoStock stock;
     private DaoActivoCrypto crypto;
     private DaoActivoFiat fiat;
-    private static FactorySQLManager instancia;
-    private FactorySQLManager(){
+    private static SQLManager instancia;
+    private SQLManager(){
     }
-    public static FactorySQLManager getInstancia(){
+    public static SQLManager getInstancia(){
         if(instancia ==null){
-            instancia = new FactorySQLManager();
+            instancia = new SQLManager();
         }
         return instancia;
     }

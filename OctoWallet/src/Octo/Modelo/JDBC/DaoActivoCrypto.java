@@ -1,5 +1,6 @@
 package Octo.Modelo.JDBC;
 
+import Octo.Exceptions.OctoNotFound;
 import Octo.Modelo.Entidad.Activo;
 
 import java.sql.*;
@@ -46,7 +47,7 @@ public class DaoActivoCrypto extends DaoActivoImpl{
             res = st.executeUpdate();
             st.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new OctoNotFound("error! no se encontró el activo CRYPTO con nomenclatura: " + nomenclatura);
         }
         return res;
     }
