@@ -70,7 +70,7 @@ public class Moneda {
 
     @Override
     public String toString() {
-        return   "nombre='" + nombre + '\'' +
+        return "nombre='" + nombre + '\'' +
                 ", cotizacion=" + cotizacion +
                 ", volatilidad=" + volatilidad +
                 ", stock=" + stock +
