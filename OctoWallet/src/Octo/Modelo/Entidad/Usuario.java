@@ -1,11 +1,14 @@
-package Octo.Modelo.Entidad.otros;
+package Octo.Modelo.Entidad;
+import Octo.Modelo.Entidad.otros.Persona;
+import Octo.Modelo.Entidad.otros.Tarjeta;
+
 import java.util.List;
 /**
  * @author Giovanna Gotusso,Francisco Estrada,Ludmila Dosil
  * @version 1.0
  * Esta clase publica Usuario representa las caracteristicas necesarias que usuario precisa para el manejo de billetera 
  **/
-public class Usuario extends Persona{
+public class Usuario extends Persona {
 	private String alias;
 	private long Cbu;
 	private String contrasena;

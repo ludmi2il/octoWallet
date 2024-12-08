@@ -1,20 +1,31 @@
 package Octo.Modelo.Entidad;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties (ignoreUnknown = true) // para ignorar los campos que no me sirven.
 public class Moneda {
     private String tipo; // deberia ser un enum
+    @JsonProperty("name")
     private String nombre;
+    @JsonProperty("symbol")
     private String nomenclatura;
+    @JsonProperty("current_price")
     private double cotizacion;
+    @JsonProperty("price_change_24h")
     private double volatilidad;
     private double stock;
+    @JsonProperty("image")
+    private String imagen;
 
-    public Moneda(String tipo,String nombre, String nomenclatura, double cotizacion, double volatilidad, double stock) {
+    public Moneda(String tipo,String nombre, String nomenclatura, double cotizacion, double volatilidad, double stock, String imagen) {
         this.tipo = tipo;
         this.nombre = nombre;
         this.nomenclatura = nomenclatura;
         this.cotizacion = cotizacion;
         this.volatilidad = volatilidad;
         this.stock = stock;
+        this.imagen = imagen;
     }
     public Moneda(){
 

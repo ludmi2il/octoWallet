@@ -15,6 +15,7 @@ public class Conexion {
             conexion = DriverManager.getConnection(URL);
             if (conexion != null) {
                 creacionDeTablasEnBD();
+                // si se crea se obtiene la info de las apis
                 System.out.println("Conexión establecida con la base de datos.");}
         } catch( SQLException e) {
             System.out.println(e.getMessage());

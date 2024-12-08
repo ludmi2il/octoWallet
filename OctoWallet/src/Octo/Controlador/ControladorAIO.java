@@ -17,7 +17,7 @@ public class ControladorAIO {
     }
     public boolean crearMoneda(String tipo,String nombre, String nomenclatura, double cotizacion, double volatilidad, double stock){
         boolean exito;
-        factory.getMoneda().crear(new Moneda(tipo,nombre,nomenclatura,cotizacion,volatilidad,stock));
+        factory.getMoneda().crear(new Moneda(tipo,nombre,nomenclatura,cotizacion,volatilidad,stock,""));
         exito= true;
         return exito;
     }
