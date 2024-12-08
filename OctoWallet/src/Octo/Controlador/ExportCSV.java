@@ -16,11 +16,11 @@ public class ExportCSV {
     //El metodo exportToCSV recibe una lista de activos y exporta los datos de estos a un archivo CSV en el directorio de Descargas.
     public static void exportToCSV(List<Activo> acts) throws IOException {
         Path downloadsPath = Paths.get(System.getProperty("user.home"), "Downloads");
-        File exportDir = new File(downloadsPath+"/export.csv");
+        File exportDir = new File(downloadsPath+"/misActivos.csv");
         exportDir.delete();
-        File newExportDir = new File(downloadsPath+"/export.csv");
+        File newExportDir = new File(downloadsPath+"/misActivos.csv");
         List<List<String>> filas = getFilas2(acts);
-        FileWriter csvWriter = new FileWriter(downloadsPath+"/export.csv"); //
+        FileWriter csvWriter = new FileWriter(downloadsPath+"/misActivos.csv"); //
         csvWriter.append("Tipo");
         csvWriter.append(",");
         csvWriter.append("Nomenclatura");

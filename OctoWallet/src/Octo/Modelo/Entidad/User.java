@@ -1,13 +1,39 @@
 package Octo.Modelo.Entidad;
 
 public class User {
-	
+	private String nombres
 	private String Email;
 	private String contrasena;
-	
-	public User(String email, String contrasena) {
-		this.Email = email;
+	private String apellidos;
+
+
+
+	public User() {
+	}
+
+
+
+	public User(String nombres, String email, String contrasena, String apellidos) {
+		this.nombres = nombres;
+		Email = email;
 		this.contrasena = contrasena;
+		this.apellidos = apellidos;
+	}
+
+	public String getApellidos() {
+		return apellidos;
+	}
+
+	public void setApellidos(String apellidos) {
+		this.apellidos = apellidos;
+	}
+
+	public String getNombres() {
+		return nombres;
+	}
+
+	public void setNombres(String nombres) {
+		this.nombres = nombres;
 	}
 
 	public String getEmail() {
