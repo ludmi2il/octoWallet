@@ -1,6 +1,4 @@
-package Octo.Modelo.Entidad;
-import Octo.Modelo.Entidad.otros.Persona;
-import Octo.Modelo.Entidad.otros.Tarjeta;
+package Octo.Modelo.Entidad.otros;
 
 import java.util.List;
 /**

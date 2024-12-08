@@ -42,7 +42,7 @@ public class PanelOperaciones extends JPanel{
         }
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         try {
             // Configuración del Look and Feel de flatlaf
             UIManager.setLookAndFeel(new FlatMacLightLaf());
@@ -64,5 +64,9 @@ public class PanelOperaciones extends JPanel{
         frame.add(panel);
         frame.setVisible(true);
     }
+
+     */
     }
+
+
 
