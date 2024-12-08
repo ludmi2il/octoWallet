@@ -13,7 +13,9 @@ public class Activo {
 
     public Activo() {
     }
-
+    public String getTipo() {
+        return tipo;
+    }
     public String getNomenclatura() {
         return nomenclatura;
     }
