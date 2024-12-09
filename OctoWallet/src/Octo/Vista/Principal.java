@@ -22,6 +22,7 @@ public class Principal {
          */
         Control control = new Control();
         vistas log=control.getprinc();
+        log.setIconImage(new ImageIcon("/imagenes/pulpito.png").getImage());
         log.setVisible(true);
     }
 }
