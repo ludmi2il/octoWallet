@@ -1,4 +1,4 @@
-package Octo.Controlador;
+package Octo.Controlador.Utilitario;
 
 import Octo.Modelo.Entidad.Moneda;
 import Octo.Modelo.Entidad.Activo;
