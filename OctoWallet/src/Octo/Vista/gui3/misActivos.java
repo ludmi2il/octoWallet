@@ -18,6 +18,8 @@ import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import Octo.Controlador.Vistas.ControllerMisActivos;
+
 public class misActivos extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -27,7 +29,7 @@ public class misActivos extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public misActivos(JPanel mainPanel) {
+	public misActivos(JPanel mainPanel, ControllerMisActivos controller) {
 		
 		this.mainPanel=mainPanel;
 		JLabel lblNewLabel = new JLabel("OctoWallet - Mis Activos\r\n");
@@ -83,6 +85,7 @@ public class misActivos extends JPanel {
 		table.setCellSelectionEnabled(true);
 		
 		JButton btnNewButton_2 = new JButton("Exportar como CSV");
+
 		btnNewButton_2.setForeground(new Color(255, 255, 255));
 		btnNewButton_2.setBackground(new Color(151, 177, 249));
 		btnNewButton_2.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -90,23 +93,13 @@ public class misActivos extends JPanel {
 		JButton btnNewButton_3 = new JButton("Transacciones");
 		btnNewButton_3.setForeground(new Color(255, 255, 255));
 		btnNewButton_3.setBackground(new Color(165, 215, 252));
-		btnNewButton_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CardLayout cl = (CardLayout)mainPanel.getLayout();
-				cl.show(mainPanel, "operaciones");
-			}
-		});
+		btnNewButton_3.addActionListener(controller.getTransaccionesActionListener());
 		btnNewButton_3.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		JButton btnNewButton_4 = new JButton("Cotizaciones\r\n");
+		btnNewButton_4.addActionListener(controller.getCotizacionesActionListener());
 		btnNewButton_4.setForeground(new Color(255, 255, 255));
 		btnNewButton_4.setBackground(new Color(165, 215, 252));
-		btnNewButton_4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CardLayout cl = (CardLayout)mainPanel.getLayout();
-				cl.show(mainPanel, "cotizacion");
-			}
-		});
 		btnNewButton_4.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		JLabel lblNewLabel_4 = new JLabel("");

@@ -1,7 +1,6 @@
 package Octo.Vista.gui3;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -9,6 +8,7 @@ import java.awt.CardLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import Octo.Vista.gui3.*;
+import Octo.Controlador.Vistas.ControllerMisActivos;
 
 public class vistas extends JFrame {
 
@@ -42,7 +42,9 @@ public class vistas extends JFrame {
 		
 		login card1 = new login(mainPanel);
 		registro card2 = new registro(mainPanel);
-		misActivos card3 = new misActivos(mainPanel);
+
+		ControllerMisActivos conMisActivos = new ControllerMisActivos(mainPanel);
+		misActivos card3 = new misActivos(mainPanel,conMisActivos);
 		operaciones card4 = new operaciones(mainPanel);
 		cotizacion card5 = new cotizacion(mainPanel);
 		comprita card6 = new comprita(mainPanel);

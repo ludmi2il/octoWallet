@@ -1,5 +1,6 @@
 package Octo.Controlador;
 
+import Octo.Controlador.Utilitario.Comparadores;
 import Octo.Modelo.JDBC.SQLManager;
 import Octo.Modelo.Entidad.Activo;
 import Octo.Modelo.Entidad.Moneda;
@@ -7,8 +8,6 @@ import Octo.Modelo.Entidad.Stock;
 import Octo.Servicios.CotizacionesRequest;
 import Octo.Servicios.DataRequest;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
