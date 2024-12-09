@@ -14,11 +14,12 @@ public class DaoMonedaImpl implements DaoMoneda {
     public void crear(Moneda dato){
         try {
             Statement st = Conexion.getConexion().createStatement();
-            String sql = "INSERT INTO MONEDA (TIPO, NOMBRE, NOMENCLATURA, VALOR_DOLAR, VOLATILIDAD, STOCK)" +
+            String sql = "INSERT INTO MONEDA (TIPO, NOMBRE, NOMENCLATURA, VALOR_DOLAR, VOLATILIDAD, STOCK, NOMBRE_ICONO)" +
                         "VALUES('" + dato.getTipo() + "', '"+ dato.getNombre() + "', '"+ dato.getNomenclatura() + "', '"
-                        + dato.getCotizacion() + "', '" + dato.getVolatilidad()+ "', '" + dato.getStock() + "');";
+                        + dato.getCotizacion() + "', '" + dato.getVolatilidad()+ "', '" + dato.getStock() + "', '" + dato.getImagen()+ "');";
                 // se puede usar sets de Statement y los campos para evitar errores de tipeo.
             st.executeUpdate(sql);
+            System.out.println("dato ingresado" + dato);
             st.close();
         } catch (SQLException e) {
             System.out.println("error al crear la moneda solicitada");
@@ -49,6 +50,7 @@ public class DaoMonedaImpl implements DaoMoneda {
         moneda.setCotizacion(rs.getDouble("VALOR_DOLAR"));
         moneda.setVolatilidad(rs.getDouble("VOLATILIDAD"));
         moneda.setStock(rs.getDouble("STOCK"));
+        moneda.setImagen(rs.getString("NOMBRE_ICONO"));
         return moneda;
     }
     @Override

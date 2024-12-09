@@ -19,13 +19,17 @@ public class DataController {
     private SQLManager factory = SQLManager.getInstancia();
     private boolean DbStatus;
     private List<Moneda> cacheMonedas;
+    private String ids;
     public DataController() {
-     DbStatus= verificarEstadoBd(); // la bd, si no existiera, se crearia en verificar por el bloque static.
+     DbStatus= verificarEstadoBd();
+     iniciarValoresBD();// la bd, si no existiera, se crearia en verificar por el bloque static.
+        ids= "";
     }
 
     private void iniciarValoresBD(){
         if(!DbStatus) {
             List<Moneda> criptos = DataRequest.RequestData();
+            System.out.println("no imprimo" + criptos.size());
             criptos.forEach(moneda -> factory.getMoneda().crear(moneda));
             Moneda argenta = new Moneda("F", "Peso Argentino", "ARS", 0, 0.0, darCantidad(), "/imagenes/argentina.png");
             Moneda dolarYankee = new Moneda("F", "Dolar Estadounidense", "USD", 1, 0, darCantidad(), "/imagenes/usa.png");
@@ -35,24 +39,26 @@ public class DataController {
         }
     }
     private boolean verificarEstadoBd(){
-        return factory.getMoneda().listar().isEmpty();
+        return !factory.getMoneda().listar().isEmpty();
     }
-    private void CargarCache(){
+    public void cargarCache(){
         cacheMonedas = factory.getMoneda().listar();
     }
-    private void CriptosOrdenadas(){
+    public void criptosOrdenadas(){
                 cacheMonedas = cacheMonedas.stream().filter(moneda ->
-                        moneda.getTipo().equals("C")).sorted(Comparadores.compararMonedaPorValorDolar()).toList();}
-    private List<Moneda> getCacheMonedas(){
+                        moneda.getTipo().equals("C")).sorted(Comparadores.compararMonedaPorValorDolar().reversed()).toList();}
+    public List<Moneda> getCacheMonedas(){
         return cacheMonedas;
     }
-    private CompletableFuture<Map<String, Map<String,Double>>> ObtenerCotizaciones(){
+    private CompletableFuture<Map<String, Map<String,Double>>> obtenerCotizaciones(){
         // obtengo solo las monedas de tipo C sin crear casos de where en las queries
-        String ids= cacheMonedas.stream().map(Moneda::getNombre).collect(Collectors.joining(","));
+        if(ids.equals("")) {
+            ids = cacheMonedas.stream().map(Moneda::getNombre).collect(Collectors.joining(","));
+        }
         return CotizacionesRequest.RequestAsync(ids); // quiero que retorne un mapa
     }
     public void ActualizarCotizaciones(){
-        ObtenerCotizaciones()
+        obtenerCotizaciones()
                 .thenAccept(cotizaciones -> {
                     // Verificamos si la respuesta no está vacía
                     if (!cotizaciones.isEmpty()) {

@@ -81,8 +81,8 @@ public class Conexion {
         stmt.executeUpdate(sql);
         sql = "CREATE TABLE IF NOT EXISTS ACTIVO_CRIPTO"
                 + "("
-                + " ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," +
-                "ID_USUARIO INTEGER NOT NULL, "
+                + " ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL , " +
+                " ID_USUARIO INTEGER NOT NULL, "
                 + " ID_MONEDA INTEGER NOT NULL, "
                 + " CANTIDAD REAL NOT NULL, "
                 + " FOREIGN KEY(ID_USUARIO) REFERENCES USUARIO(ID),"
@@ -102,7 +102,7 @@ public class Conexion {
                 + "("
                 + " ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL , "
                 + " RESUMEN VARCHAR(1000) NOT NULL, "
-                + " FECHA_HORA DATETIME NOT NULL "
+                + " FECHA_HORA DATETIME NOT NULL, "
                 + " ID_USUARIO INTEGER NOT NULL, "
                 + " FOREIGN KEY(ID_USUARIO) REFERENCES USUARIO(ID)"
                 + ")";

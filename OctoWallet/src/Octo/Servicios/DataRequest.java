@@ -18,6 +18,7 @@ public class DataRequest {
     private static final String URL_API =
             "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1";
     public  static List<Moneda> RequestData(){
+        System.out.println("estoy");
         HttpClient cliente = HttpClient.newHttpClient();
         HttpRequest solicitud = HttpRequest.newBuilder().uri(URI.create(URL_API)).GET().build();
         HttpResponse<String> respuesta = null;
@@ -25,6 +26,7 @@ public class DataRequest {
         try {
             respuesta = cliente.send(solicitud, HttpResponse.BodyHandlers.ofString());
             if (respuesta.statusCode() == 200) {
+                System.out.println("entré");
                  lista = parsearDatos(respuesta.body());
             } else {
                 System.out.println("Error al obtener los precios. Código de estado: " + respuesta.statusCode());

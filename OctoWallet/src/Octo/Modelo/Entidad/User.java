@@ -1,7 +1,7 @@
 package Octo.Modelo.Entidad;
 
 public class User {
-	private String nombres
+	private String nombres;
 	private String Email;
 	private String contrasena;
 	private String apellidos;
