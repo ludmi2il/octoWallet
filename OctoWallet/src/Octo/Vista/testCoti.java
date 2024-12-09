@@ -5,7 +5,7 @@ import Octo.Servicios.CotizacionesRequest;
 public class testCoti {
     public static void main(String[] args) {
         while(true) {
-            CotizacionesRequest.RequestAsync();
+            CotizacionesRequest.RequestAsync("bitcoin,ethereum");
             try {
                 Thread.sleep(60000);  // Espera 1 minuto antes de hacer otra solicitud
             } catch (InterruptedException e) {

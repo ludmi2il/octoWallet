@@ -1,6 +1,6 @@
 package Octo.Vista;
 
-import Octo.Controlador.ControladorAIO;
+import Octo.Controlador.DataController;
 import Octo.Modelo.Entidad.Transaccion;
 import Octo.Modelo.JDBC.SQLManager;
 import com.formdev.flatlaf.FlatDarculaLaf;

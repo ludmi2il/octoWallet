@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties (ignoreUnknown = true) // para ignorar los campos que no me sirven.
 public class Moneda {
     private String tipo; // deberia ser un enum
-    @JsonProperty("name")
+    @JsonProperty("id")
     private String nombre;
     @JsonProperty("symbol")
     private String nomenclatura;
