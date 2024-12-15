@@ -12,28 +12,11 @@ public class Sesion {
     private Sesion() {
     }
 
-    public User getUsuario() {
-        return usuario;
+    public UserResult getUserResult() {
+        return userResult;
     }
-    public void setUsuario(User usuario) {
-        this.usuario = usuario;
-    }
-    public long getuserId() {
-        return userId;
-    }
-    public void setuserId(long userId) {
-        this.userId = userId;
-    }
-    public long getpersonaId() {
-        return personaId;
-    }
-    public void setpersonaId(long personaId) {
-        this.personaId = personaId;
-    }
-    public void initSesion(User usuario, long userId, long personaId) {
-        this.usuario = usuario;
-        this.userId = userId;
-        this.personaId = personaId;
+    public void setUserResult(UserResult userResult) {
+        this.userResult = userResult;
     }
     public static Sesion getInstance() {
         if(instancia == null) {
@@ -41,7 +24,7 @@ public class Sesion {
         }
         return instancia;
     }
-    public static void cerrarSesion() {
+    public void cerrarSesion() {
         instancia = null;
     }
 }

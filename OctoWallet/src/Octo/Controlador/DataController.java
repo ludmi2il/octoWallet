@@ -111,12 +111,12 @@ public class DataController {
         }
         return stocks;
     }
-    public boolean crearActivo(String tipo, String nomenclatura, double saldo){
+    public boolean crearActivo(String tipo, Moneda moneda, double saldo){
         boolean exito;
         if( tipo.toUpperCase().equals("CRYPTO")){
-            factory.getCrypto().crear(new Activo(tipo.toUpperCase(),nomenclatura,saldo));
+            factory.getCrypto().crear(new Activo(tipo.toUpperCase(),moneda,saldo));
         }else if(tipo.toUpperCase().equals("FIAT")){
-            factory.getFiat().crear(new Activo(tipo.toUpperCase(),nomenclatura,saldo));
+            factory.getFiat().crear(new Activo(tipo.toUpperCase(),moneda,saldo));
         }
         exito=true;
         return exito;

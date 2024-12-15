@@ -3,6 +3,8 @@ import Octo.Modelo.DAO.DaoPersona;
 import Octo.Modelo.DAO.DaoUsuario;
 import Octo.Modelo.Entidad.Persona;
 import Octo.Modelo.Entidad.User;
+import Octo.Modelo.Entidad.UserResult;
+
 import java.util.List;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -31,15 +33,32 @@ public class DaoUsuarioImpl implements DaoUsuario{
             }
         }
     }
-    private User convertir(java.sql.ResultSet rs) throws SQLException {
+    public boolean verificarMail(String mail) { // Devuelve true si no existe el mail en la BD, si no false
+        boolean res = false;
+        try {
+            String str = "SELECT * FROM USUARIO WHERE EMAIL = ?";
+            java.sql.PreparedStatement st = Conexion.getConexion().prepareStatement(str);
+            st.setString(1,mail);
+            java.sql.ResultSet rs = st.executeQuery();
+            if (!rs.next()){
+                res = true;
+            }
+            st.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return res;
+    }
+    private UserResult convertir(java.sql.ResultSet rs) throws SQLException {
         DaoPersona con = SQLManager.getInstancia().getPersona();
         Persona per = con.obtener(rs.getLong("ID_PERSONA"));
         String email = rs.getString("EMAIL");
         String contrasena = rs.getString("CONTRASENA");
-        return new User(per.getNombres(), email, contrasena, per.getApellidos());
+        return (new UserResult(new User(per.getNombres(), email, contrasena, per.getApellidos()), rs.getLong("ID"),rs.getLong("ID_PERSONA")));
     }
-    public User obtener(String email, String contrasena) {
-        User usuario = null;
+
+    public UserResult obtener(String email, String contrasena) {
+        UserResult usuario = null;
         try {
             String str = "SELECT * FROM USUARIO WHERE EMAIL = ? AND CONTRASENA = ?";
             java.sql.PreparedStatement st = Conexion.getConexion().prepareStatement(str);

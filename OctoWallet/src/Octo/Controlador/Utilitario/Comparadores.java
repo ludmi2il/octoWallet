@@ -20,7 +20,7 @@ public class Comparadores {
         return Comparator.comparing(Moneda::getNomenclatura);
     }
     public static Comparator<Activo> compararActivoPorNomenclatura() {
-        return Comparator.comparing(Activo::getNomenclatura);
+        return Comparator.comparing(activo -> activo.getMoneda().getNomenclatura());
     }
     public static Comparator<Activo> compararActivoPorSaldo(){
         return Comparator.comparing(Activo::getSaldo);

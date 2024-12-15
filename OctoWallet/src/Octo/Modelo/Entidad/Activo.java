@@ -2,12 +2,12 @@ package Octo.Modelo.Entidad;
 
 public class Activo {
     private String tipo;
-    private String nomenclatura; // deberia cambiar por moneda
+    private Moneda moneda;
     private double saldo;
 
-    public Activo(String tipo, String nomenclatura, double saldo) {
-        this.tipo= tipo;
-        this.nomenclatura = nomenclatura;
+    public Activo(String tipo, Moneda moneda, double saldo) {
+        this.tipo = tipo;
+        this.moneda = moneda;
         this.saldo = saldo;
     }
 
@@ -16,12 +16,15 @@ public class Activo {
     public String getTipo() {
         return tipo;
     }
-    public String getNomenclatura() {
-        return nomenclatura;
-    }
 
-    public void setNomenclatura(String nomenclatura) {
-        this.nomenclatura = nomenclatura;
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+    public Moneda getMoneda() {
+        return moneda;
+    }
+    public void setMoneda(Moneda moneda) {
+        this.moneda = moneda;
     }
 
     public double getSaldo() {
@@ -35,7 +38,7 @@ public class Activo {
     @Override
     public String toString() {
         return "Activo{" +
-                "tipo=" + tipo + "nomenclatura=" + nomenclatura +
+                "tipo=" + tipo + "Moneda =" + moneda.toString() +
                 ", saldo=" + saldo +
                 '}';
     }
