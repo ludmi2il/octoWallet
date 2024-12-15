@@ -38,13 +38,12 @@ public class DaoPersonaImpl implements DaoPersona {
             return id;
         }
     }
-    public Persona obtener(String nombres, String apellidos) {
+    public Persona obtener(long id) {
         Persona persona = null;
         try {
-            String str = "SELECT * FROM PERSONA WHERE NOMBRES = ? AND APELLIDOS = ?";
+            String str = "SELECT * FROM PERSONA WHERE ID = ?";
             java.sql.PreparedStatement st = Conexion.getConexion().prepareStatement(str);
-            st.setString(1,nombres);
-            st.setString(2,apellidos);
+            st.setLong(1,id);
             java.sql.ResultSet res = st.executeQuery();
             if (res.next()){
                 persona = convertir(res);

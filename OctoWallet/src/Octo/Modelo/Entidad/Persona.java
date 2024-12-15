@@ -7,6 +7,7 @@ public class Persona {
 		this.nombres = nombres;
 		this.apellidos = apellidos;
 	}
+	public Persona(){}
 
 	public String getNombres() {
 		return nombres;

@@ -1,40 +1,23 @@
 package Octo.Modelo.Entidad;
 
-public class User {
-	private String nombres;
+public class User extends Persona{
 	private String Email;
 	private String contrasena;
-	private String apellidos;
 
 
 
 	public User() {
+		super();
 	}
 
 
 
 	public User(String nombres, String email, String contrasena, String apellidos) {
-		this.nombres = nombres;
+		super(nombres, apellidos);
 		Email = email;
 		this.contrasena = contrasena;
-		this.apellidos = apellidos;
 	}
 
-	public String getApellidos() {
-		return apellidos;
-	}
-
-	public void setApellidos(String apellidos) {
-		this.apellidos = apellidos;
-	}
-
-	public String getNombres() {
-		return nombres;
-	}
-
-	public void setNombres(String nombres) {
-		this.nombres = nombres;
-	}
 
 	public String getEmail() {
 		return Email;

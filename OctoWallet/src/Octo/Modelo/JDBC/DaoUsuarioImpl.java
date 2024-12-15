@@ -1,4 +1,5 @@
 package Octo.Modelo.JDBC;
+import Octo.Modelo.DAO.DaoPersona;
 import Octo.Modelo.DAO.DaoUsuario;
 import Octo.Modelo.Entidad.Persona;
 import Octo.Modelo.Entidad.User;
@@ -31,11 +32,11 @@ public class DaoUsuarioImpl implements DaoUsuario{
         }
     }
     private User convertir(java.sql.ResultSet rs) throws SQLException {
-        String nombres = rs.getString("NOMBRES");
-        String apellidos = rs.getString("APELLIDOS");
+        DaoPersona con = SQLManager.getInstancia().getPersona();
+        Persona per = con.obtener(rs.getLong("ID_PERSONA"));
         String email = rs.getString("EMAIL");
         String contrasena = rs.getString("CONTRASENA");
-        return new User(nombres, email, contrasena, apellidos);
+        return new User(per.getNombres(), email, contrasena, per.getApellidos());
     }
     public User obtener(String email, String contrasena) {
         User usuario = null;

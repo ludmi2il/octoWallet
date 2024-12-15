@@ -4,6 +4,8 @@ import Octo.Modelo.DAO.*;
 
 public class SQLManager {
     private DaoMoneda moneda;
+    private DaoPersona persona;
+    private DaoUsuario usuario;
     private DaoTransaccion transaccion;
     private DaoStock stock;
     private DaoActivoCrypto crypto;
@@ -23,7 +25,18 @@ public class SQLManager {
         }
         return moneda;
     }
-
+    public DaoUsuario getUsuario() {
+        if( usuario == null){
+            usuario = new DaoUsuarioImpl();
+        }
+        return usuario;
+    }
+    public DaoPersona getPersona() {
+        if( persona == null){
+            persona = new DaoPersonaImpl();
+        }
+        return persona;
+    }
     public DaoActivo getCrypto() {
         if( crypto == null){
             crypto = new DaoActivoCrypto();
