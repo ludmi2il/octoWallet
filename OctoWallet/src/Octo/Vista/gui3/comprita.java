@@ -1,5 +1,7 @@
 package Octo.Vista.gui3;
 
+import Octo.Controlador.Vistas.ControllerComprita;
+
 import javax.swing.JPanel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -27,7 +29,8 @@ public class comprita extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public comprita(JPanel mainPanel) {
+	public comprita(JPanel mainPanel, ControllerComprita controller) {
+		setBackground(new Color(255, 255, 255));
 		
 		this.mainPanel=mainPanel;
 		
@@ -37,27 +40,13 @@ public class comprita extends JPanel {
 		
 		JSeparator separator = new JSeparator();
 		
-		JLabel lblNewLabel_1 = new JLabel("Stock disponible:\r\n");
-		lblNewLabel_1.setForeground(new Color(0, 0, 64));
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		
-		JLabel lblNewLabel_2 = new JLabel("100 bitcoin(BTC)");
-		lblNewLabel_2.setForeground(new Color(0, 0, 64));
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 14));
-		
-		JLabel lblNewLabel_3 = new JLabel("Precio de Compra:");
-		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel_3.setForeground(new Color(0, 0, 0));
-		
-		JLabel lblNewLabel_4 = new JLabel("$66,788.39");
-		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 14));
-		
 		JLabel lblNewLabel_5 = new JLabel("Quiero comprar con");
 		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		textField = new JTextField();
 		textField.setColumns(10);
-		
+		controller.setTextField(textField);
+
 		JButton btnNewButton = new JButton("Convertir\r\n");
 		btnNewButton.setForeground(new Color(255, 255, 255));
 		btnNewButton.setBackground(new Color(165, 199, 183));
@@ -71,69 +60,66 @@ public class comprita extends JPanel {
 		
 		JComboBox comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"ARS", "USD"}));
-		
+		controller.setComboBox(comboBox);
+
 		JButton btnNewButton_1 = new JButton("Realizar Compra");
 		btnNewButton_1.setForeground(new Color(255, 255, 255));
 		btnNewButton_1.setBackground(new Color(151, 177, 249));
+		btnNewButton_1.addActionListener(controller.getComprarActionListener());
 		btnNewButton_1.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		JButton btnNewButton_2 = new JButton("Cancelar");
 		btnNewButton_2.setForeground(new Color(255, 255, 255));
 		btnNewButton_2.setBackground(new Color(151, 177, 249));
-		btnNewButton_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CardLayout cl = (CardLayout)mainPanel.getLayout();
-				cl.show(mainPanel, "cotizacion");
-			}
-		});
+		btnNewButton_2.addActionListener(controller.getCancelarActionListener());
 		btnNewButton_2.setFont(new Font("Tahoma", Font.BOLD, 12));
+		
+		JLabel lblNewLabel_1 = new JLabel("Elegir cripto a comprar:");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 14));
+		
+		JComboBox comboBox_1 = new JComboBox();
+		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"BTC", "ETH", "DOGE", "USDC", "USDT"}));
+
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(separator, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 920, Short.MAX_VALUE)
-						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(separator, GroupLayout.DEFAULT_SIZE, 920, Short.MAX_VALUE)
+						.addGroup(groupLayout.createSequentialGroup()
 							.addContainerGap()
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addComponent(lblNewLabel_1, GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
-											.addGroup(groupLayout.createSequentialGroup()
-												.addComponent(lblNewLabel_5)
-												.addPreferredGap(ComponentPlacement.RELATED)))
-										.addGroup(groupLayout.createSequentialGroup()
-											.addComponent(lblNewLabel_3)
-											.addPreferredGap(ComponentPlacement.RELATED)))
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addComponent(lblNewLabel_2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addGroup(groupLayout.createSequentialGroup()
-											.addComponent(lblNewLabel_4, GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
-											.addGap(3))
-										.addGroup(groupLayout.createSequentialGroup()
-											.addPreferredGap(ComponentPlacement.RELATED)
-											.addComponent(textField, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
-											.addGap(18)
-											.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)))
-									.addGap(26)
-									.addComponent(btnNewButton)
-									.addGap(509))
+									.addComponent(lblNewLabel_5)
+									.addGap(6))
 								.addGroup(groupLayout.createSequentialGroup()
 									.addComponent(lblNewLabel_6, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(lblNewLabel_7, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED))))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)))
+									.addGap(29)))
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+								.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+									.addComponent(textField, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
+									.addGap(26)
+									.addComponent(btnNewButton))
+								.addComponent(lblNewLabel_7, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE))
+							.addGap(509)))
 					.addGap(0))
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(79)
 					.addComponent(btnNewButton_1)
 					.addGap(87)
 					.addComponent(btnNewButton_2)
-					.addContainerGap(576, Short.MAX_VALUE))
+					.addContainerGap(538, Short.MAX_VALUE))
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(662, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -142,24 +128,17 @@ public class comprita extends JPanel {
 					.addComponent(lblNewLabel)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGap(45)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel_1)
-						.addComponent(lblNewLabel_2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblNewLabel_4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addGap(32))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblNewLabel_3)
-							.addPreferredGap(ComponentPlacement.RELATED)))
+						.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblNewLabel_5)
 						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
-					.addGap(44)
+					.addGap(30)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel_6)
 						.addComponent(lblNewLabel_7))

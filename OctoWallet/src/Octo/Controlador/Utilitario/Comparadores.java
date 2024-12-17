@@ -2,7 +2,7 @@ package Octo.Controlador.Utilitario;
 
 import Octo.Modelo.Entidad.Moneda;
 import Octo.Modelo.Entidad.Activo;
-import Octo.Modelo.Entidad.Stock;
+
 
 import java.util.Comparator;
 /* method reference Clase::metodo -> es una forma implicita de decirle que metodo debe ser llamado,
@@ -25,7 +25,5 @@ public class Comparadores {
     public static Comparator<Activo> compararActivoPorSaldo(){
         return Comparator.comparing(Activo::getSaldo);
     }
-    public static Comparator<Stock> compararStockPorNomenclatura() {
-        return Comparator.comparing(Stock::getNomenclaturaMoneda);
-    }
+   
 }

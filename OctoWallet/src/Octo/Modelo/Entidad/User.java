@@ -3,7 +3,7 @@ package Octo.Modelo.Entidad;
 public class User extends Persona{
 	private String Email;
 	private String contrasena;
-
+	private boolean aceptaTerminos;
 
 
 	public User() {
@@ -12,10 +12,11 @@ public class User extends Persona{
 
 
 
-	public User(String nombres, String email, String contrasena, String apellidos) {
+	public User(String nombres, String email, String contrasena, String apellidos, boolean aceptaTerminos) {
 		super(nombres, apellidos);
 		Email = email;
 		this.contrasena = contrasena;
+		this.aceptaTerminos = aceptaTerminos;
 	}
 
 
@@ -35,5 +36,10 @@ public class User extends Persona{
 		this.contrasena = contrasena;
 	}
 
-	
+	public boolean isAceptaTerminos() {
+		return aceptaTerminos;
+	}
+	public void setAceptaTerminos(boolean aceptaTerminos) {
+		this.aceptaTerminos = aceptaTerminos;
+	}
 }

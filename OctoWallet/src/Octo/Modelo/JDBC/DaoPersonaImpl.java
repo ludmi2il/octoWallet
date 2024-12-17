@@ -26,6 +26,7 @@ public class DaoPersonaImpl implements DaoPersona {
                 PreparedStatement statement = Conexion.getConexion().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
             statement.setString(1, persona.getNombres());
             statement.setString(2, persona.getApellidos());
+            statement.executeUpdate();
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     id = generatedKeys.getLong(1);

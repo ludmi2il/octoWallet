@@ -7,11 +7,10 @@ import Octo.Modelo.DAO.DaoActivo;
 import Octo.Modelo.Entidad.Activo;
 
 public abstract class DaoActivoImpl implements DaoActivo {
-    
-    public abstract void crear(Activo dato);
-    protected boolean verificarNomenclatura(String nom){
-        return (SQLManager.getInstancia().getStock().obtener(nom) != null);
-    }
+    public abstract int actualizar(double valor, long idUser, long idMoneda);
+    public abstract Activo obtener(long id, long idMoneda);
+    public abstract long crear(Activo dato);
+
     @Override
     @Deprecated
     public List<Activo> listar() {
@@ -83,11 +82,12 @@ public abstract class DaoActivoImpl implements DaoActivo {
     }
     protected Activo convertir(ResultSet res) throws SQLException {
         Activo activo = new Activo();
-        activo.setNomenclatura(res.getString("NOMENCLATURA"));
+        activo.setId(res.getLong("ID"));
+        activo.setMoneda(SQLManager.getInstancia().getMoneda().obtener(res.getLong("ID_MONEDA")));
         activo.setSaldo(res.getDouble("CANTIDAD"));
         return activo;
     }
 
-    
+
 
 }

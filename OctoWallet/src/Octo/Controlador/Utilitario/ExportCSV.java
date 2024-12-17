@@ -42,8 +42,8 @@ public class ExportCSV {
     }
     public static List<String> getFilas(Activo act) {
         List<String> fila = new ArrayList<>();
-        fila.add(act.getTipo());
-        fila.add(String.valueOf(act.getNomenclatura()));
+        fila.add(act.getMoneda().getTipo());
+        fila.add(String.valueOf(act.getMoneda().getNomenclatura()));
         fila.add(Double.toString(act.getSaldo()));
         return fila;
     }

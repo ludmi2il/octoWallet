@@ -1,5 +1,7 @@
 package Octo.Vista.gui3;
 
+import Octo.Controlador.Vistas.ControllerRegistro;
+
 import javax.swing.JPanel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -27,7 +29,8 @@ public class registro extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public registro(JPanel mainPanel) {
+	public registro(JPanel mainPanel, ControllerRegistro controller) {
+		setBackground(new Color(255, 255, 255));
 		
 		this.mainPanel=mainPanel;
 		
@@ -41,49 +44,46 @@ public class registro extends JPanel {
 		
 		textField_1 = new JTextField();
 		textField_1.setColumns(10);
-		
+		controller.setPasswordField(textField_1);
+
 		JLabel lblNewLabel_3 = new JLabel("E-Mail:\r\n");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		textField_2 = new JTextField();
 		textField_2.setColumns(10);
-		
+		controller.setTextField(textField_2);
+
 		JLabel lblNewLabel_4 = new JLabel("Nombres:");
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		textField_3 = new JTextField();
 		textField_3.setColumns(10);
-		
+		controller.setNombre(textField_3);
+
 		JLabel lblNewLabel_5 = new JLabel("Apellidos:\r\n");
 		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		textField_4 = new JTextField();
 		textField_4.setColumns(10);
-		
+		controller.setApellido(textField_4);
+
 		JCheckBox chckbxNewCheckBox = new JCheckBox("Acepto los terminos y condiciones?\r\n");
+		chckbxNewCheckBox.setBackground(new Color(255, 255, 255));
 		chckbxNewCheckBox.setFont(new Font("Tahoma", Font.BOLD, 12));
-		
+		controller.setChckbxNewCheckBox(chckbxNewCheckBox);
+
 		JButton btnNewButton = new JButton("Registrar\r\n");
 		btnNewButton.setForeground(new Color(255, 255, 255));
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 12));
 		btnNewButton.setBackground(new Color(151, 177, 249));
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CardLayout cl = (CardLayout)mainPanel.getLayout();
-				cl.show(mainPanel, "misActivos");
-			}
-		});
+		btnNewButton.addActionListener(controller.getRegistrarActionListener());
 		
 		JButton btnNewButton_1 = new JButton("Volver al inicio\r\n");
 		btnNewButton_1.setForeground(new Color(255, 255, 255));
 		btnNewButton_1.setBackground(new Color(151, 177, 249));
 		btnNewButton_1.setFont(new Font("Tahoma", Font.BOLD, 12));
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CardLayout cl = (CardLayout)mainPanel.getLayout();
-				cl.show(mainPanel, "login");
-			}
-		});
+		btnNewButton_1.addActionListener(controller.getVolverActionListener());
+
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)

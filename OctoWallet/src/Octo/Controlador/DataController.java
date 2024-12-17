@@ -4,10 +4,9 @@ import Octo.Controlador.Utilitario.Comparadores;
 import Octo.Modelo.JDBC.SQLManager;
 import Octo.Modelo.Entidad.Activo;
 import Octo.Modelo.Entidad.Moneda;
-import Octo.Modelo.Entidad.Stock;
 import Octo.Servicios.CotizacionesRequest;
 import Octo.Servicios.DataRequest;
-
+import Octo.Modelo.JDBC.DaoUsuarioImpl;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -19,10 +18,13 @@ public class DataController {
     private boolean DbStatus;
     private List<Moneda> cacheMonedas;
     private String ids;
+    private DaoUsuarioImpl daoUsuario;
+
     public DataController() {
-     DbStatus= verificarEstadoBd();
-     iniciarValoresBD();// la bd, si no existiera, se crearia en verificar por el bloque static.
+        DbStatus= verificarEstadoBd();
+        iniciarValoresBD();// la bd, si no existiera, se crearia en verificar por el bloque static.
         ids= "";
+        daoUsuario = new DaoUsuarioImpl();
     }
 
     private void iniciarValoresBD(){
@@ -30,8 +32,8 @@ public class DataController {
             List<Moneda> criptos = DataRequest.RequestData();
             System.out.println("no imprimo" + criptos.size());
             criptos.forEach(moneda -> factory.getMoneda().crear(moneda));
-            Moneda argenta = new Moneda("F", "Peso Argentino", "ARS", 0, 0.0, darCantidad(), "/imagenes/argentina.png");
-            Moneda dolarYankee = new Moneda("F", "Dolar Estadounidense", "USD", 1, 0, darCantidad(), "/imagenes/usa.png");
+            Moneda argenta = new Moneda(0,"F", "Peso Argentino", "ARS", 0, 0.0, darCantidad(), "/imagenes/argentina.png");
+            Moneda dolarYankee = new Moneda(0,"F", "Dolar Estadounidense", "USD", 1, 0, darCantidad(), "/imagenes/usa.png");
             factory.getMoneda().crear(argenta);
             factory.getMoneda().crear(dolarYankee);
             DbStatus = true;
@@ -44,8 +46,8 @@ public class DataController {
         cacheMonedas = factory.getMoneda().listar();
     }
     public void criptosOrdenadas(){
-                cacheMonedas = cacheMonedas.stream().filter(moneda ->
-                        moneda.getTipo().equals("C")).sorted(Comparadores.compararMonedaPorValorDolar().reversed()).toList();}
+        cacheMonedas = cacheMonedas.stream().filter(moneda ->
+                moneda.getTipo().equals("C")).sorted(Comparadores.compararMonedaPorValorDolar().reversed()).toList();}
     public List<Moneda> getCacheMonedas(){
         return cacheMonedas;
     }
@@ -70,21 +72,21 @@ public class DataController {
                                 moneda.setCotizacion(cotizacion); // Asignamos la cotización al objeto Moneda
                             }
                         });
-        // Después de actualizar las cotizaciones,ya puedo actualizar la vista
-        //actualizarVistaConCotizaciones(listaMonedas);
-    }
-})
-        .exceptionally(e -> {
-        System.out.println("Error al obtener las cotizaciones: " + e.getMessage());
-        return null;
-        });
+                        // Después de actualizar las cotizaciones,ya puedo actualizar la vista
+                        //actualizarVistaConCotizaciones(listaMonedas);
+                    }
+                })
+                .exceptionally(e -> {
+                    System.out.println("Error al obtener las cotizaciones: " + e.getMessage());
+                    return null;
+                });
     }
     private int darCantidad (){ //falta ver realmente donde va a ir esto
         return (int)(Math.random()*10000) + 1;
     }
     public boolean crearMoneda(String tipo,String nombre, String nomenclatura, double cotizacion, double volatilidad, double stock){
         boolean exito;
-        factory.getMoneda().crear(new Moneda(tipo,nombre,nomenclatura,cotizacion,volatilidad,stock,""));
+        factory.getMoneda().crear(new Moneda(0,tipo,nombre,nomenclatura,cotizacion,volatilidad,stock,""));
         exito= true;
         return exito;
     }
@@ -97,26 +99,14 @@ public class DataController {
         }
         return monedas;
     }
-    public boolean crearStock(String nomenclaturaStock){
-        boolean exito;
-        factory.getStock().crear(new Stock(nomenclaturaStock, darCantidad()));
-        exito = true;
-        return exito;
-    }
-    public List<Stock> ListarStock(int opcion){
-        List<Stock> stocks = factory.getStock().listar();
-        switch (opcion){
-            case 1: stocks.sort(Comparadores.compararStockPorNomenclatura());
-                    break;
-        }
-        return stocks;
-    }
+
+
     public boolean crearActivo(String tipo, Moneda moneda, double saldo){
         boolean exito;
         if( tipo.toUpperCase().equals("CRYPTO")){
-            factory.getCrypto().crear(new Activo(tipo.toUpperCase(),moneda,saldo));
+            factory.getCrypto().crear(new Activo(0,moneda,saldo));
         }else if(tipo.toUpperCase().equals("FIAT")){
-            factory.getFiat().crear(new Activo(tipo.toUpperCase(),moneda,saldo));
+            factory.getFiat().crear(new Activo(0,moneda,saldo));
         }
         exito=true;
         return exito;
@@ -126,7 +116,7 @@ public class DataController {
         acts.sort(Comparadores.compararActivoPorSaldo());
         return acts;
     }
-    public boolean swap(String criptoOriginal, double cantidad, String criptoEsperada) {
+    public boolean swap(long criptoOriginal, double cantidad, long criptoEsperada) {
         boolean exito = false;
         try {
             factory.getTransaccion().swap(criptoOriginal, cantidad, criptoEsperada);
@@ -137,7 +127,7 @@ public class DataController {
         }
         return exito;
     }
-    public boolean comprarCripto(String cripto, String fiat, double cantidad){
+    public boolean comprarCripto(long cripto, long fiat, double cantidad){
         boolean exito = false;
         try{
             factory.getTransaccion().comprarCriptoMonedas(cripto,fiat,cantidad);
@@ -147,5 +137,8 @@ public class DataController {
             e.printStackTrace();
         }
         return exito;
+    }
+    public boolean verificarMail(String mail) {
+        return daoUsuario.verificarMail(mail);
     }
 }

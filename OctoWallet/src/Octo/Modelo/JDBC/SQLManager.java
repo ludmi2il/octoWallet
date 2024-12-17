@@ -2,12 +2,13 @@ package Octo.Modelo.JDBC;
 
 import Octo.Modelo.DAO.*;
 
+import java.sql.Connection;
+
 public class SQLManager {
     private DaoMoneda moneda;
-    private DaoPersona persona;
-    private DaoUsuario usuario;
-    private DaoTransaccion transaccion;
-    private DaoStock stock;
+    private DaoPersonaImpl persona;
+    private DaoUsuarioImpl usuario;
+    private DaoTransaccionImpl transaccion;
     private DaoActivoCrypto crypto;
     private DaoActivoFiat fiat;
     private static SQLManager instancia;
@@ -25,41 +26,36 @@ public class SQLManager {
         }
         return moneda;
     }
-    public DaoUsuario getUsuario() {
+    public DaoUsuarioImpl getUsuario() {
         if( usuario == null){
             usuario = new DaoUsuarioImpl();
         }
         return usuario;
     }
-    public DaoPersona getPersona() {
+    public DaoPersonaImpl getPersona() {
         if( persona == null){
             persona = new DaoPersonaImpl();
         }
         return persona;
     }
-    public DaoActivo getCrypto() {
+    public DaoActivoCrypto getCrypto() {
         if( crypto == null){
             crypto = new DaoActivoCrypto();
         }
         return crypto;
     }
-    public DaoActivo getFiat() {
+    public DaoActivoFiat getFiat() {
         if( fiat == null){
             fiat = new DaoActivoFiat();
         }
         return fiat;
     }
-    public DaoTransaccion getTransaccion() {
+    public DaoTransaccionImpl getTransaccion() {
         if(transaccion==null){
             transaccion = new DaoTransaccionImpl();
         }
         return transaccion;
     }
 
-    public DaoStock getStock() {
-        if(stock == null){
-            stock = new DaoStockImpl();
-        }
-        return stock;
-    }
+
 }

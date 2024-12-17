@@ -41,7 +41,7 @@ public class CotizacionesFiatRequest {
             JsonNode raiz = objectMapper.readTree(cuerpoRespuesta);
             String base = raiz.get("base_code").asText();
             double cotizacion = raiz.get("conversion_rate").asDouble();
-            return new Moneda("F", base, base,cotizacion,0.0,0.0,"");
+            return new Moneda(0,"F", base, base,cotizacion,0.0,0.0,"");
         } catch (Exception e) {
             System.out.println("Error al parsear el JSON: " + e.getMessage());
             return null;
