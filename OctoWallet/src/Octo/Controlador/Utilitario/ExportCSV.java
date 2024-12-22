@@ -5,20 +5,24 @@ import Octo.Modelo.Entidad.Activo;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
 import java.nio.file.Paths;
 import java.nio.file.Path;
+import java.util.Locale;
 
 public class ExportCSV {
 
     //El metodo exportToCSV recibe una lista de activos y exporta los datos de estos a un archivo CSV en el directorio de Descargas.
     public static void exportToCSV(List<Activo> acts) throws IOException {
-        Path downloadsPath = Paths.get(System.getProperty("user.home"), "Downloads");
-        File exportDir = new File(downloadsPath+"/misActivos.csv");
-        exportDir.delete();
-        File newExportDir = new File(downloadsPath+"/misActivos.csv");
+        Path downloadsPath = Paths.get(System.getProperty("user.home"), getDownloadsFolderName());
+        Path exportFilePath = downloadsPath.resolve("misActivos.csv");
+        File exportFile = exportFilePath.toFile();
+        if(exportFile.exists()){
+            Files.delete(exportFilePath);
+        }
         List<List<String>> filas = getFilas2(acts);
         FileWriter csvWriter = new FileWriter(downloadsPath+"/misActivos.csv"); //
         csvWriter.append("Tipo");
@@ -46,5 +50,18 @@ public class ExportCSV {
         fila.add(String.valueOf(act.getMoneda().getNomenclatura()));
         fila.add(Double.toString(act.getSaldo()));
         return fila;
+    }
+    private static String getDownloadsFolderName() {
+        String language = Locale.getDefault().getLanguage();
+        switch (language) {
+            case "es":
+                return "Descargas";
+            case "fr":
+                return "Téléchargements";
+            case "en":
+                return "Downloads";
+            default:
+                return "Downloads";
+        }
     }
 }

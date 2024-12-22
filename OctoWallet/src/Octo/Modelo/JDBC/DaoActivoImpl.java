@@ -80,6 +80,18 @@ public abstract class DaoActivoImpl implements DaoActivo {
         activos.addAll(listarFiat(id));
         return activos;
     }
+    public void borrado(long id) {
+        Activo activo = null;
+        try {
+            String str = "DELETE FROM ACTIVO_CRIPTO WHERE ID_USUARIO = ?";
+                PreparedStatement st = Conexion.getConexion().prepareStatement(str);
+                st.setLong(1,id);
+                int res = st.executeUpdate();
+            } catch (SQLException e) {
+            System.out.println("no se pudo borrar los activos!");
+            }
+    }
+
     protected Activo convertir(ResultSet res) throws SQLException {
         Activo activo = new Activo();
         activo.setId(res.getLong("ID"));

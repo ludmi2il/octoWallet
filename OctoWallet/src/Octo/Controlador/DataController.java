@@ -7,6 +7,10 @@ import Octo.Modelo.Entidad.Moneda;
 import Octo.Servicios.CotizacionesRequest;
 import Octo.Servicios.DataRequest;
 import Octo.Modelo.JDBC.DaoUsuarioImpl;
+
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -25,6 +29,9 @@ public class DataController {
         iniciarValoresBD();// la bd, si no existiera, se crearia en verificar por el bloque static.
         ids= "";
         daoUsuario = new DaoUsuarioImpl();
+       cargarCache();
+       criptosOrdenadas();
+       cacheMonedas =MonedasMVP();
     }
 
     private void iniciarValoresBD(){
@@ -50,6 +57,13 @@ public class DataController {
                 moneda.getTipo().equals("C")).sorted(Comparadores.compararMonedaPorValorDolar().reversed()).toList();}
     public List<Moneda> getCacheMonedas(){
         return cacheMonedas;
+    }
+    public List<Moneda> MonedasMVP(){
+        List<String> monedasMVP = Arrays.asList("btc", "eth", "usdc","usdt","doge");
+        System.out.println(cacheMonedas);
+        return cacheMonedas.stream()
+                .filter(moneda -> monedasMVP.contains(moneda.getNomenclatura().toLowerCase()))
+                .collect(Collectors.toList());
     }
     private CompletableFuture<Map<String, Map<String,Double>>> obtenerCotizaciones(){
         // obtengo solo las monedas de tipo C sin crear casos de where en las queries
@@ -81,15 +95,18 @@ public class DataController {
                     return null;
                 });
     }
+
     private int darCantidad (){ //falta ver realmente donde va a ir esto
         return (int)(Math.random()*10000) + 1;
     }
+    @Deprecated
     public boolean crearMoneda(String tipo,String nombre, String nomenclatura, double cotizacion, double volatilidad, double stock){
         boolean exito;
         factory.getMoneda().crear(new Moneda(0,tipo,nombre,nomenclatura,cotizacion,volatilidad,stock,""));
         exito= true;
         return exito;
     }
+    @Deprecated
     public List<Moneda> listarMoneda(int opcion){
         List<Moneda> monedas = factory.getMoneda().listar();
         switch (opcion){
@@ -101,21 +118,23 @@ public class DataController {
     }
 
 
-    public boolean crearActivo(String tipo, Moneda moneda, double saldo){
-        boolean exito;
-        if( tipo.toUpperCase().equals("CRYPTO")){
-            factory.getCrypto().crear(new Activo(0,moneda,saldo));
-        }else if(tipo.toUpperCase().equals("FIAT")){
-            factory.getFiat().crear(new Activo(0,moneda,saldo));
-        }
-        exito=true;
-        return exito;
+    public List<Activo> crearActivosDefault(List<Moneda> monedas){
+        // con el id de usuario Sesion.getInstance().getUserResult().getUserId()
+        List<Activo> activos= new ArrayList<>();
+        monedas.stream().forEach(moneda ->
+                activos.add(new Activo(Sesion.getInstance().getUserResult().
+                                getUserId(),moneda, darCantidad())));
+        activos.forEach(activo -> SQLManager.getInstancia().getCrypto().crear(activo));
+        return activos;
+
     }
+    @Deprecated
     public List<Activo> ListarActivos(){
         List<Activo> acts = factory.getCrypto().listar();
         acts.sort(Comparadores.compararActivoPorSaldo());
         return acts;
     }
+    @Deprecated
     public boolean swap(long criptoOriginal, double cantidad, long criptoEsperada) {
         boolean exito = false;
         try {
@@ -127,6 +146,7 @@ public class DataController {
         }
         return exito;
     }
+    @Deprecated
     public boolean comprarCripto(long cripto, long fiat, double cantidad){
         boolean exito = false;
         try{

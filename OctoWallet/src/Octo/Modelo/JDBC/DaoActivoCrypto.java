@@ -16,7 +16,7 @@ public class DaoActivoCrypto extends DaoActivoImpl{
             st.setLong(1, Sesion.getInstance().getUserResult().getUserId());
             st.setLong(2, dato.getMoneda().getIdM());
             st.setDouble(3, dato.getSaldo());
-            st.executeUpdate(sql);
+            st.executeUpdate();
             try (ResultSet generatedKeys = st.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     return generatedKeys.getLong(1);
@@ -50,6 +50,7 @@ public class DaoActivoCrypto extends DaoActivoImpl{
         }
         return activo;
     }
+
     @Override
     public Activo obtener(String nomenclatura){
         Activo activo = null;

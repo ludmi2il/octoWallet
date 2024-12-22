@@ -64,17 +64,13 @@ public class misActivos extends JPanel {
 
 		JButton btnNewButton_1 = new JButton("Generar Datos de Prueba\r\n");
 
-		btnNewButton_1.addActionListener(controller.getGenerarDatos());
-		btnNewButton_1.setForeground(new Color(255, 255, 255));
-		btnNewButton_1.setBackground(new Color(128, 0, 0));
-		btnNewButton_1.setFont(new Font("Tahoma", Font.BOLD, 12));
 
 		JLabel lblNewLabel_2 = new JLabel("Balance:");
 		lblNewLabel_2.setIcon(new ImageIcon(misActivos.class.getResource("/imagenes/360_F_577821527_5sZgkA6qrLkwitzLc1ZroVoYkPvdUPlG.png")));
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 18));
 
 		JLabel lblNewLabel_3 = new JLabel("ARS 8'000,000.39");
-		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblNewLabel_3.setFont(new Font("Roboto", Font.BOLD, 18));
 
 
 		JButton btnNewButton_2 = new JButton("Exportar como CSV");
@@ -171,9 +167,9 @@ public class misActivos extends JPanel {
 
 		DefaultTableModel model = new DefaultTableModel(
                 new Object[][] {
-                    {new ImageIcon(misActivos.class.getResource("/imagenes/bitcoin.png")), "Bitcoin", 1000.0},
-                    {new ImageIcon(misActivos.class.getResource("/imagenes/USDC.png")), "USDC", 2500.0},
-                    {new ImageIcon(misActivos.class.getResource("/imagenes/ethereum.png")), "Ethereum", 3000.0},
+                    {new ImageIcon(misActivos.class.getResource("/imagenes/bitcoin.png")), "Bitcoin", 0.0},
+                    {new ImageIcon(misActivos.class.getResource("/imagenes/USDC.png")), "USDC", 0.0},
+                    {new ImageIcon(misActivos.class.getResource("/imagenes/ethereum.png")), "Ethereum", 0.0},
                 },
                 new String[] {
                     "Icono", "Cripto", "Monto"
@@ -193,10 +189,21 @@ public class misActivos extends JPanel {
                     return columnTypes[columnIndex];
                 }
             };
+		this.addComponentListener(new ComponentAdapter() {
+									  @Override
+									  public void componentShown(ComponentEvent e) {
+										  controller.cargarDatosEnTabla(model);
+									  }
+								  });
 
-            JTable table = new JTable(model);
+		btnNewButton_1.addActionListener(controller.getGenerarDatos(model));
+		btnNewButton_1.setForeground(new Color(255, 255, 255));
+		btnNewButton_1.setBackground(new Color(128, 0, 0));
+		btnNewButton_1.setFont(new Font("Tahoma", Font.BOLD, 12));
+
+		JTable table = new JTable(model);
             table.setFont(new Font("Tahoma", Font.PLAIN, 12));
-            table.setRowHeight(50); // Ajustar altura para los iconos
+            table.setRowHeight(100); // Ajustar altura para los iconos
             table.setEnabled(false); // Tabla no editable
 
             // Ordenación interactiva
