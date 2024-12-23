@@ -1,7 +1,6 @@
 package Octo.Vista.gui3;
 
 import Octo.Controlador.Vistas.ControllerOperaciones;
-import Octo.Modelo.Entidad.Transaccion;
 
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
@@ -22,14 +21,14 @@ public class operaciones extends JPanel {
         setBackground(new Color(236, 236, 236));
 
         JLabel lblTitulo = new JLabel("OctoWallet - Mis Operaciones");
-        lblTitulo.setForeground(new Color(128, 128, 128));
-        lblTitulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblTitulo.setForeground(new Color(96, 96, 96));
+        lblTitulo.setFont(new Font("Tahoma", Font.BOLD, 18));
 
         JSeparator separator = new JSeparator();
 
         JButton btnVolver = new JButton("Volver");
         btnVolver.setForeground(Color.WHITE);
-        btnVolver.setBackground(new Color(151, 177, 249));
+        btnVolver.setBackground(new Color(100, 149, 237));
         btnVolver.setFont(new Font("Tahoma", Font.BOLD, 12));
         btnVolver.addActionListener(controller.getVolverActionListener());
 
@@ -40,14 +39,9 @@ public class operaciones extends JPanel {
 
         // Scroll para las transacciones
         JScrollPane scrollPane = new JScrollPane(panelTransacciones);
-        scrollPane.setBorder(null);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        /*
-        for (int i = 1; i <= 10; i++) { // Simula 5 transacciones
-            panelTransacciones.add(crearTarjetaTransaccion("Transacción " + i, "$100.00", "22/12/2024"));
-        }
-        */
         // Layout principal
         GroupLayout groupLayout = new GroupLayout(this);
         groupLayout.setHorizontalGroup(
@@ -81,7 +75,8 @@ public class operaciones extends JPanel {
         );
 
         setLayout(groupLayout);
-        transacciones=panelTransacciones;
+        transacciones = panelTransacciones;
+
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
@@ -89,17 +84,32 @@ public class operaciones extends JPanel {
             }
         });
     }
-    public void agregarTransaccion(String transaccion, String monto,String fecha) {
-        JPanel nuevaTarjeta = crearTarjetaTransaccion(transaccion,monto,fecha);
+
+    public void agregarTransaccion(String transaccion, String monto, String fecha) {
+        JPanel nuevaTarjeta = crearTarjetaTransaccion(transaccion, monto, fecha);
         transacciones.add(nuevaTarjeta);
-        transacciones.revalidate(); // Actualiza el diseño del panel
-        transacciones.repaint();// Redibuja el panel
+        actualizarPanelTransacciones();
     }
+
+    private void actualizarPanelTransacciones() {
+        int alturaTarjeta = 80; // Altura aproximada de cada tarjeta
+        int margen = 10; // Margen entre tarjetas
+        int totalTarjetas = transacciones.getComponentCount();
+        int alturaTotal = totalTarjetas * (alturaTarjeta + margen);
+
+        transacciones.setPreferredSize(new Dimension(transacciones.getWidth(), alturaTotal));
+        transacciones.revalidate();
+        transacciones.repaint();
+    }
+
     private JPanel crearTarjetaTransaccion(String titulo, String monto, String fecha) {
         JPanel tarjeta = new JPanel();
         tarjeta.setBackground(Color.WHITE);
-        tarjeta.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
-        tarjeta.setLayout(new GridLayout(2, 2));
+        tarjeta.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        ));
+        tarjeta.setLayout(new BorderLayout(10, 10));
 
         JLabel lblTitulo = new JLabel(titulo);
         lblTitulo.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -112,11 +122,14 @@ public class operaciones extends JPanel {
         lblFecha.setFont(new Font("Tahoma", Font.ITALIC, 12));
         lblFecha.setForeground(new Color(150, 150, 150));
 
-        tarjeta.add(lblTitulo);
-        tarjeta.add(lblMonto);
-        tarjeta.add(lblFecha);
+        JPanel contenidoSuperior = new JPanel(new BorderLayout());
+        contenidoSuperior.setOpaque(false);
+        contenidoSuperior.add(lblTitulo, BorderLayout.WEST);
+        contenidoSuperior.add(lblMonto, BorderLayout.EAST);
+
+        tarjeta.add(contenidoSuperior, BorderLayout.NORTH);
+        tarjeta.add(lblFecha, BorderLayout.SOUTH);
 
         return tarjeta;
     }
 }
-

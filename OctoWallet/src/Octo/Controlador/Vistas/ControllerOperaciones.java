@@ -30,7 +30,6 @@ public class ControllerOperaciones {
     }
 
     public void actualizarTransacciones(operaciones mainPanel1) {
-            this.daoTransaccion.cargarTransaccionesDePrueba();
             List<Transaccion> transacciones = daoTransaccion.listar();
             if ((transacciones!= null) && (transacciones.size() > cantTransacciones)){
                 for (int i = cantTransacciones; i<transacciones.size(); i++) {

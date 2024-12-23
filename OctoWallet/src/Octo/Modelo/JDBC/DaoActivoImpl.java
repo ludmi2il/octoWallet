@@ -90,6 +90,14 @@ public abstract class DaoActivoImpl implements DaoActivo {
             } catch (SQLException e) {
             System.out.println("no se pudo borrar los activos!");
             }
+        try {
+            String str = "DELETE FROM ACTIVO_FIAT WHERE ID_USUARIO = ?";
+            PreparedStatement st = Conexion.getConexion().prepareStatement(str);
+            st.setLong(1,id);
+            int res = st.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("no se pudo borrar los activos!");
+        }
     }
 
     protected Activo convertir(ResultSet res) throws SQLException {
@@ -99,7 +107,7 @@ public abstract class DaoActivoImpl implements DaoActivo {
         activo.setSaldo(res.getDouble("CANTIDAD"));
         return activo;
     }
-
+    public abstract void borrar(long id, long idMoneda);
 
 
 }

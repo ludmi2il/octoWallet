@@ -22,6 +22,7 @@ public class ControllerCotizacion {
         private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         public ControllerCotizacion(JPanel mainPanel) {
             this.mainPanel = mainPanel; this.dataControl = new DataController();
+            Sesion.getInstance().setMonedasDisponibles(dataControl.getCacheMonedas());
         }
     public void iniciarActualizaciones(cotizacion c) {
         Runnable tareaActualizacion = () -> {
@@ -31,7 +32,7 @@ public class ControllerCotizacion {
                 c.actualizarCotizaciones(dataControl.getCacheMonedas());
             });
         };
-        scheduler.scheduleAtFixedRate(tareaActualizacion, 0, 1, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(tareaActualizacion, 0, 20, TimeUnit.SECONDS);
     }
     public void detenerActualizaciones() {
         scheduler.shutdown();
@@ -67,6 +68,7 @@ public class ControllerCotizacion {
         public ActionListener getComprarActionListener() {
             return new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
+                    Sesion.getInstance().setCriptoCompra(e.getActionCommand());
                     CardLayout cl = (CardLayout)mainPanel.getLayout();
                     cl.show(mainPanel, "comprita");
                 }
@@ -75,6 +77,7 @@ public class ControllerCotizacion {
         public ActionListener getSwapActionListener() {
             return new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
+                    Sesion.getInstance().setCriptoCompra(e.getActionCommand());
                     CardLayout cl = (CardLayout)mainPanel.getLayout();
                     cl.show(mainPanel, "intercambio");
                 }

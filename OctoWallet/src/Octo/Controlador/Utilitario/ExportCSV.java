@@ -17,7 +17,8 @@ public class ExportCSV {
 
     //El metodo exportToCSV recibe una lista de activos y exporta los datos de estos a un archivo CSV en el directorio de Descargas.
     public static void exportToCSV(List<Activo> acts) throws IOException {
-        Path downloadsPath = Paths.get(System.getProperty("user.home"), getDownloadsFolderName());
+        Path downloadsPath = getDownloadsFolderPath();
+        System.out.println(downloadsPath.toString());
         Path exportFilePath = downloadsPath.resolve("misActivos.csv");
         File exportFile = exportFilePath.toFile();
         if(exportFile.exists()){
@@ -51,15 +52,25 @@ public class ExportCSV {
         fila.add(Double.toString(act.getSaldo()));
         return fila;
     }
-    private static String getDownloadsFolderName() {
-        String language = Locale.getDefault().getLanguage();
-        switch (language) {
-            case "fr":
-                return "Téléchargements";
-            case "en":
-                return "Downloads";
-            default:
-                return "Descargas";
+    private static Path getDownloadsFolderPath() {
+        try {
+            // path absoluto del sistema de archivos
+            File downloadsFolder = new File(System.getProperty("user.home"));
+            Path downloadsPath = Paths.get(downloadsFolder.getAbsolutePath(), "Downloads");
+
+            // si la path de carrera existe, me lo traigo
+            if (downloadsPath.toFile().exists()) {
+                return downloadsPath;
+            }
+
+            // sino, sigo y pruebo con Descargas
+            downloadsPath = Paths.get(downloadsFolder.getAbsolutePath(), "Descargas");
+            if (downloadsPath.toFile().exists()) {
+                return downloadsPath;
+            }
+            throw new IllegalStateException("No se pudo determinar la carpeta de Descargas.");
+        } catch (Exception e) {
+            throw new RuntimeException("Error al intentar obtener la carpeta de Descargas", e);
         }
     }
 }

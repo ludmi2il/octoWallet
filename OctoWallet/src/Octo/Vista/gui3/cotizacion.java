@@ -131,6 +131,7 @@ public class cotizacion extends JPanel {
             @Override
             public void componentShown(ComponentEvent e) {
                 controller.ModificarUserName();
+                actualizarCotizaciones(Sesion.getInstance().getMonedasDisponibles());
             }
         });
     }
@@ -160,7 +161,7 @@ public class cotizacion extends JPanel {
             gbc.gridx = 0;
             JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             namePanel.setBackground(Color.WHITE);
-            JLabel icon = null; // Suponiendo que Moneda tiene un método getImagen()
+            JLabel icon = null;
             try {
                 icon = new JLabel(new ImageIcon(new ImageIcon(new URL(SQLManager.getInstancia().getMoneda().obtener(cripto.getNomenclatura()).getImagen())).getImage().getScaledInstance(32,32, Image.SCALE_SMOOTH)));
             } catch (MalformedURLException e) {
@@ -184,15 +185,19 @@ public class cotizacion extends JPanel {
             buttonPanel.setBackground(Color.WHITE);
             JButton buyButton = new JButton("Comprar");
             styleButton(buyButton, new Color(67, 160, 71)); // Verde
+            buyButton.setActionCommand(cripto.getNomenclatura());
             buyButton.addActionListener(control.getComprarActionListener());
             buttonPanel.add(buyButton);
 
             // Swap solo para BTC y DOGE
-            if (cripto.getNombre().contains("bitcoin") || cripto.getNombre().contains("dogecoin")) {
-                JButton swapButton = new JButton("Swap");
-                styleButton(swapButton, new Color(255, 87, 34)); // Naranja
-                swapButton.addActionListener(control.getSwapActionListener());
-                buttonPanel.add(swapButton);
+            if(Sesion.getInstance().getUserResult() != null) {
+                if (SQLManager.getInstancia().getCrypto().obtener(Sesion.getInstance().getUserResult().getUserId(), cripto.getIdM()) != null) {
+                    JButton swapButton = new JButton("Swap");
+                    styleButton(swapButton, new Color(255, 87, 34)); // Naranja
+                    swapButton.setActionCommand(cripto.getNomenclatura());
+                    swapButton.addActionListener(control.getSwapActionListener());
+                    buttonPanel.add(swapButton);
+                }
             }
 
             mainPanel1.add(buttonPanel, gbc);
@@ -203,74 +208,7 @@ public class cotizacion extends JPanel {
         mainPanel1.repaint();
     }
 
-/*
-    public void actualizarVistaCotizaciones(JPanel mainPanel1, List<Moneda> cotizaciones) {
-        // Limpia el panel principal para evitar duplicados
-        mainPanel1.removeAll();
 
-        // Layout del mainPanel1
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(CryptoCotizacion, 5, 5, 5); // Espaciado
-        gbc.weightx = 1;
-
-        // Títulos
-        gbc.gridy = 0;
-        gbc.gridx = 0;
-        mainPanel1.add(new JLabel("Nombre"), gbc);
-        gbc.gridx = 1;
-        mainPanel1.add(new JLabel("Precio"), gbc);
-        gbc.gridx = 2;
-        mainPanel1.add(new JLabel("Acciones"), gbc);
-
-        // Rellenar los datos dinámicamente
-        for (int i = 0; i < cotizaciones.size(); i++) {
-            Moneda cripto = cotizaciones.get(i);
-
-            gbc.gridy = i + 1;
-
-            // Columna 1: Imagen y nombre
-            gbc.gridx = 0;
-            JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            namePanel.setBackground(Color.WHITE);
-            JLabel icon = new JLabel(new ImageIcon(new ImageIcon(new URL(SQLManager.getInstancia().getMoneda().obtener(activo.getMoneda().getNomenclatura()).getImagen())).getImage().getScaledInstance(32,32, Image.SCALE_SMOOTH)),); // Imagen
-            JLabel name = new JLabel(cripto.getNombre());
-            name.setFont(new Font("Arial", Font.PLAIN, 14));
-            namePanel.add(icon);
-            namePanel.add(name);
-            mainPanel1.add(namePanel, gbc);
-
-            // Columna 2: Precio
-            gbc.gridx = 1;
-            JLabel price = new JLabel(String.valueOf(cripto.getCotizacion()));
-            price.setFont(new Font("Arial", Font.BOLD, 14));
-            mainPanel1.add(price, gbc);
-
-            // Columna 3: Botones
-            gbc.gridx = 2;
-            JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            buttonPanel.setBackground(Color.WHITE);
-            JButton buyButton = new JButton("Comprar");
-            styleButton(buyButton, new Color(67, 160, 71)); // Verde
-            buyButton.addActionListener(controller.getComprarActionListener());
-            buttonPanel.add(buyButton);
-
-            // Swap solo para Bitcoin y Dogecoin
-            if (cripto.getNombre().contains("Bitcoin") || cripto.getNombre().contains("Dogecoin")) {
-                JButton swapButton = new JButton("Swap");
-                styleButton(swapButton, new Color(255, 87, 34)); // Naranja
-                swapButton.addActionListener(controller.getSwapActionListener());
-                buttonPanel.add(swapButton);
-            }
-
-            mainPanel1.add(buttonPanel, gbc);
-        }
-
-        // Refrescar el panel
-        mainPanel1.revalidate();
-        mainPanel1.repaint();
-    }
-    */
     private void addLabel(JPanel panel, String text, int style, GridBagConstraints gbc) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Arial", style, 16));

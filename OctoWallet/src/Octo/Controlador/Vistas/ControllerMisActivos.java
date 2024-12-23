@@ -113,17 +113,35 @@ public class ControllerMisActivos {
            activos = SQLManager.getInstancia().getCrypto().listar(Sesion.getInstance().getUserResult().getUserId());
            label.setText("ARS $" + obtenerBalance());
            table.setRowCount(0);
+            // Iterar sobre los activos para llenar la tabla
             for (Activo activo : activos) {
                 try {
+                    // Determinar el icono basado en el tipo de moneda
+                    ImageIcon icono;
+                    if (activo.getMoneda().getTipo().equals("F")) {
+                        java.net.URL imagenLocal = getClass().getResource(activo.getMoneda().getImagen());
+                        if (imagenLocal != null) {
+                            icono = new ImageIcon(new ImageIcon(imagenLocal).getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH));
+                        } else {
+                            throw new RuntimeException("No se pudo encontrar la imagen local: /imagenes/ars.jpg");
+                        }  } else {
+                        icono = new ImageIcon(
+                                new ImageIcon(new URL(activo.getMoneda().getImagen()))
+                                        .getImage()
+                                        .getScaledInstance(32, 32, Image.SCALE_SMOOTH)
+                        );
+                    }
+
+                    // Agregar una nueva fila a la tabla con los datos del activo
                     table.addRow(new Object[] {
-                            new ImageIcon(new ImageIcon(new URL(SQLManager.getInstancia().getMoneda().obtener(activo.getMoneda().getNomenclatura()).getImagen())).getImage().getScaledInstance(32,32, Image.SCALE_SMOOTH)),
+                            icono,
                             activo.getMoneda().getNombre(),
                             activo.getSaldo()
                     });
                 } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
+                    // Manejo de la excepción en caso de URL mal formada
+                    throw new RuntimeException("Error al cargar la imagen de la moneda: " + e.getMessage(), e);
                 }
-
-            };
+            }
         };
     }

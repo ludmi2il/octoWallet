@@ -15,7 +15,7 @@ public class DaoActivoFiat extends DaoActivoImpl{
             st.setLong(1, Sesion.getInstance().getUserResult().getUserId());
             st.setLong(2, dato.getMoneda().getIdM());
             st.setDouble(3, dato.getSaldo());
-            st.executeUpdate(sql);
+            st.executeUpdate();
             try (ResultSet generatedKeys = st.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     return generatedKeys.getLong(1);
@@ -61,6 +61,21 @@ public class DaoActivoFiat extends DaoActivoImpl{
             throw new RuntimeException(e);
         }
         return activo;
+    }
+    public void borrar(long id, long idMoneda) {
+        Activo activo = null;
+        try {
+            String str = "DELETE FROM ACTIVO_FIAT WHERE ID_USUARIO = ? AND ID_MONEDA = ?";
+            PreparedStatement st = Conexion.getConexion().prepareStatement(str);
+            st.setLong(1, id);
+            st.setLong(2, idMoneda);
+            ResultSet res = st.executeQuery();
+            if (res.next()) {
+                activo = convertir(res);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
     @Override
     public Activo obtener(String nomenclatura){

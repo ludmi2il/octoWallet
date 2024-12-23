@@ -1,20 +1,13 @@
 package Octo.Vista.gui3;
 
-import javax.swing.JPanel;
-import javax.swing.GroupLayout;
+import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JLabel;
-import javax.swing.JSeparator;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import Octo.Controlador.Sesion;
 import Octo.Controlador.Vistas.ControllerIntercambio;
 
-import javax.swing.JButton;
 import java.awt.Font;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
 
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -22,7 +15,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import javax.swing.ImageIcon;
 
 public class intercambio extends JPanel {
 
@@ -85,6 +77,20 @@ public class intercambio extends JPanel {
 		lblNewLabel_5.setIcon(new ImageIcon(intercambio.class.getResource("/imagenes/pulpito.png")));
 		
 		JLabel lblNewLabel_6 = new JLabel("New label");
+		controller.setLabel(lblNewLabel_6);
+		this.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+				try {
+					if (Sesion.getInstance() != null && Sesion.getInstance().getCriptoCompra() != null) {
+						controller.getCripto();
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(null,"Cripto monedas no disponibles en este momento. Intente más tarde: ");
+				}
+			}
+		});
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)

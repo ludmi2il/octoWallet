@@ -1,6 +1,7 @@
 package Octo.Controlador;
 
 import Octo.Controlador.Utilitario.Comparadores;
+import Octo.Controlador.Utilitario.FiatConsumo;
 import Octo.Modelo.JDBC.SQLManager;
 import Octo.Modelo.Entidad.Activo;
 import Octo.Modelo.Entidad.Moneda;
@@ -26,55 +27,64 @@ public class DataController {
     private DaoUsuarioImpl daoUsuario;
 
     public DataController() {
-        DbStatus= verificarEstadoBd();
+        DbStatus = verificarEstadoBd();
         iniciarValoresBD();// la bd, si no existiera, se crearia en verificar por el bloque static.
-        ids= "";
+        ids = "";
         daoUsuario = new DaoUsuarioImpl();
-       cargarCache();
-       criptosOrdenadas();
-       cacheMonedas =MonedasMVP();
+        cargarCache();
+        criptosOrdenadas();
+        cacheMonedas = MonedasMVP();
     }
 
-    private void iniciarValoresBD(){
-        if(!DbStatus) {
+    private void iniciarValoresBD() {
+        if (!DbStatus) {
             List<Moneda> criptos = DataRequest.RequestData();
             System.out.println("no imprimo" + criptos.size());
             criptos.forEach(moneda -> factory.getMoneda().crear(moneda));
             Moneda argenta = CotizacionesFiatRequest.RequestData("ARS");
-            argenta.setImagen("https://upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_Argentina.svg");
-            Moneda dolarYankee = new Moneda(0,"F", "Dolar Estadounidense", "USD", 1, 0, darCantidad(), "/imagenes/usa.png");
+            argenta.setStock(darCantidad());
+            argenta.setImagen("/imagenes/arg.jpg");
+            Moneda dolarYankee = new Moneda(0, "F", "USD", "USD", 1, 0, darCantidad(), "/imagenes/usd.png");
             factory.getMoneda().crear(argenta);
             factory.getMoneda().crear(dolarYankee);
             DbStatus = true;
         }
     }
-    private boolean verificarEstadoBd(){
+
+    private boolean verificarEstadoBd() {
         return !factory.getMoneda().listar().isEmpty();
     }
-    public void cargarCache(){
+
+    public void cargarCache() {
         cacheMonedas = factory.getMoneda().listar();
     }
-    public void criptosOrdenadas(){
+
+    public void criptosOrdenadas() {
         cacheMonedas = cacheMonedas.stream().filter(moneda ->
-                moneda.getTipo().equals("C")).sorted(Comparadores.compararMonedaPorValorDolar().reversed()).toList();}
-    public List<Moneda> getCacheMonedas(){
+                moneda.getTipo().equals("C")).sorted(Comparadores.compararMonedaPorValorDolar().reversed()).toList();
+    }
+
+    public List<Moneda> getCacheMonedas() {
         return cacheMonedas;
     }
-    public List<Moneda> MonedasMVP(){
-        List<String> monedasMVP = Arrays.asList("btc", "eth", "usdc","usdt","doge");
+
+    public List<Moneda> MonedasMVP() {
+        List<String> monedasMVP = Arrays.asList("btc", "eth", "usdc", "usdt", "doge");
         System.out.println(cacheMonedas);
         return cacheMonedas.stream()
                 .filter(moneda -> monedasMVP.contains(moneda.getNomenclatura().toLowerCase()))
                 .collect(Collectors.toList());
     }
-    private CompletableFuture<Map<String, Map<String,Double>>> obtenerCotizaciones(){
+
+    private CompletableFuture<Map<String, Map<String, Double>>> obtenerCotizaciones() {
         // obtengo solo las monedas de tipo C sin crear casos de where en las queries
-        if(ids.equals("")) {
+        if (ids.equals("")) {
             ids = cacheMonedas.stream().map(Moneda::getNombre).collect(Collectors.joining(","));
         }
         return CotizacionesRequest.RequestAsync(ids); // quiero que retorne un mapa
     }
-    public void ActualizarCotizaciones(){
+
+    public void ActualizarCotizaciones() {
         obtenerCotizaciones()
                 .thenAccept(cotizaciones -> {
                     // Verificamos si la respuesta no está vacía
@@ -98,50 +108,65 @@ public class DataController {
                 });
     }
 
-    private int darCantidad (){ //falta ver realmente donde va a ir esto
-        return (int)(Math.random()*10000) + 1;
+    private int darCantidad() { //falta ver realmente donde va a ir esto
+        return (int) (Math.random() * 10000) + 1;
     }
+
     @Deprecated
-    public boolean crearMoneda(String tipo,String nombre, String nomenclatura, double cotizacion, double volatilidad, double stock){
+    public boolean crearMoneda(String tipo, String nombre, String nomenclatura, double cotizacion, double volatilidad, double stock) {
         boolean exito;
-        factory.getMoneda().crear(new Moneda(0,tipo,nombre,nomenclatura,cotizacion,volatilidad,stock,""));
-        exito= true;
+        factory.getMoneda().crear(new Moneda(0, tipo, nombre, nomenclatura, cotizacion, volatilidad, stock, ""));
+        exito = true;
         return exito;
     }
+
     @Deprecated
-    public List<Moneda> listarMoneda(int opcion){
+    public List<Moneda> listarMoneda(int opcion) {
         List<Moneda> monedas = factory.getMoneda().listar();
-        switch (opcion){
-            case 1: monedas.sort(Comparadores.compararMonedaPorValorDolar());
+        switch (opcion) {
+            case 1:
+                monedas.sort(Comparadores.compararMonedaPorValorDolar());
                 break;
-            case 2: monedas.sort(Comparadores.compararMonedaPorNomenclatura());
+            case 2:
+                monedas.sort(Comparadores.compararMonedaPorNomenclatura());
         }
         return monedas;
     }
 
 
-    public List<Activo> crearActivosDefault(List<Moneda> monedas){
+    public List<Activo> crearActivosDefault(List<Moneda> monedas) {
         // con el id de usuario Sesion.getInstance().getUserResult().getUserId()
-        List<Activo> activos= new ArrayList<>();
+        List<Activo> activos = new ArrayList<>();
         monedas.stream().forEach(moneda ->
                 activos.add(new Activo(Sesion.getInstance().getUserResult().
-                                getUserId(),moneda, darCantidad())));
+                        getUserId(), moneda, darCantidad())));
+
+        List<Activo> activosFiat =new ArrayList<>();
+        activosFiat.add(new Activo(Sesion.getInstance().getUserResult().
+                getUserId(), FiatConsumo.ArgFiat, darCantidad()));
+        activosFiat.add(new Activo(Sesion.getInstance().getUserResult().
+                getUserId(), FiatConsumo.USDFiat, darCantidad()));
         activos.forEach(activo -> SQLManager.getInstancia().getCrypto().crear(activo));
+        activosFiat.forEach(activo -> SQLManager.getInstancia().getFiat().crear(activo));
+        activos.addAll(activosFiat);
         return activos;
 
     }
-    public void darStock(){
+
+    public void darStock() {
         cacheMonedas.forEach(cacheMonedas ->
                 SQLManager.getInstancia().
                         getMoneda().
-                        actualizar(cacheMonedas.getIdM(),darCantidad()));
+                        actualizar(cacheMonedas.getIdM(), darCantidad()));
     }
+
     @Deprecated
-    public List<Activo> ListarActivos(){
+    public List<Activo> ListarActivos() {
         List<Activo> acts = factory.getCrypto().listar();
         acts.sort(Comparadores.compararActivoPorSaldo());
         return acts;
     }
+
     @Deprecated
     public boolean swap(long criptoOriginal, double cantidad, long criptoEsperada) {
         boolean exito = false;
@@ -154,19 +179,49 @@ public class DataController {
         }
         return exito;
     }
+
     @Deprecated
-    public boolean comprarCripto(long cripto, long fiat, double cantidad){
+    public boolean comprarCripto(long cripto, long fiat, double cantidad) {
         boolean exito = false;
-        try{
-            factory.getTransaccion().comprarCriptoMonedas(cripto,fiat,cantidad);
+        try {
+            factory.getTransaccion().comprarCriptoMonedas(cripto, fiat, cantidad);
             exito = true;
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Error durante la compra: " + e.getMessage());
             e.printStackTrace();
         }
         return exito;
     }
+
     public boolean verificarMail(String mail) {
         return daoUsuario.verificarMail(mail);
+    }
+
+
+    public double getCotizacion(String cripto) {
+        for (Moneda moneda : cacheMonedas) {
+            if (moneda.getNomenclatura().equalsIgnoreCase(cripto)) {
+                return moneda.getCotizacion();
+            }
+        }
+        throw new IllegalArgumentException("Criptomoneda desconocida: " + cripto);
+    }
+
+    public double getStock(String cripto) {
+        for (Moneda moneda : cacheMonedas) {
+            if (moneda.getNomenclatura().equalsIgnoreCase(cripto)) {
+                return moneda.getStock();
+            }
+        }
+        throw new IllegalArgumentException("Criptomoneda desconocida: " + cripto);
+    }
+
+    public double getPrice(String cripto) {
+        for (Moneda moneda : cacheMonedas) {
+            if (moneda.getNomenclatura().equalsIgnoreCase(cripto)) {
+                return moneda.getCotizacion();
+            }
+        }
+        throw new IllegalArgumentException("Criptomoneda desconocida: " + cripto);
     }
 }

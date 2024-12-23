@@ -1,6 +1,9 @@
 package Octo.Controlador.Vistas;
 
 import Octo.Controlador.Sesion;
+import Octo.Controlador.Utilitario.FiatConsumo;
+import Octo.Exceptions.OctoNotFound;
+import Octo.Modelo.Entidad.Moneda;
 import Octo.Modelo.Entidad.userResult;
 import Octo.Modelo.JDBC.DaoTransaccionImpl;
 
@@ -8,6 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Optional;
+
 import Octo.Controlador.DataController;
 import Octo.Modelo.JDBC.SQLManager;
 
@@ -18,15 +23,10 @@ public class ControllerComprita {
     private DaoTransaccionImpl daoTransaccion;
     private JTextField textField;
     private JComboBox<String> comboBox;
-    private DataController dataController;
-    private JLabel conversionResultLabel;
     private JLabel stockLabel;
     private JLabel priceLabel;
-    private String selectedCripto;
-    private long userId;
 
     public ControllerComprita(JPanel mainPanel) {
-        this.dataController = new DataController();
         this.mainPanel = mainPanel;
     }
 
@@ -46,49 +46,65 @@ public class ControllerComprita {
 
                 double cantidad = Double.parseDouble(textField.getText());
 
-                //long criptoId = dataController.getCriptoId(selectedCripto);
+                long criptoId = Sesion.getInstance().getIdCriptotByNom(Sesion.getInstance().getCriptoCompra());
+                assert fiat != null;
+                long fiatId = FiatConsumo.getFiatId(fiat);
 
-                //long fiatId = dataController.getFiatId(fiat);
-
-                /*try {
+                try {
                     SQLManager.getInstancia().getTransaccion().comprarCriptoMonedas(criptoId,fiatId ,cantidad);
                     JOptionPane.showMessageDialog(mainPanel, "Compra realizada con éxito.");
                     CardLayout cl = (CardLayout)mainPanel.getLayout();
                     cl.show(mainPanel, "cotizacion");
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(mainPanel, "La compra no se pudo realizar.");
+                } catch (OctoNotFound o) {
+                    JOptionPane.showMessageDialog(mainPanel, "La compra no se pudo realizar. No tienes saldo suficiente");
                 }
-
-                 */
             }
         };
     }
 
-    public ActionListener getConvertir() {
+    public ActionListener getConvertir(JLabel label1) {
         return new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String cripto = selectedCripto;
-                double cantidad = Double.parseDouble(textField.getText());
+                if (textField.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Por favor, ingrese una cantidad antes de convertir.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
 
-               // double cotizacion = dataController.getCotizacion(cripto); // Implement this method to get the exchange rate
-                //double resultado = cantidad / cotizacion;
+                try {
+                    String cripto = Sesion.getInstance().getCriptoCompra();
+                    double cantidad = Double.parseDouble(textField.getText())*FiatConsumo.getFiat(comboBox.getSelectedItem().toString()).getCotizacion();
+                    Optional<Moneda> monedaEncontrada = Sesion.getInstance().getMonedasDisponibles().stream()
+                            .filter(moneda -> moneda.getNomenclatura().equals(cripto)).findFirst();
 
-                //conversionResultLabel.setText("Resultado: " + resultado);
+                    if (monedaEncontrada.isPresent()) {
+                        Moneda moneda = monedaEncontrada.get();
+                        double cotizacion = moneda.getCotizacion();
+                        System.out.println(cotizacion);
+                        // Realiza operaciones con la moneda y la cantidad
+                        double total = cantidad / cotizacion;
+                        System.out.println("Total a pagar: " + total);
+                        label1.setText(String.format("$%.2f", total));
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error, no se tienen datos de esa moneda.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Por favor, ingrese un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         };
     }
 
     public void updateStockAndPrice(String cripto) {
-       // double stock = dataController.getStock(cripto); // Implement this method to get the stock
-        //double price = dataController.getPrice(cripto); // Implement this method to get the price
-
-        //stockLabel.setText(String.valueOf(stock));
-        //priceLabel.setText(String.valueOf(price));
-    }
-
-    public void setSelectedCripto(String cripto) {
-        this.selectedCripto = cripto;
-        updateStockAndPrice(cripto);
+        try {
+            double stock = Sesion.getInstance().getStockByNom(cripto);
+            double price = Sesion.getInstance().getCotizacionByNom(cripto);
+            stockLabel.setText(String.format("%.2f", stock)); // Mostrar con 2 decimales
+            priceLabel.setText(String.format("%.2f", price));
+        } catch (Exception e) {
+            stockLabel.setText("N/A");
+            priceLabel.setText("N/A");
+            JOptionPane.showMessageDialog(null,"Error al conseguir stock y precio, intente más tarde");
+        }
     }
 
 

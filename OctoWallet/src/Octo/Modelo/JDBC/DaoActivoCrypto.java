@@ -50,7 +50,23 @@ public class DaoActivoCrypto extends DaoActivoImpl{
         }
         return activo;
     }
+    public void borrar(long id, long idMoneda){
+        Activo activo = null;
+        try {
+            String str = "DELETE * FROM ACTIVO_CRIPTO WHERE ID_USUARIO = ? AND ID_MONEDA = ?";
+            PreparedStatement st = Conexion.getConexion().prepareStatement(str);
+            st.setLong(1,id);
+            st.setLong(2,idMoneda);
+            ResultSet res = st.executeQuery();
+            if (res.next()){
+                activo = convertir(res);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    @Deprecated
     @Override
     public Activo obtener(String nomenclatura){
         Activo activo = null;

@@ -1,5 +1,6 @@
 package Octo.Vista.gui3;
 
+import Octo.Controlador.Sesion;
 import Octo.Controlador.Vistas.ControllerComprita;
 
 import javax.swing.JPanel;
@@ -13,12 +14,12 @@ import javax.swing.JList;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Font;
+import java.awt.*;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class comprita extends JPanel {
 
@@ -48,7 +49,6 @@ public class comprita extends JPanel {
 		controller.setTextField(textField);
 
 		JButton btnNewButton = new JButton("Convertir\r\n");
-		//btnNewButton.addActionListener(controller.getConvertir());
 
 		btnNewButton.setForeground(new Color(255, 255, 255));
 		btnNewButton.setBackground(new Color(165, 199, 183));
@@ -57,9 +57,10 @@ public class comprita extends JPanel {
 		JLabel lblNewLabel_6 = new JLabel("Equivale a....");
 		lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 14));
 		
-		JLabel lblNewLabel_7 = new JLabel("Algo\r\n");
+		JLabel lblNewLabel_7 = new JLabel("?\r\n");
 		lblNewLabel_7.setFont(new Font("Tahoma", Font.BOLD, 14));
-		
+		lblNewLabel_7.setPreferredSize(new Dimension(300, 50));
+		btnNewButton.addActionListener(controller.getConvertir(lblNewLabel_7));
 		JComboBox comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"ARS", "USD"}));
 		controller.setComboBox(comboBox);
@@ -82,11 +83,27 @@ public class comprita extends JPanel {
 		JLabel lblNewLabel_2 = new JLabel("Precio de Compra:\r\n");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 14));
 
-		JLabel lblNewLabel_3 = new JLabel("New label");
-		//controller.setStockLabel(lblNewLabel_3);
+		JLabel lblNewLabel_3 = new JLabel("muestra");
+		controller.setStockLabel(lblNewLabel_3);
 
 		JLabel lblNewLabel_4 = new JLabel("New label");
-		//controller.setPriceLabel(lblNewLabel_4);
+		controller.setPriceLabel(lblNewLabel_4);
+		this.addComponentListener(new ComponentAdapter() {
+									  @Override
+									  public void componentShown(ComponentEvent e) {
+										  try {
+											  if (Sesion.getInstance() != null && Sesion.getInstance().getCriptoCompra() != null) {
+												  controller.updateStockAndPrice(Sesion.getInstance().getCriptoCompra());
+											  } else {
+												  System.err.println("CriptoCompra no está disponible o Sesion no inicializada.");
+												  // Opcional: Mostrar mensaje en un JLabel para el usuario.
+											  }
+										  } catch (Exception ex) {
+											  ex.printStackTrace();
+											  System.err.println("Error al actualizar stock y precio: " + ex.getMessage());
+										  }
+									  }
+								  });
 
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
