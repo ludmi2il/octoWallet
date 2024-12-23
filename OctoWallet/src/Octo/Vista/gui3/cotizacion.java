@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
@@ -159,7 +160,12 @@ public class cotizacion extends JPanel {
             gbc.gridx = 0;
             JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             namePanel.setBackground(Color.WHITE);
-            JLabel icon = new JLabel(new ImageIcon(cripto.getImagen())); // Suponiendo que Moneda tiene un método getImagen()
+            JLabel icon = null; // Suponiendo que Moneda tiene un método getImagen()
+            try {
+                icon = new JLabel(new ImageIcon(new ImageIcon(new URL(SQLManager.getInstancia().getMoneda().obtener(cripto.getNomenclatura()).getImagen())).getImage().getScaledInstance(32,32, Image.SCALE_SMOOTH)));
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
             JLabel name = new JLabel(cripto.getNombre());
             name.setFont(new Font("Arial", Font.PLAIN, 14));
             namePanel.add(icon);

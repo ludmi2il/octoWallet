@@ -1,8 +1,11 @@
 package Octo.Controlador.Vistas;
 
+import Octo.Controlador.DataController;
 import Octo.Controlador.Sesion;
 import Octo.Modelo.JDBC.DaoTransaccionImpl;
+import Octo.Modelo.JDBC.SQLManager;
 
+import javax.accessibility.AccessibleRelation;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,12 +17,13 @@ public class ControllerIntercambio {
     private JComboBox<String> comboBox;
     private JComboBox<String> comboBox_1;
     private JTextField textField;
-    private DaoTransaccionImpl daoTransaccion;
+    private DataController dataController;
     private JLabel userNameLabel;
+    private String selectedCripto;
 
     public ControllerIntercambio(JPanel mainPanel) {
-
         this.mainPanel = mainPanel;
+        this.dataController = new DataController();
     }
 
     public ActionListener getVolverActionListener() {
@@ -30,6 +34,7 @@ public class ControllerIntercambio {
             }
         };
     }
+
     public ActionListener getCerrarSesion(){
         return new ActionListener() {
             @Override
@@ -40,24 +45,34 @@ public class ControllerIntercambio {
             }
         };
     }
+
     public ActionListener getRealizarSwap() {
         return new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String criptoOriginal = (String) comboBox.getSelectedItem();
-                String criptoEsperada = (String) comboBox_1.getSelectedItem();
+                String criptoOriginalStr = selectedCripto;
+                String criptoEsperadaStr = (String) comboBox_1.getSelectedItem();
                 double cantidad = Double.parseDouble(textField.getText());
 
-               //boolean success = daoTransaccion.swap(criptoOriginal, cantidad, criptoEsperada);
+                //long criptoOriginal = dataController.getCriptoId(criptoOriginalStr);
+                //long criptoEsperada = dataController.getCriptoId(criptoEsperadaStr);
 
-               // if (success) {
+               /* boolean success = SQLManager.getInstancia().getTransaccion().swap(criptoOriginal, cantidad, criptoEsperada);
+
+                if (success) {
                     JOptionPane.showMessageDialog(mainPanel, "Swap realizado con éxito.");
                     CardLayout cl = (CardLayout)mainPanel.getLayout();
                     cl.show(mainPanel, "misActivos");
-               // } else {
+                } else {
                     JOptionPane.showMessageDialog(mainPanel, "El swap no se pudo realizar.");
                 }
-           // ;;}
+
+                */
+            }
         };
+    }
+
+    public void setSelectedCripto(String cripto) {
+        this.selectedCripto = cripto;
     }
 
     public void setUserNameLabel(JLabel label) {
@@ -72,9 +87,11 @@ public class ControllerIntercambio {
     public void setComboBox(JComboBox<String> comboBox) {
         this.comboBox = comboBox;
     }
+
     public void setComboBox_1(JComboBox<String> comboBox_1) {
         this.comboBox_1 = comboBox_1;
     }
+
     public void setTextField(JTextField textField) {
         this.textField = textField;
     }

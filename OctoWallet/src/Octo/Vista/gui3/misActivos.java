@@ -37,7 +37,6 @@ public class misActivos extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel mainPanel;
-	private List<Activo> activos = new ArrayList<>();
 	private JTable table;
 
 
@@ -69,7 +68,7 @@ public class misActivos extends JPanel {
 		lblNewLabel_2.setIcon(new ImageIcon(misActivos.class.getResource("/imagenes/360_F_577821527_5sZgkA6qrLkwitzLc1ZroVoYkPvdUPlG.png")));
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 18));
 
-		JLabel lblNewLabel_3 = new JLabel("ARS 8'000,000.39");
+		JLabel lblNewLabel_3 = new JLabel("ARS 0.00");
 		lblNewLabel_3.setFont(new Font("Roboto", Font.BOLD, 18));
 
 
@@ -192,11 +191,11 @@ public class misActivos extends JPanel {
 		this.addComponentListener(new ComponentAdapter() {
 									  @Override
 									  public void componentShown(ComponentEvent e) {
-										  controller.cargarDatosEnTabla(model);
+										  controller.cargarDatosEnTabla(model,lblNewLabel_3);
 									  }
 								  });
 
-		btnNewButton_1.addActionListener(controller.getGenerarDatos(model));
+		btnNewButton_1.addActionListener(controller.getGenerarDatos(model,lblNewLabel_3));
 		btnNewButton_1.setForeground(new Color(255, 255, 255));
 		btnNewButton_1.setBackground(new Color(128, 0, 0));
 		btnNewButton_1.setFont(new Font("Tahoma", Font.BOLD, 12));

@@ -54,14 +54,12 @@ public class ExportCSV {
     private static String getDownloadsFolderName() {
         String language = Locale.getDefault().getLanguage();
         switch (language) {
-            case "es":
-                return "Descargas";
             case "fr":
                 return "Téléchargements";
             case "en":
                 return "Downloads";
             default:
-                return "Downloads";
+                return "Descargas";
         }
     }
 }

@@ -34,7 +34,7 @@ public class DaoTransaccionImpl implements DaoTransaccion {
                 }
                 factory.getFiat().actualizar((-1) * cantidad, Sesion.getInstance().getUserResult().getUserId(), fiat);
                 Transaccion transaccion = new Transaccion();
-                transaccion.setResumen("se compraron " + cantAComprar + " criptomonedas " + monCripto.getNomenclatura() + " gastando $" + valorAGastar + " de la moneda FIAT: " + monFiat.getNomenclatura());
+                transaccion.setResumen(" Compradas " + cantAComprar + " " + monCripto.getNomenclatura() + ", -$" + valorAGastar);
                 transaccion.setFechaHora(LocalDateTime.now());
                 transaccion.setIdUsuario(Sesion.getInstance().getUserResult().getUserId()); // Set a default or appropriate user ID
                 crear(transaccion);
@@ -148,9 +148,9 @@ public class DaoTransaccionImpl implements DaoTransaccion {
     }*/
 
     public void cargarTransaccionesDePrueba() {
-        transacciones.add(new Transaccion("Compra de BTC", LocalDateTime.now(), 1));
-        transacciones.add(new Transaccion("Venta de ETH", LocalDateTime.now(), 2));
-        transacciones.add(new Transaccion("Compra de USD", LocalDateTime.now(), 3));
+        transacciones.add(new Transaccion("Compra de BTC, -$20", LocalDateTime.now(), Sesion.getInstance().getUserResult().getUserId()));
+        transacciones.add(new Transaccion("Venta de ETH, +$2000", LocalDateTime.now(),Sesion.getInstance().getUserResult().getUserId()));
+        transacciones.add(new Transaccion("Compra de USD, -$200", LocalDateTime.now(), Sesion.getInstance().getUserResult().getUserId()));
     }
 
     public Transaccion obtener(long ID) {

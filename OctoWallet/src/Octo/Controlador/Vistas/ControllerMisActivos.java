@@ -66,7 +66,14 @@ public class ControllerMisActivos {
     public void setUserNameLabel(JLabel label) {
         this.userNameLabel = label;
     }
-
+    public double obtenerBalance(){
+        double pesoDolar = SQLManager.getInstancia().getMoneda().obtener("ARS").getCotizacion();
+        double total= 0.0;
+        for( Activo act : activos){
+            total+= act.getSaldo()/pesoDolar;
+        }
+        return total;
+    }
     public void ModificarUserName() {
         String nombre = Sesion.getInstance().getUserResult().getUser().getNombres() + " " + Sesion.getInstance().getUserResult().getUser().getApellidos();
         this.userNameLabel.setText(nombre);
@@ -83,7 +90,7 @@ public class ControllerMisActivos {
         };
     }
 
-    public ActionListener getGenerarDatos(DefaultTableModel table) {
+    public ActionListener getGenerarDatos(DefaultTableModel table, JLabel label) {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -95,15 +102,16 @@ public class ControllerMisActivos {
                 System.out.println(criptosMVP);
                 DataController d = new DataController();
                 activos = d.crearActivosDefault(monedas);
-                System.out.println(activos);
-                cargarDatosEnTabla(table);
+                cargarDatosEnTabla(table,label);
+                d.darStock();
                 JOptionPane.showMessageDialog(null, "datos de prueba generados correctamente.");
 
             }
         };
     }
-        public void cargarDatosEnTabla(DefaultTableModel table){
+        public void cargarDatosEnTabla(DefaultTableModel table, JLabel label){
            activos = SQLManager.getInstancia().getCrypto().listar(Sesion.getInstance().getUserResult().getUserId());
+           label.setText("ARS $" + obtenerBalance());
            table.setRowCount(0);
             for (Activo activo : activos) {
                 try {

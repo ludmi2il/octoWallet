@@ -1,11 +1,16 @@
 package Octo.Controlador.Vistas;
 
+import Octo.Controlador.Sesion;
+import Octo.Modelo.Entidad.userResult;
 import Octo.Modelo.JDBC.DaoTransaccionImpl;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import Octo.Controlador.DataController;
+import Octo.Modelo.JDBC.SQLManager;
+
 
 public class ControllerComprita {
 
@@ -13,9 +18,15 @@ public class ControllerComprita {
     private DaoTransaccionImpl daoTransaccion;
     private JTextField textField;
     private JComboBox<String> comboBox;
+    private DataController dataController;
+    private JLabel conversionResultLabel;
+    private JLabel stockLabel;
+    private JLabel priceLabel;
+    private String selectedCripto;
+    private long userId;
 
     public ControllerComprita(JPanel mainPanel) {
-
+        this.dataController = new DataController();
         this.mainPanel = mainPanel;
     }
 
@@ -31,42 +42,62 @@ public class ControllerComprita {
     public ActionListener getComprarActionListener() {
         return new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String cripto = (String) comboBox.getSelectedItem();
+                String fiat = (String) comboBox.getSelectedItem();
+
                 double cantidad = Double.parseDouble(textField.getText());
 
-                // Assuming the method comprarCriptoMonedas expects long IDs and a double amount
-                long criptoId = getCriptoId(cripto); // Implement this method to get the ID based on the name
-                long userId = getUserId(); // Implement this method to get the current user ID
+                //long criptoId = dataController.getCriptoId(selectedCripto);
 
-                try {
-                    daoTransaccion.comprarCriptoMonedas(userId, criptoId, cantidad);
+                //long fiatId = dataController.getFiatId(fiat);
+
+                /*try {
+                    SQLManager.getInstancia().getTransaccion().comprarCriptoMonedas(criptoId,fiatId ,cantidad);
                     JOptionPane.showMessageDialog(mainPanel, "Compra realizada con éxito.");
                     CardLayout cl = (CardLayout)mainPanel.getLayout();
                     cl.show(mainPanel, "cotizacion");
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(mainPanel, "La compra no se pudo realizar.");
                 }
+
+                 */
             }
         };
     }
 
-    private long getCriptoId(String cripto) {
-        // Implement this method to return the correct ID based on the cryptocurrency name
-        // For example:
-        switch (cripto) {
-            case "BTC": return 1;
-            case "ETH": return 2;
-            case "DOGE": return 3;
-            case "USDC": return 4;
-            case "USDT": return 5;
-            default: throw new IllegalArgumentException("Criptomoneda desconocida: " + cripto);
-        }
+    public ActionListener getConvertir() {
+        return new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String cripto = selectedCripto;
+                double cantidad = Double.parseDouble(textField.getText());
+
+               // double cotizacion = dataController.getCotizacion(cripto); // Implement this method to get the exchange rate
+                //double resultado = cantidad / cotizacion;
+
+                //conversionResultLabel.setText("Resultado: " + resultado);
+            }
+        };
     }
 
-    private long getUserId() {
-        // Implement this method to return the current user ID
-        // This is just a placeholder implementation
-        return 12345;
+    public void updateStockAndPrice(String cripto) {
+       // double stock = dataController.getStock(cripto); // Implement this method to get the stock
+        //double price = dataController.getPrice(cripto); // Implement this method to get the price
+
+        //stockLabel.setText(String.valueOf(stock));
+        //priceLabel.setText(String.valueOf(price));
+    }
+
+    public void setSelectedCripto(String cripto) {
+        this.selectedCripto = cripto;
+        updateStockAndPrice(cripto);
+    }
+
+
+    public void setStockLabel(JLabel stockLabel) {
+        this.stockLabel = stockLabel;
+    }
+
+    public void setPriceLabel(JLabel priceLabel) {
+        this.priceLabel = priceLabel;
     }
 
     public void setComboBox(JComboBox<String> comboBox) {

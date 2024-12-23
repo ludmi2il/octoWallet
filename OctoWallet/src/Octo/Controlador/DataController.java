@@ -4,6 +4,7 @@ import Octo.Controlador.Utilitario.Comparadores;
 import Octo.Modelo.JDBC.SQLManager;
 import Octo.Modelo.Entidad.Activo;
 import Octo.Modelo.Entidad.Moneda;
+import Octo.Servicios.CotizacionesFiatRequest;
 import Octo.Servicios.CotizacionesRequest;
 import Octo.Servicios.DataRequest;
 import Octo.Modelo.JDBC.DaoUsuarioImpl;
@@ -39,7 +40,8 @@ public class DataController {
             List<Moneda> criptos = DataRequest.RequestData();
             System.out.println("no imprimo" + criptos.size());
             criptos.forEach(moneda -> factory.getMoneda().crear(moneda));
-            Moneda argenta = new Moneda(0,"F", "Peso Argentino", "ARS", 0, 0.0, darCantidad(), "/imagenes/argentina.png");
+            Moneda argenta = CotizacionesFiatRequest.RequestData("ARS");
+            argenta.setImagen("https://upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_Argentina.svg");
             Moneda dolarYankee = new Moneda(0,"F", "Dolar Estadounidense", "USD", 1, 0, darCantidad(), "/imagenes/usa.png");
             factory.getMoneda().crear(argenta);
             factory.getMoneda().crear(dolarYankee);
@@ -127,6 +129,12 @@ public class DataController {
         activos.forEach(activo -> SQLManager.getInstancia().getCrypto().crear(activo));
         return activos;
 
+    }
+    public void darStock(){
+        cacheMonedas.forEach(cacheMonedas ->
+                SQLManager.getInstancia().
+                        getMoneda().
+                        actualizar(cacheMonedas.getIdM(),darCantidad()));
     }
     @Deprecated
     public List<Activo> ListarActivos(){

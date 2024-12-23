@@ -48,11 +48,11 @@ public class ControllerRegistro {
                   }
 
                   if (dataController.verificarMail(email)&& (chckbxNewCheckBox.isSelected())) {
+                      SQLManager.getInstancia().getUsuario().crear(new User(NombreField.getText(), email, password, ApellidoField.getText(), true));
                       textField.setText("");
                       passwordField.setText("");
                       ApellidoField.setText("");
                       NombreField.setText("");
-                      SQLManager.getInstancia().getUsuario().crear(new User(NombreField.getText(), email, password, ApellidoField.getText(), true));
                       CardLayout cl = (CardLayout)mainPanel.getLayout();
                       cl.show(mainPanel, "login");
                       chckbxNewCheckBox.setSelected(false);

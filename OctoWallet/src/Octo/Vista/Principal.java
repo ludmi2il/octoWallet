@@ -20,7 +20,6 @@ public class Principal {
         //SQLManager.getInstancia().getUsuario().crear(new User("Ludmi", "luwu", "1234", "Dosil", true));
         Control control = new Control();
         vistas log=control.getprinc();
-
         log.setIconImage(new ImageIcon("/imagenes/pulpito.png").getImage());
         log.setVisible(true);
 
