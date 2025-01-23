@@ -80,7 +80,7 @@ public class ControllerIntercambio {
     }
 
     public void ModificarUserName() {
-        String nombre = Sesion.getInstance().getUserResult().getUser().getNombres() + " " + Sesion.getInstance().getUserResult().getUser().getApellidos();
+        String nombre = Sesion.getInstance().getUser().getNombres() + " " + Sesion.getInstance().getUser().getApellidos();
         this.userNameLabel.setText(nombre);
     }
     public void getCripto(){

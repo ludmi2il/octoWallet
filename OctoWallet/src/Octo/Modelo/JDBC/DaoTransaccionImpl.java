@@ -20,7 +20,7 @@ public class DaoTransaccionImpl implements DaoTransaccion {
     @Override
     // guarda los negativos
     public void comprarCriptoMonedas(long cripto, long fiat, double cantidad) throws OctoNotFound {
-        long userId = Sesion.getInstance().getUserResult().getUserId();
+        long userId = Sesion.getInstance().getUser().getUserId();
         SQLManager factory = SQLManager.getInstancia();
         Moneda monFiat = factory.getMoneda().obtener(fiat);
         Moneda monCripto = factory.getMoneda().obtener(cripto);
@@ -34,16 +34,16 @@ public class DaoTransaccionImpl implements DaoTransaccion {
                 if (actiCripto == null) {
                     factory.getCrypto().crear(new Activo(userId, monCripto, cantAComprar));
                 } else {
-                    factory.getCrypto().actualizar(cantAComprar, Sesion.getInstance().getUserResult().getUserId(), monCripto.getIdM());
+                    factory.getCrypto().actualizar(cantAComprar, Sesion.getInstance().getUser().getUserId(), monCripto.getIdM());
                 }
-                factory.getFiat().actualizar((-1) * cantidad, Sesion.getInstance().getUserResult().getUserId(), fiat);
+                factory.getFiat().actualizar((-1) * cantidad, Sesion.getInstance().getUser().getUserId(), fiat);
                 /*if(factory.getFiat().obtener(userId,actiFiat.getMoneda().getIdM()).getSaldo() == 0){
                     factory.getFiat().borrar(userId, actiFiat.getMoneda().getIdM());
                 }*/
                 Transaccion transaccion = new Transaccion();
                 transaccion.setResumen("Compra de " +monCripto.getNomenclatura() + " con " + "$" + String.format("%.2f",cantidad) +fiat+ ", +$" + String.format("%.2f",cantAComprar) +monCripto.getNomenclatura());
                 transaccion.setFechaHora(LocalDateTime.now());
-                transaccion.setIdUsuario(Sesion.getInstance().getUserResult().getUserId()); // Set a default or appropriate user ID
+                transaccion.setIdUsuario(Sesion.getInstance().getUser().getUserId()); // Set a default or appropriate user ID
                 crear(transaccion);
                 Conexion.getConexion().commit();
             } else {
@@ -68,7 +68,7 @@ public class DaoTransaccionImpl implements DaoTransaccion {
     @Override
     public void swap(long criptoOriginal, double cantidad, long criptoEsperada) {
 
-        long userId = Sesion.getInstance().getUserResult().getUserId();
+        long userId = Sesion.getInstance().getUser().getUserId();
         SQLManager factory = SQLManager.getInstancia();
         try {
             Moneda monedaOriginal = factory.getMoneda().obtener(criptoOriginal);
@@ -159,7 +159,7 @@ public class DaoTransaccionImpl implements DaoTransaccion {
         List<Transaccion> transacciones = new ArrayList<>();
         try {
             Statement st = Conexion.getConexion().createStatement();
-            ResultSet res = st.executeQuery("SELECT * FROM TRANSACCION WHERE ID_USUARIO =" + Sesion.getInstance().getUserResult().getUserId());
+            ResultSet res = st.executeQuery("SELECT * FROM TRANSACCION WHERE ID_USUARIO =" + Sesion.getInstance().getUser().getUserId());
             while (res.next()) {
                 transacciones.add(convertir(res));
             }
@@ -173,9 +173,9 @@ public class DaoTransaccionImpl implements DaoTransaccion {
     }
 
     public void cargarTransaccionesDePrueba() {
-        transacciones.add(new Transaccion("Compra de BTC, -$20", LocalDateTime.now(), Sesion.getInstance().getUserResult().getUserId()));
-        transacciones.add(new Transaccion("Venta de ETH, +$2000", LocalDateTime.now(),Sesion.getInstance().getUserResult().getUserId()));
-        transacciones.add(new Transaccion("Compra de USD, -$200", LocalDateTime.now(), Sesion.getInstance().getUserResult().getUserId()));
+        transacciones.add(new Transaccion("Compra de BTC, -$20", LocalDateTime.now(), Sesion.getInstance().getUser().getUserId()));
+        transacciones.add(new Transaccion("Venta de ETH, +$2000", LocalDateTime.now(),Sesion.getInstance().getUser().getUserId()));
+        transacciones.add(new Transaccion("Compra de USD, -$200", LocalDateTime.now(), Sesion.getInstance().getUser().getUserId()));
     }
 
     public Transaccion obtener(long ID) {

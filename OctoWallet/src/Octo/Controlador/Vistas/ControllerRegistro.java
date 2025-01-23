@@ -48,7 +48,7 @@ public class ControllerRegistro {
                   }
 
                   if (dataController.verificarMail(email)&& (chckbxNewCheckBox.isSelected())) {
-                      SQLManager.getInstancia().getUsuario().crear(new User(NombreField.getText(), email, password, ApellidoField.getText(), true));
+                      SQLManager.getInstancia().getUsuario().crear(new User(NombreField.getText(), email, password, ApellidoField.getText(), true, -1));
                       textField.setText("");
                       passwordField.setText("");
                       ApellidoField.setText("");

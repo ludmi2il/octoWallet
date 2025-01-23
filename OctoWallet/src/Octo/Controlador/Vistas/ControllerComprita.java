@@ -4,7 +4,6 @@ import Octo.Controlador.Sesion;
 import Octo.Controlador.Utilitario.FiatConsumo;
 import Octo.Exceptions.OctoNotFound;
 import Octo.Modelo.Entidad.Moneda;
-import Octo.Modelo.Entidad.userResult;
 import Octo.Modelo.JDBC.DaoTransaccionImpl;
 
 import javax.swing.*;
@@ -13,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Optional;
 
-import Octo.Controlador.DataController;
 import Octo.Modelo.JDBC.SQLManager;
 
 

@@ -75,7 +75,7 @@ public class ControllerMisActivos {
         return total;
     }
     public void ModificarUserName() {
-        String nombre = Sesion.getInstance().getUserResult().getUser().getNombres() + " " + Sesion.getInstance().getUserResult().getUser().getApellidos();
+        String nombre = Sesion.getInstance().getUser().getNombres() + " " + Sesion.getInstance().getUser().getApellidos();
         this.userNameLabel.setText(nombre);
     }
 
@@ -95,7 +95,7 @@ public class ControllerMisActivos {
             @Override
             public void actionPerformed(ActionEvent e) {
                 activos.clear();
-                SQLManager.getInstancia().getCrypto().borrado(Sesion.getInstance().getUserResult().getUserId());// deberia borrar activos del usuario
+                SQLManager.getInstancia().getCrypto().borrado(Sesion.getInstance().getUser().getUserId());// deberia borrar activos del usuario
                 List<String> criptosMVP = Arrays.asList("BTC", "ETH", "usdc");
                 List<Moneda> monedas = new ArrayList<>();
                 criptosMVP.stream().forEach(cripto -> monedas.add(SQLManager.getInstancia().getMoneda().obtener(cripto.toLowerCase())));
@@ -110,7 +110,7 @@ public class ControllerMisActivos {
         };
     }
         public void cargarDatosEnTabla(DefaultTableModel table, JLabel label){
-           activos = SQLManager.getInstancia().getCrypto().listar(Sesion.getInstance().getUserResult().getUserId());
+           activos = SQLManager.getInstancia().getCrypto().listar(Sesion.getInstance().getUser().getUserId());
            label.setText("ARS $" + obtenerBalance());
            table.setRowCount(0);
             // Iterar sobre los activos para llenar la tabla

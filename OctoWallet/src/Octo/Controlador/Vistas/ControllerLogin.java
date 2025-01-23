@@ -1,7 +1,7 @@
 package Octo.Controlador.Vistas;
 
 import Octo.Controlador.Sesion;
-import Octo.Modelo.Entidad.userResult;
+import Octo.Modelo.Entidad.User;
 import Octo.Modelo.JDBC.SQLManager;
 
 import javax.swing.*;
@@ -49,12 +49,12 @@ public class ControllerLogin {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if((!textField.getText().isEmpty()) && (!passwordField.getText().isEmpty())){
-                    userResult a = SQLManager.getInstancia().getUsuario().obtener(textField.getText(), passwordField.getText());
+                    User a = SQLManager.getInstancia().getUsuario().obtener(textField.getText(), passwordField.getText());
                     if (a != null) {
-                        Sesion.getInstance().setuserResult(a);
+                        Sesion.getInstance().setUser(a);
                         CardLayout cl = (CardLayout)mainPanel.getLayout();
                         cl.show(mainPanel, "misActivos");
-                        JOptionPane.showMessageDialog(null, "Bienvenido/a " + a.getUser().getNombres());
+                        JOptionPane.showMessageDialog(null, "Bienvenido/a " + a.getNombres());
                     } else {
                         JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
                     }

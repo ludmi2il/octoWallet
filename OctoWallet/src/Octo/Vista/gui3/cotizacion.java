@@ -190,8 +190,8 @@ public class cotizacion extends JPanel {
             buttonPanel.add(buyButton);
 
             // Swap solo para BTC y DOGE
-            if(Sesion.getInstance().getUserResult() != null) {
-                if (SQLManager.getInstancia().getCrypto().obtener(Sesion.getInstance().getUserResult().getUserId(), cripto.getIdM()) != null) {
+            if(Sesion.getInstance().getUser() != null) {
+                if (SQLManager.getInstancia().getCrypto().obtener(Sesion.getInstance().getUser().getUserId(), cripto.getIdM()) != null) {
                     JButton swapButton = new JButton("Swap");
                     styleButton(swapButton, new Color(255, 87, 34)); // Naranja
                     swapButton.setActionCommand(cripto.getNomenclatura());

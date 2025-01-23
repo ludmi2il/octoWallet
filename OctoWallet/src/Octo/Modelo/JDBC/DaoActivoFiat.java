@@ -12,7 +12,7 @@ public class DaoActivoFiat extends DaoActivoImpl{
 
         try {
             PreparedStatement st = Conexion.getConexion().prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-            st.setLong(1, Sesion.getInstance().getUserResult().getUserId());
+            st.setLong(1, Sesion.getInstance().getUser().getUserId());
             st.setLong(2, dato.getMoneda().getIdM());
             st.setDouble(3, dato.getSaldo());
             st.executeUpdate();

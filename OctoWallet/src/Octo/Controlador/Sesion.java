@@ -2,6 +2,7 @@ package Octo.Controlador;
 
 import Octo.Modelo.Entidad.Activo;
 import Octo.Modelo.Entidad.Moneda;
+import Octo.Modelo.Entidad.User;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
 //
 public class Sesion {
     private static Sesion instancia;
-    private Octo.Modelo.Entidad.userResult userResult;
+    private User user;
     private String criptoCompra;
     private List<Activo> misActivos;
     private List<Moneda> monedasDisponibles;
@@ -17,13 +18,11 @@ public class Sesion {
     private Sesion() {
     }
 
-    public Octo.Modelo.Entidad.userResult getUserResult() {
-
-        return userResult;
+    public User getUser() {
+        return user;
     }
-    public void setuserResult(Octo.Modelo.Entidad.userResult userResult) {
-
-        this.userResult = userResult;
+    public void setUser(User user) {
+        this.user = user;
     }
     public static Sesion getInstance() {
         if(instancia == null) {

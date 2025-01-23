@@ -4,9 +4,11 @@ package Octo.Modelo.Entidad;
 public class Persona {
      private String nombres;
      private String apellidos;
-	public Persona(String nombres, String apellidos){
+	 private long idPersona;
+	public Persona(String nombres, String apellidos, long idPersona) {
 		this.nombres = nombres;
 		this.apellidos = apellidos;
+		this.idPersona = idPersona;
 	}
 	public Persona(){}
 
@@ -25,6 +27,13 @@ public class Persona {
 	public void setApellidos(String apellidos) {
 		this.apellidos = apellidos;
 	}
+	public long getIdPersona() {
+		return idPersona;
+	}
+	public void setIdPersona(long idPersona) {
+		this.idPersona = idPersona;
+	}
+
      
 	
      

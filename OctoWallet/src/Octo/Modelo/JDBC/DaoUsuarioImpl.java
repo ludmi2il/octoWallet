@@ -3,7 +3,6 @@ import Octo.Modelo.DAO.DaoPersona;
 import Octo.Modelo.DAO.DaoUsuario;
 import Octo.Modelo.Entidad.Persona;
 import Octo.Modelo.Entidad.User;
-import Octo.Modelo.Entidad.userResult;
 
 import java.util.List;
 import java.sql.SQLException;
@@ -16,7 +15,7 @@ public class DaoUsuarioImpl implements DaoUsuario{
         long id = -1;
         DaoPersonaImpl daoPersona = new DaoPersonaImpl();
         try {
-            id = daoPersona.crear(new Persona(user.getNombres(), user.getApellidos()));
+            id = daoPersona.crear(user.getNombres(), user.getApellidos());
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -49,17 +48,17 @@ public class DaoUsuarioImpl implements DaoUsuario{
         }
         return res;
     }
-    private userResult convertir(java.sql.ResultSet rs) throws SQLException {
+    private User convertir(java.sql.ResultSet rs) throws SQLException {
         DaoPersona con = SQLManager.getInstancia().getPersona();
         Persona per = con.obtener(rs.getLong("ID_PERSONA"));
         String email = rs.getString("EMAIL");
         String contrasena = rs.getString("PASSWORD");
         boolean aceptaTerminos = rs.getBoolean("ACEPTA_TERMINOS");
-        return (new userResult(new User(per.getNombres(), email, contrasena, per.getApellidos(), aceptaTerminos), rs.getLong("ID"),rs.getLong("ID_PERSONA")));
+        return new User(per.getNombres(), email, contrasena, per.getApellidos(), aceptaTerminos, rs.getLong("ID"));
     }
 
-    public userResult obtener(String email, String contrasena) {
-        userResult usuario = null;
+    public User obtener(String email, String contrasena) {
+        User usuario = null;
         try {
             String str = "SELECT * FROM USUARIO WHERE EMAIL = ? AND PASSWORD = ?";
             java.sql.PreparedStatement st = Conexion.getConexion().prepareStatement(str);

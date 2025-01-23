@@ -138,13 +138,13 @@ public class DataController {
         // con el id de usuario Sesion.getInstance().getUserResult().getUserId()
         List<Activo> activos = new ArrayList<>();
         monedas.stream().forEach(moneda ->
-                activos.add(new Activo(Sesion.getInstance().getUserResult().
+                activos.add(new Activo(Sesion.getInstance().getUser().
                         getUserId(), moneda, darCantidad())));
 
         List<Activo> activosFiat =new ArrayList<>();
-        activosFiat.add(new Activo(Sesion.getInstance().getUserResult().
+        activosFiat.add(new Activo(Sesion.getInstance().getUser().
                 getUserId(), FiatConsumo.ArgFiat, darCantidad()));
-        activosFiat.add(new Activo(Sesion.getInstance().getUserResult().
+        activosFiat.add(new Activo(Sesion.getInstance().getUser().
                 getUserId(), FiatConsumo.USDFiat, darCantidad()));
         activos.forEach(activo -> SQLManager.getInstancia().getCrypto().crear(activo));
         activosFiat.forEach(activo -> SQLManager.getInstancia().getFiat().crear(activo));

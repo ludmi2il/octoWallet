@@ -9,23 +9,23 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class DaoPersonaImpl implements DaoPersona {
-    private Persona convertir(java.sql.ResultSet rs) throws SQLException {
+    private Persona convertir(java.sql.ResultSet rs, long id) throws SQLException {
         String nombres = rs.getString("NOMBRES");
         String apellidos = rs.getString("APELLIDOS");
-        return new Persona(nombres, apellidos);
+        return new Persona(nombres, apellidos, id);
     }
 
     public List<Persona> listar() {
         return null;
     }
 
-    public long crear(Persona persona) throws SQLException {
+    public long crear(String nombre, String apellido) throws SQLException {
         long id = -1;
         String sql = "INSERT INTO PERSONA (NOMBRES, APELLIDOS)VALUES(?, ?);";
         try (
                 PreparedStatement statement = Conexion.getConexion().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
-            statement.setString(1, persona.getNombres());
-            statement.setString(2, persona.getApellidos());
+            statement.setString(1, nombre);
+            statement.setString(2, apellido);
             statement.executeUpdate();
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
@@ -47,7 +47,7 @@ public class DaoPersonaImpl implements DaoPersona {
             st.setLong(1,id);
             java.sql.ResultSet res = st.executeQuery();
             if (res.next()){
-                persona = convertir(res);
+                persona = convertir(res, id);
             }
             st.close();
         } catch (SQLException e) {
