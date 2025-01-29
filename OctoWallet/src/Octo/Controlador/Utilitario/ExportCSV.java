@@ -52,7 +52,7 @@ public class ExportCSV {
         fila.add(Double.toString(act.getSaldo()));
         return fila;
     }
-    private static Path getDownloadsFolderPath() {
+    public static Path getDownloadsFolderPath() {
         try {
             // path absoluto del sistema de archivos
             File downloadsFolder = new File(System.getProperty("user.home"));

@@ -1,5 +1,6 @@
 package Octo.Controlador.Vistas;
 
+
 import Octo.Controlador.Sesion;
 import Octo.Controlador.Utilitario.ExportCSV;
 import Octo.Modelo.Entidad.Activo;
@@ -10,6 +11,8 @@ import Octo.Servicios.AppServices.ActivosService;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -67,13 +70,12 @@ public class ControllerMisActivos {
     }
     public double obtenerBalance(){
         double pesoDolar = FactoryDao.getMoneda().obtenerPorNomenclatura("ARS").getCotizacion();
-        System.out.println(pesoDolar);
         return activos.stream()
-                    .mapToDouble(act -> "ARS".equals(act.getMoneda().getNomenclatura())
-                            ? act.getSaldo()  // Sumar directo si es ARS
-                            : act.getSaldo() / pesoDolar // Convertir si es otra moneda
-                    )
-                    .sum();
+                .mapToDouble(act -> "ARS".equals(act.getMoneda().getNomenclatura())
+                        ? act.getSaldo()  // Sumar directo si es ARS
+                        : act.getSaldo() / pesoDolar // Convertir si es otra moneda
+                )
+                .sum();
     }
     public void ModificarUserName() {
         String nombre = Sesion.getInstance().getUser().getNombres() + " " + Sesion.getInstance().getUser().getApellidos();
@@ -112,7 +114,7 @@ public class ControllerMisActivos {
         public void cargarDatosEnTabla(DefaultTableModel table, JLabel label){
            activos = FactoryDao.getCrypto().listarPorId(Sesion.getInstance().getUser().getUserId());
            activos.addAll(FactoryDao.getFiat().listarPorId(Sesion.getInstance().getUser().getUserId()));
-            DecimalFormat formato = new DecimalFormat("#,##0.00");
+           DecimalFormat formato = new DecimalFormat("#,##0.00");
            label.setText("ARS $" + formato.format(obtenerBalance()));
            table.setRowCount(0);
             // Iterar sobre los activos para llenar la tabla
