@@ -3,6 +3,7 @@ package Octo.Controlador.Vistas;
 
 import Octo.Controlador.Sesion;
 import Octo.Controlador.Utilitario.ExportCSV;
+import Octo.Controlador.Utilitario.ExportPDF;
 import Octo.Modelo.Entidad.Activo;
 import Octo.Modelo.Entidad.Moneda;
 import Octo.Modelo.JDBC.FactoryDao;
@@ -52,6 +53,13 @@ public class ControllerMisActivos {
         };
     }
 
+    public ActionListener getExportarPDFListener(JTable table) {
+        return new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ExportPDF.printToPDF(table);
+            }
+        };
+    }
     public ActionListener getExportarActionListener() {
         return new ActionListener() {
             public void actionPerformed(ActionEvent e) {
