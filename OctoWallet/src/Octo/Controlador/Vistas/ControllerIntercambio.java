@@ -1,12 +1,9 @@
 package Octo.Controlador.Vistas;
 
-import Octo.Controlador.DataController;
 import Octo.Controlador.Sesion;
-import Octo.Exceptions.OctoNotFound;
-import Octo.Modelo.JDBC.DaoTransaccionImpl;
-import Octo.Modelo.JDBC.SQLManager;
+import Octo.Exceptions.OctoElemNotFoundException;
+import Octo.Modelo.JDBC.FactoryDao;
 
-import javax.accessibility.AccessibleRelation;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -18,11 +15,9 @@ public class ControllerIntercambio {
     private JLabel selectedCripto;
     private JComboBox<String> comboBox_1;
     private JTextField textField;
-    private DataController dataController;
     private JLabel userNameLabel;
     public ControllerIntercambio(JPanel mainPanel) {
         this.mainPanel = mainPanel;
-        this.dataController = new DataController();
     }
 
     public ActionListener getVolverActionListener() {
@@ -64,11 +59,11 @@ public class ControllerIntercambio {
                 long criptoEsperada = Sesion.getInstance().getIdCriptotByNom(criptoEsperadaStr);
 
                try{
-                   SQLManager.getInstancia().getTransaccion().swap(criptoOriginal, cantidad, criptoEsperada);
+                   FactoryDao.getTransaccion().swap(criptoOriginal, cantidad, criptoEsperada);
                    JOptionPane.showMessageDialog(mainPanel, "Swap realizado con éxito.");
                    CardLayout cl = (CardLayout)mainPanel.getLayout();
                    cl.show(mainPanel, "misActivos");
-               }catch (OctoNotFound o) {
+               }catch (OctoElemNotFoundException o) {
                    JOptionPane.showMessageDialog(null, o.getMessage());
                }
             }

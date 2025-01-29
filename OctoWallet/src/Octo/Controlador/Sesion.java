@@ -54,7 +54,7 @@ public class Sesion {
     public long getIdCriptotByNom(String criptoNombre) {
         for (Moneda moneda : monedasDisponibles) {
             if (moneda.getNomenclatura().equalsIgnoreCase(criptoNombre)) {
-                return moneda.getIdM();
+                return moneda.getIdMoneda();
             }
         }
         throw new IllegalArgumentException("Criptomoneda desconocida: " + criptoNombre);
@@ -63,7 +63,7 @@ public class Sesion {
     public long getIdFiatById(String fiatNombre) {
         for (Moneda moneda : monedasDisponibles) {
             if (moneda.getNombre().equalsIgnoreCase(fiatNombre)) {
-                return moneda.getIdM();
+                return moneda.getIdMoneda();
             }
         }
         throw new IllegalArgumentException("Fiat desconocido: " + fiatNombre);

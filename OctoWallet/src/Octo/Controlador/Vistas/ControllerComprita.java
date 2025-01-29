@@ -1,8 +1,8 @@
 package Octo.Controlador.Vistas;
 
 import Octo.Controlador.Sesion;
-import Octo.Controlador.Utilitario.FiatConsumo;
-import Octo.Exceptions.OctoNotFound;
+import Octo.Servicios.AppServices.FiatConsumo;
+import Octo.Exceptions.OctoElemNotFoundException;
 import Octo.Modelo.Entidad.Moneda;
 import Octo.Modelo.JDBC.DaoTransaccionImpl;
 
@@ -10,9 +10,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.Optional;
 
-import Octo.Modelo.JDBC.SQLManager;
+import Octo.Modelo.JDBC.FactoryDao;
 
 
 public class ControllerComprita {
@@ -49,11 +50,11 @@ public class ControllerComprita {
                 long fiatId = FiatConsumo.getFiatId(fiat);
 
                 try {
-                    SQLManager.getInstancia().getTransaccion().comprarCriptoMonedas(criptoId,fiatId ,cantidad);
+                    FactoryDao.getTransaccion().comprarCriptoMonedas(criptoId,fiatId ,cantidad);
                     JOptionPane.showMessageDialog(mainPanel, "Compra realizada con éxito.");
                     CardLayout cl = (CardLayout)mainPanel.getLayout();
                     cl.show(mainPanel, "cotizacion");
-                } catch (OctoNotFound o) {
+                } catch (OctoElemNotFoundException o) {
                     JOptionPane.showMessageDialog(mainPanel, "La compra no se pudo realizar. No tienes saldo suficiente");
                 }
             }
@@ -77,11 +78,10 @@ public class ControllerComprita {
                     if (monedaEncontrada.isPresent()) {
                         Moneda moneda = monedaEncontrada.get();
                         double cotizacion = moneda.getCotizacion();
-                        System.out.println(cotizacion);
-                        // Realiza operaciones con la moneda y la cantidad
                         double total = cantidad / cotizacion;
                         System.out.println("Total a pagar: " + total);
-                        label1.setText(String.format("$%.2f", total));
+                        DecimalFormat formato = new DecimalFormat("#,##0.00");
+                        label1.setText(formato.format(total)+ "USD" );
                     } else {
                         JOptionPane.showMessageDialog(null, "Error, no se tienen datos de esa moneda.", "Error", JOptionPane.ERROR_MESSAGE);
                     }

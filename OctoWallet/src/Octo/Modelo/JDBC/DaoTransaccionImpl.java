@@ -1,14 +1,13 @@
 package Octo.Modelo.JDBC;
 
 import Octo.Controlador.Sesion;
-import Octo.Controlador.Utilitario.FiatConsumo;
-import Octo.Exceptions.OctoNotFound;
+import Octo.Servicios.AppServices.FiatConsumo;
+import Octo.Exceptions.OctoElemNotFoundException;
 import Octo.Modelo.DAO.DaoTransaccion;
 import Octo.Modelo.Entidad.Activo;
 import Octo.Modelo.Entidad.Moneda;
 import Octo.Modelo.Entidad.Transaccion;
 
-import javax.swing.*;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -19,24 +18,23 @@ public class DaoTransaccionImpl implements DaoTransaccion {
     private List<Transaccion> transacciones = new ArrayList<>();
     @Override
     // guarda los negativos
-    public void comprarCriptoMonedas(long cripto, long fiat, double cantidad) throws OctoNotFound {
+    public void comprarCriptoMonedas(long cripto, long fiat, double cantidad) throws OctoElemNotFoundException {
         long userId = Sesion.getInstance().getUser().getUserId();
-        SQLManager factory = SQLManager.getInstancia();
-        Moneda monFiat = factory.getMoneda().obtener(fiat);
-        Moneda monCripto = factory.getMoneda().obtener(cripto);
+        Moneda monFiat = FactoryDao.getMoneda().obtener(fiat);
+        Moneda monCripto = FactoryDao.getMoneda().obtener(cripto);
         double valorAGastar = FiatConsumo.getCotizacion(monFiat.getNomenclatura())* cantidad;
         double cantAComprar = valorAGastar / Sesion.getInstance().getCotizacionByNom(monCripto.getNomenclatura());
-        Activo actiFiat = factory.getFiat().obtener(userId,fiat);
+        Activo actiFiat = FactoryDao.getFiat().obtenerporIdyMoneda(userId,fiat);
         try {
             Conexion.getConexion().setAutoCommit(false);
             if (valorAGastar <= actiFiat.getSaldo()*FiatConsumo.getCotizacion(monFiat.getNomenclatura())) {
-                Activo actiCripto = factory.getCrypto().obtener(userId,cripto);
+                Activo actiCripto = FactoryDao.getCrypto().obtenerporIdyMoneda(userId,cripto);
                 if (actiCripto == null) {
-                    factory.getCrypto().crear(new Activo(userId, monCripto, cantAComprar));
+                    FactoryDao.getCrypto().crear(new Activo(userId, monCripto, cantAComprar));
                 } else {
-                    factory.getCrypto().actualizar(cantAComprar, Sesion.getInstance().getUser().getUserId(), monCripto.getIdM());
+                    FactoryDao.getCrypto().actualizarCantidad(cantAComprar, Sesion.getInstance().getUser().getUserId(), monCripto.getIdMoneda());
                 }
-                factory.getFiat().actualizar((-1) * cantidad, Sesion.getInstance().getUser().getUserId(), fiat);
+                FactoryDao.getFiat().actualizarCantidad((-1) * cantidad, Sesion.getInstance().getUser().getUserId(), fiat);
                 /*if(factory.getFiat().obtener(userId,actiFiat.getMoneda().getIdM()).getSaldo() == 0){
                     factory.getFiat().borrar(userId, actiFiat.getMoneda().getIdM());
                 }*/
@@ -47,7 +45,7 @@ public class DaoTransaccionImpl implements DaoTransaccion {
                 crear(transaccion);
                 Conexion.getConexion().commit();
             } else {
-                throw new OctoNotFound("problemas con los valores! no hay suficiente saldo");
+                throw new OctoElemNotFoundException("problemas con los valores! no hay suficiente saldo");
             }
         } catch (SQLException e) {
             System.out.println("error durante la carga!");
@@ -69,16 +67,15 @@ public class DaoTransaccionImpl implements DaoTransaccion {
     public void swap(long criptoOriginal, double cantidad, long criptoEsperada) {
 
         long userId = Sesion.getInstance().getUser().getUserId();
-        SQLManager factory = SQLManager.getInstancia();
         try {
-            Moneda monedaOriginal = factory.getMoneda().obtener(criptoOriginal);
-            Moneda monedaEsperada = factory.getMoneda().obtener(criptoEsperada);
+            Moneda monedaOriginal = FactoryDao.getMoneda().obtener(criptoOriginal);
+            Moneda monedaEsperada = FactoryDao.getMoneda().obtener(criptoEsperada);
 
             double cotizacionOriginal = Sesion.getInstance().getCotizacionByNom(monedaOriginal.getNomenclatura());
             double cotizacionEsperada = Sesion.getInstance().getCotizacionByNom(monedaEsperada.getNomenclatura());
 
             if (cotizacionOriginal <= 0 || cotizacionEsperada <= 0) {
-                throw new OctoNotFound("Cotización inválida para las monedas seleccionadas.");
+                throw new OctoElemNotFoundException("Cotización inválida para las monedas seleccionadas.");
             }
 
             Conexion.getConexion().setAutoCommit(false);
@@ -86,19 +83,19 @@ public class DaoTransaccionImpl implements DaoTransaccion {
             double cantidadACambiar = cantidad * cotizacionOriginal;
             double cantidadEsperada = cantidadACambiar / cotizacionEsperada;
 
-            Activo actiCriptoOriginal = factory.getCrypto().obtener(userId, criptoOriginal);
+            Activo actiCriptoOriginal = FactoryDao.getCrypto().obtenerporIdyMoneda(userId, criptoOriginal);
             if (actiCriptoOriginal == null || actiCriptoOriginal.getSaldo() < cantidad) {
-                throw new OctoNotFound("Saldo insuficiente en la moneda original o inexistente " + monedaOriginal.getNomenclatura());
+                throw new OctoElemNotFoundException("Saldo insuficiente en la moneda original o inexistente " + monedaOriginal.getNomenclatura());
             }
 
-            Activo actiCriptoEsperada = factory.getCrypto().obtener(userId, criptoEsperada);
+            Activo actiCriptoEsperada = FactoryDao.getCrypto().obtenerporIdyMoneda(userId, criptoEsperada);
             if (actiCriptoEsperada == null) {
-                throw new OctoNotFound("No se tiene ninguna cantidad de la moneda " + monedaEsperada.getNomenclatura());
+                throw new OctoElemNotFoundException("No se tiene ninguna cantidad de la moneda " + monedaEsperada.getNomenclatura());
             }
-                factory.getCrypto().actualizar(cantidadEsperada, userId, criptoEsperada);
-                factory.getCrypto().actualizar(-cantidad, userId, criptoOriginal);
+                FactoryDao.getCrypto().actualizarCantidad(cantidadEsperada, userId, criptoEsperada);
+                FactoryDao.getCrypto().actualizarCantidad(-cantidad, userId, criptoOriginal);
 
-                Activo saldoRestante = factory.getCrypto().obtener(userId, criptoOriginal);
+                Activo saldoRestante = FactoryDao.getCrypto().obtenerporIdyMoneda(userId, criptoOriginal);
                 /*if (saldoRestante != null && saldoRestante.getSaldo() == 0) {
                     factory.getCrypto().borrar(userId, criptoOriginal);
                 }*/
@@ -114,14 +111,14 @@ public class DaoTransaccionImpl implements DaoTransaccion {
             try {
                 Conexion.getConexion().rollback();
             } catch (SQLException rollbackEx) {
-                throw new OctoNotFound("Error al intentar realizar rollback: " + rollbackEx.getMessage());
+                throw new OctoElemNotFoundException("Error al intentar realizar rollback: " + rollbackEx.getMessage());
             }
-            throw new OctoNotFound("Error al realizar swap: " + e.getMessage());
+            throw new OctoElemNotFoundException("Error al realizar swap: " + e.getMessage());
         } finally {
             try {
                 Conexion.getConexion().setAutoCommit(true);
             } catch (SQLException e) {
-                throw new OctoNotFound("Error! No se pudo restablecer el flujo de la aplicación.");
+                throw new OctoElemNotFoundException("Error! No se pudo restablecer el flujo de la aplicación.");
             }
         }
     }
@@ -155,11 +152,11 @@ public class DaoTransaccionImpl implements DaoTransaccion {
         return tr;
     }
     @Override
-    public List<Transaccion> listar() {
+    public List<Transaccion> listarPorId(long id) {
         List<Transaccion> transacciones = new ArrayList<>();
         try {
             Statement st = Conexion.getConexion().createStatement();
-            ResultSet res = st.executeQuery("SELECT * FROM TRANSACCION WHERE ID_USUARIO =" + Sesion.getInstance().getUser().getUserId());
+            ResultSet res = st.executeQuery("SELECT * FROM TRANSACCION WHERE ID_USUARIO =" + id);
             while (res.next()) {
                 transacciones.add(convertir(res));
             }
@@ -171,14 +168,8 @@ public class DaoTransaccionImpl implements DaoTransaccion {
         }
         return transacciones;
     }
-
-    public void cargarTransaccionesDePrueba() {
-        transacciones.add(new Transaccion("Compra de BTC, -$20", LocalDateTime.now(), Sesion.getInstance().getUser().getUserId()));
-        transacciones.add(new Transaccion("Venta de ETH, +$2000", LocalDateTime.now(),Sesion.getInstance().getUser().getUserId()));
-        transacciones.add(new Transaccion("Compra de USD, -$200", LocalDateTime.now(), Sesion.getInstance().getUser().getUserId()));
-    }
-
-    public Transaccion obtener(long ID) {
+    @Override
+    public Transaccion obtener(long ID) throws OctoElemNotFoundException{
         String sql = "SELECT * FROM TRANSACCION WHERE ID = ?";
         Connection connection = Conexion.getConexion();
         Transaccion transaccion = null;
@@ -196,10 +187,8 @@ public class DaoTransaccionImpl implements DaoTransaccion {
                 }
             }
         } catch (SQLException e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            e.printStackTrace();
+            throw new OctoElemNotFoundException(" error! no se encontró la transacción solicitada.");
         }
-
         return transaccion;  // Devuelve el objeto Transaccion o null si no existe
     }
     public Transaccion obtener(String a){

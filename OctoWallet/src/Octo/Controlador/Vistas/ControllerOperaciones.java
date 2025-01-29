@@ -1,6 +1,7 @@
 package Octo.Controlador.Vistas;
 
 
+import Octo.Controlador.Sesion;
 import Octo.Modelo.JDBC.DaoTransaccionImpl;
 import Octo.Modelo.Entidad.Transaccion;
 import Octo.Vista.gui3.operaciones;
@@ -30,7 +31,7 @@ public class ControllerOperaciones {
     }
 
     public void actualizarTransacciones(operaciones mainPanel1) {
-            List<Transaccion> transacciones = daoTransaccion.listar();
+            List<Transaccion> transacciones = daoTransaccion.listarPorId(Sesion.getInstance().getUser().getUserId());
             if ((transacciones!= null) && (transacciones.size() > cantTransacciones)){
                 for (int i = cantTransacciones; i<transacciones.size(); i++) {
                     String[] partes = transacciones.get(i).getResumen().split(",");

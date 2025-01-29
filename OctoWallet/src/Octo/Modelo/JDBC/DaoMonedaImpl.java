@@ -1,6 +1,6 @@
 package Octo.Modelo.JDBC;
 
-import Octo.Exceptions.OctoNotFound;
+import Octo.Exceptions.OctoElemNotFoundException;
 import Octo.Modelo.DAO.DaoMoneda;
 import Octo.Modelo.Entidad.Moneda;
 
@@ -43,8 +43,9 @@ public class DaoMonedaImpl implements DaoMoneda {
     }
 
     @Override
-    public List<Moneda> listar() {
-        List<Moneda> monedas = new ArrayList<>(); Moneda moneda;
+    public List<Moneda> listar() throws OctoElemNotFoundException{
+        List<Moneda> monedas = new ArrayList<>();
+        Moneda moneda;
         try {
             Statement st= Conexion.getConexion().createStatement();
             ResultSet res = st.executeQuery("SELECT * FROM MONEDA");
@@ -60,7 +61,7 @@ public class DaoMonedaImpl implements DaoMoneda {
     }
     private Moneda convertir(ResultSet rs) throws SQLException{
         Moneda moneda = new Moneda();
-        moneda.setIdM(rs.getLong("ID"));
+        moneda.setIdMoneda(rs.getLong("ID"));
         moneda.setTipo(rs.getString("TIPO"));
         moneda.setNombre(rs.getString("NOMBRE"));
         moneda.setNomenclatura(rs.getString("NOMENCLATURA"));
@@ -70,7 +71,8 @@ public class DaoMonedaImpl implements DaoMoneda {
         moneda.setImagen(rs.getString("NOMBRE_ICONO"));
         return moneda;
     }
-    public Moneda obtener(long id){
+    @Override
+    public Moneda obtener(long id) throws OctoElemNotFoundException{
         Moneda moneda = null;
         try {
             String str = "SELECT * FROM MONEDA WHERE ID = ?";
@@ -81,27 +83,28 @@ public class DaoMonedaImpl implements DaoMoneda {
                 moneda = convertir(res);
             }
         } catch (SQLException e) {
-            throw new OctoNotFound("error! no se encontró el elemento con id: " + id);
+            throw new OctoElemNotFoundException("error! no se encontró el elemento con id: " + id);
         }
         return moneda;
     }
-
-    public long actualizar(long idMoneda, double stock){
-        long res = -1;
+    // foco: tener id y stock para actualizarlo
+    @Override
+    public int actualizar(Moneda moneda) throws OctoElemNotFoundException{
+        int res = -1;
         try{
             String sql = "UPDATE MONEDA SET STOCK = STOCK + ? WHERE ID = ?";
             PreparedStatement st = Conexion.getConexion().prepareStatement(sql);
-            st.setDouble(1,stock);
-            st.setLong(2,idMoneda);
+            st.setDouble(1,moneda.getStock());
+            st.setLong(2,moneda.getIdMoneda());
             res = st.executeUpdate();
             st.close();
         } catch (SQLException e) {
-            throw new OctoNotFound("error! no se encontró el elemento con id: " + idMoneda);
+            throw new OctoElemNotFoundException("error! no se encontró el elemento con id: " + moneda.getIdMoneda());
         }
         return res;
     }
     @Override
-    public Moneda obtener(String nomenclatura){
+    public Moneda obtenerPorNomenclatura(String nomenclatura){
         Moneda mon = null;
         try {
             String str = "SELECT * FROM MONEDA WHERE NOMENCLATURA = ?";
@@ -112,7 +115,7 @@ public class DaoMonedaImpl implements DaoMoneda {
                 mon = convertir(res);
             }
         } catch (SQLException e) {
-            throw new OctoNotFound("error! no se encontró el elemento con nomenclatura: " + nomenclatura);
+            throw new OctoElemNotFoundException("error! no se encontró el elemento con nomenclatura: " + nomenclatura);
         }
         return mon;
     }

@@ -1,7 +1,6 @@
-package Octo.Servicios;
+package Octo.Servicios.ApiServices;
 
 import Octo.Modelo.Entidad.Moneda;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -10,8 +9,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Collections;
-import java.util.List;
 
 public class CotizacionesFiatRequest {
     private static String URL_API =

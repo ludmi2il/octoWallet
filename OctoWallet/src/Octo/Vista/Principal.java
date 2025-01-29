@@ -1,15 +1,7 @@
 package Octo.Vista;
 
 import Octo.Controlador.Control;
-import Octo.Modelo.Entidad.User;
-import Octo.Modelo.JDBC.SQLManager;
 import Octo.Vista.gui3.*;
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatIntelliJLaf;
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.themes.FlatMacLightLaf;
-import java.sql.*;
-import java.net.URL;
 
 import javax.swing.*;
 

@@ -1,20 +1,19 @@
 package Octo.Controlador.Vistas;
 
-import Octo.Controlador.DataController;
 import Octo.Controlador.Sesion;
 import Octo.Controlador.Utilitario.ExportCSV;
 import Octo.Modelo.Entidad.Activo;
 import Octo.Modelo.Entidad.Moneda;
-import Octo.Modelo.JDBC.SQLManager;
+import Octo.Modelo.JDBC.FactoryDao;
+import Octo.Servicios.AppServices.ActivosService;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -67,12 +66,14 @@ public class ControllerMisActivos {
         this.userNameLabel = label;
     }
     public double obtenerBalance(){
-        double pesoDolar = SQLManager.getInstancia().getMoneda().obtener("ARS").getCotizacion();
-        double total= 0.0;
-        for( Activo act : activos){
-            total+= act.getSaldo()/pesoDolar;
-        }
-        return total;
+        double pesoDolar = FactoryDao.getMoneda().obtenerPorNomenclatura("ARS").getCotizacion();
+        System.out.println(pesoDolar);
+        return activos.stream()
+                    .mapToDouble(act -> "ARS".equals(act.getMoneda().getNomenclatura())
+                            ? act.getSaldo()  // Sumar directo si es ARS
+                            : act.getSaldo() / pesoDolar // Convertir si es otra moneda
+                    )
+                    .sum();
     }
     public void ModificarUserName() {
         String nombre = Sesion.getInstance().getUser().getNombres() + " " + Sesion.getInstance().getUser().getApellidos();
@@ -95,23 +96,24 @@ public class ControllerMisActivos {
             @Override
             public void actionPerformed(ActionEvent e) {
                 activos.clear();
-                SQLManager.getInstancia().getCrypto().borrado(Sesion.getInstance().getUser().getUserId());// deberia borrar activos del usuario
+                FactoryDao.getCrypto().borrar(Sesion.getInstance().getUser().getUserId());// deberia borrar activos del usuario
+                FactoryDao.getFiat().borrar(Sesion.getInstance().getUser().getUserId());
                 List<String> criptosMVP = Arrays.asList("BTC", "ETH", "usdc");
                 List<Moneda> monedas = new ArrayList<>();
-                criptosMVP.stream().forEach(cripto -> monedas.add(SQLManager.getInstancia().getMoneda().obtener(cripto.toLowerCase())));
-                System.out.println(criptosMVP);
-                DataController d = new DataController();
-                activos = d.crearActivosDefault(monedas);
+                criptosMVP.stream().forEach(cripto -> monedas.add(FactoryDao.getMoneda().obtenerPorNomenclatura(cripto.toLowerCase())));
+                activos = ActivosService.crearActivosDefault(monedas);
                 cargarDatosEnTabla(table,label);
-                d.darStock();
+                ActivosService.darStock(monedas);
                 JOptionPane.showMessageDialog(null, "datos de prueba generados correctamente.");
 
             }
         };
     }
         public void cargarDatosEnTabla(DefaultTableModel table, JLabel label){
-           activos = SQLManager.getInstancia().getCrypto().listar(Sesion.getInstance().getUser().getUserId());
-           label.setText("ARS $" + obtenerBalance());
+           activos = FactoryDao.getCrypto().listarPorId(Sesion.getInstance().getUser().getUserId());
+           activos.addAll(FactoryDao.getFiat().listarPorId(Sesion.getInstance().getUser().getUserId()));
+            DecimalFormat formato = new DecimalFormat("#,##0.00");
+           label.setText("ARS $" + formato.format(obtenerBalance()));
            table.setRowCount(0);
             // Iterar sobre los activos para llenar la tabla
             for (Activo activo : activos) {
@@ -136,7 +138,7 @@ public class ControllerMisActivos {
                     table.addRow(new Object[] {
                             icono,
                             activo.getMoneda().getNombre(),
-                            activo.getSaldo()
+                            formato.format(activo.getSaldo())
                     });
                 } catch (MalformedURLException e) {
                     // Manejo de la excepción en caso de URL mal formada

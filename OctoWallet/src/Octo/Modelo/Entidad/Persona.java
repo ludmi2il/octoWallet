@@ -10,6 +10,12 @@ public class Persona {
 		this.apellidos = apellidos;
 		this.idPersona = idPersona;
 	}
+
+	public Persona(String nombres, String apellidos) {
+		this.nombres = nombres;
+		this.apellidos = apellidos;
+	}
+
 	public Persona(){}
 
 	public String getNombres() {

@@ -1,16 +1,14 @@
-package Octo.Controlador.Utilitario;
+package Octo.Servicios.AppServices;
 
 import Octo.Modelo.DAO.DaoMoneda;
 import Octo.Modelo.Entidad.Moneda;
-import Octo.Modelo.JDBC.DaoActivoFiat;
-import Octo.Modelo.JDBC.DaoMonedaImpl;
-import Octo.Modelo.JDBC.SQLManager;
-import Octo.Servicios.CotizacionesFiatRequest;
+import Octo.Modelo.JDBC.FactoryDao;
+import Octo.Servicios.ApiServices.CotizacionesFiatRequest;
+
 // utilitario para el manejo de fiat
 public class FiatConsumo {
-    public static final DaoMoneda managerMoneda = SQLManager.getInstancia().getMoneda();
-    public static final Moneda ArgFiat = managerMoneda.obtener("ARS");
-    public static final Moneda USDFiat = managerMoneda.obtener("USD");
+    public static final Moneda ArgFiat = FactoryDao.getMoneda().obtenerPorNomenclatura("ARS");
+    public static final Moneda USDFiat = FactoryDao.getMoneda().obtenerPorNomenclatura("USD");
     public static final double ARGCotizacion = CotizacionesFiatRequest.RequestData("ARS").getCotizacion();
     public static final double USDCotizacion = 1.0;
     public static final double getCotizacion(String nomenclatura){
@@ -27,9 +25,9 @@ public class FiatConsumo {
     public static long getFiatId(String nomenclatura){
         long res;
         switch(nomenclatura){
-            case "ARS": res =ArgFiat.getIdM();
+            case "ARS": res =ArgFiat.getIdMoneda();
                 break;
-            case "USD": res = USDFiat.getIdM();
+            case "USD": res = USDFiat.getIdMoneda();
                 break;
             default: res=-1;
         }

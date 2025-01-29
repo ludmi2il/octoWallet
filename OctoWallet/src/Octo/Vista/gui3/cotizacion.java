@@ -5,11 +5,9 @@ import javax.swing.*;
 import Octo.Controlador.Sesion;
 import Octo.Controlador.Vistas.ControllerCotizacion;
 import Octo.Modelo.Entidad.Moneda;
-import Octo.Modelo.JDBC.SQLManager;
+import Octo.Modelo.JDBC.FactoryDao;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.net.MalformedURLException;
@@ -163,7 +161,7 @@ public class cotizacion extends JPanel {
             namePanel.setBackground(Color.WHITE);
             JLabel icon = null;
             try {
-                icon = new JLabel(new ImageIcon(new ImageIcon(new URL(SQLManager.getInstancia().getMoneda().obtener(cripto.getNomenclatura()).getImagen())).getImage().getScaledInstance(32,32, Image.SCALE_SMOOTH)));
+                icon = new JLabel(new ImageIcon(new ImageIcon(new URL(FactoryDao.getMoneda().obtenerPorNomenclatura(cripto.getNomenclatura()).getImagen())).getImage().getScaledInstance(32,32, Image.SCALE_SMOOTH)));
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
@@ -191,7 +189,7 @@ public class cotizacion extends JPanel {
 
             // Swap solo para BTC y DOGE
             if(Sesion.getInstance().getUser() != null) {
-                if (SQLManager.getInstancia().getCrypto().obtener(Sesion.getInstance().getUser().getUserId(), cripto.getIdM()) != null) {
+                if (FactoryDao.getCrypto().obtenerporIdyMoneda(Sesion.getInstance().getUser().getUserId(), cripto.getIdMoneda()) != null) {
                     JButton swapButton = new JButton("Swap");
                     styleButton(swapButton, new Color(255, 87, 34)); // Naranja
                     swapButton.setActionCommand(cripto.getNomenclatura());

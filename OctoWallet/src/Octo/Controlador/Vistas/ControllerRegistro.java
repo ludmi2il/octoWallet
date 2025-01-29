@@ -3,22 +3,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import Octo.Controlador.DataController;
+
 import Octo.Modelo.Entidad.User;
-import Octo.Modelo.JDBC.SQLManager;
+import Octo.Modelo.JDBC.FactoryDao;
 
 public class ControllerRegistro {
     private JTextField textField;
     private JTextField passwordField;
     private JPanel mainPanel;
-    private DataController dataController;
     private JCheckBox chckbxNewCheckBox;
     private JTextField ApellidoField;
     private JTextField NombreField;
 
     public ControllerRegistro(JPanel mainPanel) {
         this.mainPanel = mainPanel;
-        this.dataController = new DataController();
     }
     public ActionListener getVolverActionListener() {
         return new ActionListener() {
@@ -47,8 +45,8 @@ public class ControllerRegistro {
                      return;
                   }
 
-                  if (dataController.verificarMail(email)&& (chckbxNewCheckBox.isSelected())) {
-                      SQLManager.getInstancia().getUsuario().crear(new User(NombreField.getText(), email, password, ApellidoField.getText(), true, -1));
+                  if (FactoryDao.getUsuario().verificarMail(email)&& (chckbxNewCheckBox.isSelected())) {
+                      FactoryDao.getUsuario().crear(new User(NombreField.getText(), email, password, ApellidoField.getText(), true, -1));
                       textField.setText("");
                       passwordField.setText("");
                       ApellidoField.setText("");

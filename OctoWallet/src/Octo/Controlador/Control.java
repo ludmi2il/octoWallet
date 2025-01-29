@@ -1,9 +1,11 @@
 package Octo.Controlador;
 
+import Octo.Servicios.AppServices.DBStatus;
 import Octo.Vista.gui3.*;
 
 public class Control {
 	private static Control instance;
+    private DBStatus dbStatus = new DBStatus(); // verificador
     private vistas princ;
     
     public Control() {}

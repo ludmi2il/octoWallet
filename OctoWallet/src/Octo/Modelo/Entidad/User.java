@@ -1,7 +1,7 @@
 package Octo.Modelo.Entidad;
 
 public class User extends Persona{
-	private long userId;
+	private long Id_user;
 	private String Email;
 	private String contrasena;
 	private boolean aceptaTerminos;
@@ -18,14 +18,14 @@ public class User extends Persona{
 		Email = email;
 		this.contrasena = contrasena;
 		this.aceptaTerminos = aceptaTerminos;
-		this.userId = userId;
+		this.Id_user = userId;
 	}
 
 	public long getUserId() {
-		return userId;
+		return Id_user;
 	}
 	public void setUserId(long userId) {
-		this.userId = userId;
+		this.Id_user = userId;
 	}
 	
 	public String getEmail() {

@@ -2,7 +2,7 @@ package Octo.Controlador.Vistas;
 
 import Octo.Controlador.Sesion;
 import Octo.Modelo.Entidad.User;
-import Octo.Modelo.JDBC.SQLManager;
+import Octo.Modelo.JDBC.FactoryDao;
 
 import javax.swing.*;
 import java.awt.*;
@@ -49,7 +49,7 @@ public class ControllerLogin {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if((!textField.getText().isEmpty()) && (!passwordField.getText().isEmpty())){
-                    User a = SQLManager.getInstancia().getUsuario().obtener(textField.getText(), passwordField.getText());
+                    User a = FactoryDao.getUsuario().obtenerPorMail(textField.getText(), passwordField.getText());
                     if (a != null) {
                         Sesion.getInstance().setUser(a);
                         CardLayout cl = (CardLayout)mainPanel.getLayout();

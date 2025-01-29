@@ -1,13 +1,6 @@
 package Octo.Vista;
 
-import Octo.Controlador.DataController;
 import Octo.Modelo.Entidad.Transaccion;
-import Octo.Modelo.JDBC.SQLManager;
-import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatIntelliJLaf;
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

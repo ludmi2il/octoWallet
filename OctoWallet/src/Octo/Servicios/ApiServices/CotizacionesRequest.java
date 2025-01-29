@@ -1,4 +1,4 @@
-package Octo.Servicios;
+package Octo.Servicios.ApiServices;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,7 +29,7 @@ public class CotizacionesRequest {
             }
         }).exceptionally(e -> {
             System.out.println("Error en la solicitud: " + e.getMessage());
-            return null;
+            return Collections.emptyMap();
         });
     }
     private static Map<String, Map<String,Double>> parsearYMostrarPrecios(String cuerpoRespuesta) {
@@ -37,13 +37,6 @@ public class CotizacionesRequest {
             ObjectMapper objectMapper = new ObjectMapper();
             // creo un map con todos los precios.
             return objectMapper.readValue(cuerpoRespuesta, new TypeReference<Map<String, Map<String, Double>>>() {});
-            /*
-            System.out.println("Precios de Criptomonedas (en USD):");
-            precios.forEach((moneda, valores) -> {
-                System.out.println(moneda.toUpperCase() + ": $" + valores.get("usd"));
-            });
-
-             */
         } catch (Exception e) {
             System.out.println("Error al parsear el JSON: " + e.getMessage());
             return Collections.emptyMap();

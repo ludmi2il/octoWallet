@@ -1,16 +1,14 @@
 package Octo.Controlador.Vistas;
 
-import Octo.Controlador.DataController;
 import Octo.Controlador.Sesion;
-import Octo.Modelo.Entidad.Moneda;
+import Octo.Servicios.AppServices.CacheCryptoService;
+import Octo.Servicios.AppServices.DBStatus;
 import Octo.Vista.gui3.cotizacion;
 
 import javax.swing.*;
-import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -18,18 +16,17 @@ import java.util.concurrent.TimeUnit;
 public class ControllerCotizacion {
         private JLabel userNameLabel;
         private JPanel mainPanel;
-        private DataController dataControl;
+        private CacheCryptoService cachemoneda = CacheCryptoService.getInstancia();
         private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         public ControllerCotizacion(JPanel mainPanel) {
-            this.mainPanel = mainPanel; this.dataControl = new DataController();
-            Sesion.getInstance().setMonedasDisponibles(dataControl.getCacheMonedas());
+            this.mainPanel = mainPanel;
+            Sesion.getInstance().setMonedasDisponibles(cachemoneda.getCacheMonedas());
         }
     public void iniciarActualizaciones(cotizacion c) {
         Runnable tareaActualizacion = () -> {
-            dataControl.ActualizarCotizaciones();
+            cachemoneda.ActualizarCotizaciones();
             SwingUtilities.invokeLater(() -> {
-                System.out.println(dataControl.getCacheMonedas());
-                c.actualizarCotizaciones(dataControl.getCacheMonedas());
+                c.actualizarCotizaciones(cachemoneda.getCacheMonedas());
             });
         };
         scheduler.scheduleAtFixedRate(tareaActualizacion, 0, 20, TimeUnit.SECONDS);

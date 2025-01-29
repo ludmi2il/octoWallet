@@ -1,5 +1,6 @@
 package Octo.Modelo.JDBC;
 
+import Octo.Exceptions.OctoDBException;
 import Octo.Modelo.DAO.DaoPersona;
 import Octo.Modelo.Entidad.Persona;
 import java.sql.SQLException;
@@ -15,29 +16,26 @@ public class DaoPersonaImpl implements DaoPersona {
         return new Persona(nombres, apellidos, id);
     }
 
-    public List<Persona> listar() {
-        return null;
-    }
-
-    public long crear(String nombre, String apellido) throws SQLException {
+    public long crear(Persona persona) throws OctoDBException {
         long id = -1;
         String sql = "INSERT INTO PERSONA (NOMBRES, APELLIDOS)VALUES(?, ?);";
         try (
                 PreparedStatement statement = Conexion.getConexion().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
-            statement.setString(1, nombre);
-            statement.setString(2, apellido);
+            statement.setString(1, persona.getNombres());
+            statement.setString(2, persona.getApellidos());
             statement.executeUpdate();
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     id = generatedKeys.getLong(1);
                 }
                 statement.close();
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-                e.printStackTrace();
+            } catch ( Exception e) {
+                throw new OctoDBException(e.getMessage());
             }
-            return id;
+        } catch (SQLException e) {
+            throw new OctoDBException(e.getMessage());
         }
+        return id;
     }
     public Persona obtener(long id) {
         Persona persona = null;
