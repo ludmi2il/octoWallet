@@ -9,7 +9,6 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.HorizontalAlignment;
 import com.itextpdf.layout.properties.TextAlignment;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.TableModel;

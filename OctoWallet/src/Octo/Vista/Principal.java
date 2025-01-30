@@ -9,7 +9,6 @@ public class Principal {
 
 
     public static void main(String[] args) {
-
         Control control = new Control();
         vistas log = control.getprinc();
         log.setTitle("OctoWallet - Billetera Virtual");

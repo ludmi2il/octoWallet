@@ -79,6 +79,12 @@ public class misActivos extends JPanel {
 		btnNewButton_2.setBackground(new Color(151, 177, 249));
 		btnNewButton_2.setFont(new Font("Tahoma", Font.BOLD, 12));
 
+		JButton btnNewButton_PDF = new JButton("Exportar como PDF");
+
+		btnNewButton_PDF.setForeground(new Color(255, 255, 255));
+		btnNewButton_PDF.setBackground(new Color(151, 177, 249));
+		btnNewButton_PDF.setFont(new Font("Tahoma", Font.BOLD, 12));
+
 		JButton btnNewButton_3 = new JButton("Transacciones");
 		btnNewButton_3.setForeground(new Color(255, 255, 255));
 		btnNewButton_3.setBackground(new Color(165, 215, 252));
@@ -129,6 +135,10 @@ public class misActivos extends JPanel {
 					.addContainerGap(159, Short.MAX_VALUE))
 				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
 					.addContainerGap(257, Short.MAX_VALUE)
+						.addComponent(btnNewButton_PDF)
+						.addContainerGap(159, Short.MAX_VALUE))
+					.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+							.addContainerGap(257, Short.MAX_VALUE)
 					.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
 		);
@@ -159,6 +169,7 @@ public class misActivos extends JPanel {
 					.addComponent(btnNewButton_2)
 					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+							.addComponent(btnNewButton_PDF, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(btnNewButton_4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(btnNewButton_3, GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
 					.addContainerGap(55, Short.MAX_VALUE))
@@ -200,7 +211,7 @@ public class misActivos extends JPanel {
 		btnNewButton_1.setBackground(new Color(128, 0, 0));
 		btnNewButton_1.setFont(new Font("Tahoma", Font.BOLD, 12));
 
-		JTable table = new JTable(model);
+		this.table = new JTable(model);
             table.setFont(new Font("Tahoma", Font.PLAIN, 12));
             table.setRowHeight(100); // Ajustar altura para los iconos
             table.setEnabled(false); // Tabla no editable
@@ -229,6 +240,7 @@ public class misActivos extends JPanel {
 		    table.setCellSelectionEnabled(false);
 		    scrollPane.setViewportView(table);
 		setLayout(groupLayout);
+		btnNewButton_PDF.addActionListener(controller.getExportarPDFListener(table));
 		this.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
