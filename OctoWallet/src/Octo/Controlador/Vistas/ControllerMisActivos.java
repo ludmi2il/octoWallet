@@ -8,6 +8,7 @@ import Octo.Modelo.Entidad.Activo;
 import Octo.Modelo.Entidad.Moneda;
 import Octo.Modelo.JDBC.FactoryDao;
 import Octo.Servicios.AppServices.ActivosService;
+import Octo.Vista.gui3.vistas;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -28,17 +29,23 @@ public class ControllerMisActivos {
     private JPanel mainPanel;
     private List<Activo> activos = new ArrayList<>();
     private JLabel userNameLabel;
+    private vistas views;
+    private JPanel ContentPane;
 
-    public ControllerMisActivos(JPanel mainPanel) {
+    public ControllerMisActivos(JPanel mainPanel,JPanel ContentPane, vistas views) {
+    	
         this.mainPanel = mainPanel;
+        this.ContentPane = ContentPane;
+        this.views = views;
     }
 
     public ActionListener getCotizacionesActionListener() {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CardLayout cl = (CardLayout) mainPanel.getLayout();
-                cl.show(mainPanel, "cotizacion");
+              // CardLayout cl = (CardLayout) mainPanel.getLayout();
+              // cl.show(mainPanel, "cotizacion");
+                showPanel("cotizacion");
             }
         };
     }
@@ -47,8 +54,9 @@ public class ControllerMisActivos {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CardLayout cl = (CardLayout) mainPanel.getLayout();
-                cl.show(mainPanel, "operaciones");
+                //CardLayout cl = (CardLayout) mainPanel.getLayout();
+                //cl.show(mainPanel, "operaciones");
+                showPanel("operaciones");
             }
         };
     }
@@ -57,6 +65,7 @@ public class ControllerMisActivos {
         return new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ExportPDF.printToPDF(table);
+                JOptionPane.showMessageDialog(null, "Archivo PDF exportado con éxito a la carpeta Descargas.");
             }
         };
     }
@@ -95,8 +104,9 @@ public class ControllerMisActivos {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Sesion.getInstance().cerrarSesion();
-                CardLayout cl = (CardLayout) mainPanel.getLayout();
-                cl.show(mainPanel, "login");
+                //CardLayout cl = (CardLayout) mainPanel.getLayout();
+                //cl.show(mainPanel, "login");
+                showPanel("login");
             }
         };
     }
@@ -105,10 +115,12 @@ public class ControllerMisActivos {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                activos.clear();
-                FactoryDao.getCrypto().borrar(Sesion.getInstance().getUser().getUserId());// deberia borrar activos del usuario
-                FactoryDao.getFiat().borrar(Sesion.getInstance().getUser().getUserId());
-                List<String> criptosMVP = Arrays.asList("BTC", "ETH", "usdc");
+                if(activos!=null) {
+                    activos.clear();
+                    FactoryDao.getCrypto().borrar(Sesion.getInstance().getUser().getUserId());// deberia borrar activos del usuario
+                    FactoryDao.getFiat().borrar(Sesion.getInstance().getUser().getUserId());
+                }
+                List<String> criptosMVP = Arrays.asList("BTC", "ETH","doge");
                 List<Moneda> monedas = new ArrayList<>();
                 criptosMVP.stream().forEach(cripto -> monedas.add(FactoryDao.getMoneda().obtenerPorNomenclatura(cripto.toLowerCase())));
                 activos = ActivosService.crearActivosDefault(monedas);
@@ -130,19 +142,11 @@ public class ControllerMisActivos {
                 try {
                     // Determinar el icono basado en el tipo de moneda
                     ImageIcon icono;
-                    if (activo.getMoneda().getTipo().equals("F")) {
-                        java.net.URL imagenLocal = getClass().getResource(activo.getMoneda().getImagen());
-                        if (imagenLocal != null) {
-                            icono = new ImageIcon(new ImageIcon(imagenLocal).getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH));
-                        } else {
-                            throw new RuntimeException("No se pudo encontrar la imagen local: /imagenes/ars.jpg");
-                        }  } else {
                         icono = new ImageIcon(
                                 new ImageIcon(new URL(activo.getMoneda().getImagen()))
                                         .getImage()
                                         .getScaledInstance(32, 32, Image.SCALE_SMOOTH)
                         );
-                    }
 
                     // Agregar una nueva fila a la tabla con los datos del activo
                     table.addRow(new Object[] {
@@ -156,4 +160,19 @@ public class ControllerMisActivos {
                 }
             }
         };
+
+    public void showPanel(String name) {
+        CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
+        cardLayout.show(mainPanel, name);
+        for (Component comp : mainPanel.getComponents()) {
+            if (comp.isVisible()) {
+                Dimension preferredSize = comp.getPreferredSize();
+                mainPanel.setPreferredSize(preferredSize);
+                views.getContentPane().setPreferredSize(preferredSize);
+                views.pack();
+                views.setLocationRelativeTo(null);
+                break;
+            }
+        }
     }
+}

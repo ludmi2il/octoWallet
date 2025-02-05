@@ -3,7 +3,7 @@ package Octo.Controlador.Vistas;
 import Octo.Controlador.Sesion;
 import Octo.Exceptions.OctoElemNotFoundException;
 import Octo.Modelo.JDBC.FactoryDao;
-
+import Octo.Vista.gui3.vistas;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,19 +12,25 @@ import java.awt.event.ActionListener;
 public class ControllerIntercambio {
 
     private JPanel mainPanel;
+    private JPanel contentPane;
     private JLabel selectedCripto;
     private JComboBox<String> comboBox_1;
     private JTextField textField;
     private JLabel userNameLabel;
-    public ControllerIntercambio(JPanel mainPanel) {
+    private vistas views;
+    public ControllerIntercambio(JPanel mainPanel, JPanel contentPane, vistas views) {
+    	
         this.mainPanel = mainPanel;
+        this.contentPane = contentPane;
+        this.views = views;
     }
 
     public ActionListener getVolverActionListener() {
         return new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                CardLayout cl = (CardLayout)mainPanel.getLayout();
-                cl.show(mainPanel, "cotizacion");
+               // CardLayout cl = (CardLayout)mainPanel.getLayout();
+               // cl.show(mainPanel, "cotizacion");
+                showPanel("cotizacion");
             }
         };
     }
@@ -34,8 +40,9 @@ public class ControllerIntercambio {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Sesion.getInstance().cerrarSesion();
-                CardLayout cl = (CardLayout)mainPanel.getLayout();
-                cl.show(mainPanel, "login");
+               // CardLayout cl = (CardLayout)mainPanel.getLayout();
+                //cl.show(mainPanel, "login");
+                showPanel("login");
             }
         };
     }
@@ -61,8 +68,8 @@ public class ControllerIntercambio {
                try{
                    FactoryDao.getTransaccion().swap(criptoOriginal, cantidad, criptoEsperada);
                    JOptionPane.showMessageDialog(mainPanel, "Swap realizado con éxito.");
-                   CardLayout cl = (CardLayout)mainPanel.getLayout();
-                   cl.show(mainPanel, "misActivos");
+                   //CardLayout cl = (CardLayout)mainPanel.getLayout();
+                   //cl.show(mainPanel, "misActivos");
                }catch (OctoElemNotFoundException o) {
                    JOptionPane.showMessageDialog(null, o.getMessage());
                }
@@ -93,4 +100,20 @@ public class ControllerIntercambio {
     public void setTextField(JTextField textField) {
         this.textField = textField;
     }
+
+    public void showPanel(String name) {
+        CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
+        cardLayout.show(mainPanel, name);
+        for (Component comp : mainPanel.getComponents()) {
+            if (comp.isVisible()) {
+                Dimension preferredSize = comp.getPreferredSize();
+                mainPanel.setPreferredSize(preferredSize);
+                views.getContentPane().setPreferredSize(preferredSize);
+                views.pack();
+                views.setLocationRelativeTo(null);
+                break;
+            }
+        }
+    }
+
 }

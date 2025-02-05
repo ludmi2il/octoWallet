@@ -18,6 +18,7 @@ public class CacheCryptoService {
     private CacheCryptoService(){
         cargarCache();
         criptosOrdenadas();
+        ActivosService.darStock(cacheMonedas);
         this.cacheMonedas = monedasMVP();
     } public static List<Moneda> MonedasMVP() {
         List<String> monedasMVP = Arrays.asList("btc", "eth", "usdc", "usdt", "doge");

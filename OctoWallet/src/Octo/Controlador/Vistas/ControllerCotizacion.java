@@ -4,7 +4,7 @@ import Octo.Controlador.Sesion;
 import Octo.Servicios.AppServices.CacheCryptoService;
 import Octo.Servicios.AppServices.DBStatus;
 import Octo.Vista.gui3.cotizacion;
-
+import Octo.Vista.gui3.vistas;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,11 +16,18 @@ import java.util.concurrent.TimeUnit;
 public class ControllerCotizacion {
         private JLabel userNameLabel;
         private JPanel mainPanel;
+        private JPanel ContentPane;
         private CacheCryptoService cachemoneda = CacheCryptoService.getInstancia();
+        private vistas views;
+
         private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        public ControllerCotizacion(JPanel mainPanel) {
+        
+        public ControllerCotizacion(JPanel mainPanel,JPanel ContentPane, vistas views) {
+        	
             this.mainPanel = mainPanel;
-            Sesion.getInstance().setMonedasDisponibles(cachemoneda.getCacheMonedas());
+            this.ContentPane = ContentPane;
+            this.views = views;
+            System.out.println(Sesion.getInstance().getMonedasDisponibles());
         }
     public void iniciarActualizaciones(cotizacion c) {
         Runnable tareaActualizacion = () -> {
@@ -48,8 +55,9 @@ public class ControllerCotizacion {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Sesion.getInstance().cerrarSesion();
-                CardLayout cl = (CardLayout) mainPanel.getLayout();
-                cl.show(mainPanel, "login");
+                //CardLayout cl = (CardLayout) mainPanel.getLayout();
+                //cl.show(mainPanel, "login");
+                showPanel("login");
             }
         };
        }
@@ -57,8 +65,9 @@ public class ControllerCotizacion {
         public ActionListener getVolverActionListener() {
             return new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    CardLayout cl = (CardLayout)mainPanel.getLayout();
-                    cl.show(mainPanel, "misActivos");
+                    //CardLayout cl = (CardLayout)mainPanel.getLayout();
+                    //cl.show(mainPanel, "misActivos");
+                    showPanel("misActivos");
                 }
             };
         }
@@ -66,8 +75,9 @@ public class ControllerCotizacion {
             return new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     Sesion.getInstance().setCriptoCompra(e.getActionCommand());
-                    CardLayout cl = (CardLayout)mainPanel.getLayout();
-                    cl.show(mainPanel, "comprita");
+                   // CardLayout cl = (CardLayout)mainPanel.getLayout();
+                    //cl.show(mainPanel, "comprita");
+                    showPanel("comprita");
                 }
             };
         }
@@ -75,8 +85,9 @@ public class ControllerCotizacion {
             return new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     Sesion.getInstance().setCriptoCompra(e.getActionCommand());
-                    CardLayout cl = (CardLayout)mainPanel.getLayout();
-                    cl.show(mainPanel, "intercambio");
+                   //CardLayout cl = (CardLayout)mainPanel.getLayout();
+                    //cl.show(mainPanel, "intercambio");
+                    showPanel("intercambio");
                 }
             };
         }
@@ -88,4 +99,18 @@ public class ControllerCotizacion {
         String nombre = Sesion.getInstance().getUser().getNombres() + " " + Sesion.getInstance().getUser().getApellidos();
         this.userNameLabel.setText(nombre);
       }
+    public void showPanel(String name) {
+        CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
+        cardLayout.show(mainPanel, name);
+        for (Component comp : mainPanel.getComponents()) {
+            if (comp.isVisible()) {
+                Dimension preferredSize = comp.getPreferredSize();
+                mainPanel.setPreferredSize(preferredSize);
+                views.getContentPane().setPreferredSize(preferredSize);
+                views.pack();
+                views.setLocationRelativeTo(null);
+                break;
+            }
+        }
+    }
 }

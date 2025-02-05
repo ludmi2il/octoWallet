@@ -17,15 +17,17 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JPasswordField;
 
 public class registro extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JTextField textField_1;
+	private JTextField txtContra;
 	private JTextField textField_2;
 	private JTextField textField_3;
 	private JTextField textField_4;
     private JPanel mainPanel;
+    private JPasswordField passCR1;
 	/**
 	 * Create the panel.
 	 */
@@ -39,12 +41,12 @@ public class registro extends JPanel {
 		
 		JSeparator separator = new JSeparator();
 		
-		JLabel lblNewLabel_2 = new JLabel("Contraseña:\r\n");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 12));
+		JLabel contra1 = new JLabel("Contraseña:\r\n");
+		contra1.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		controller.setPasswordField(textField_1);
+		txtContra = new JTextField();
+		txtContra.setColumns(10);
+		controller.setPasswordField(txtContra);
 
 		JLabel lblNewLabel_3 = new JLabel("E-Mail:\r\n");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -83,40 +85,51 @@ public class registro extends JPanel {
 		btnNewButton_1.setBackground(new Color(151, 177, 249));
 		btnNewButton_1.setFont(new Font("Tahoma", Font.BOLD, 12));
 		btnNewButton_1.addActionListener(controller.getVolverActionListener());
-
+		
+		JLabel contraR1 = new JLabel("Repetir contraseña:");
+		contraR1.setFont(new Font("Tahoma", Font.BOLD, 12));
+		
+		passCR1 = new JPasswordField();
+        controller.setPassworldFieldR(passCR1);
+        
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
+			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 123, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(317, Short.MAX_VALUE))
+					.addContainerGap(197, Short.MAX_VALUE))
 				.addGroup(groupLayout.createSequentialGroup()
-					.addComponent(separator, GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
+					.addComponent(separator, GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
 					.addGap(1))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(47)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(lblNewLabel_2)
-						.addComponent(lblNewLabel_3)
-						.addComponent(lblNewLabel_5)
-						.addComponent(lblNewLabel_4))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(223, Short.MAX_VALUE))
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(27)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(chckbxNewCheckBox)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(btnNewButton)
-							.addGap(71)
+							.addGap(70)
 							.addComponent(btnNewButton_1)))
 					.addGap(172))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(lblNewLabel_3)
+						.addComponent(lblNewLabel_5)
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+							.addComponent(contraR1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGap(47)
+								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+									.addComponent(lblNewLabel_4)
+									.addComponent(contra1)))))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(txtContra)
+						.addComponent(passCR1)
+						.addComponent(textField_3)
+						.addComponent(textField_4)
+						.addComponent(textField_2))
+					.addContainerGap(232, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -125,29 +138,33 @@ public class registro extends JPanel {
 					.addComponent(lblNewLabel)
 					.addGap(8)
 					.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(26)
+					.addGap(33)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel_2))
+						.addComponent(contra1)
+						.addComponent(txtContra, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(19)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(contraR1)
+						.addComponent(passCR1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel_3))
-					.addGap(18)
+						.addComponent(lblNewLabel_3)
+						.addComponent(textField_2))
+					.addGap(19)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel_4))
-					.addGap(18)
+						.addComponent(lblNewLabel_4)
+						.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(12)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel_5))
-					.addGap(32)
+						.addComponent(lblNewLabel_5)
+						.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
 					.addComponent(chckbxNewCheckBox)
-					.addGap(28)
+					.addGap(26)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnNewButton)
 						.addComponent(btnNewButton_1))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addGap(46))
 		);
 		setLayout(groupLayout);
 

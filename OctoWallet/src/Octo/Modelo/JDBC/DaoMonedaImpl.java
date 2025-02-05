@@ -99,7 +99,7 @@ public class DaoMonedaImpl implements DaoMoneda {
             res = st.executeUpdate();
             st.close();
         } catch (SQLException e) {
-            throw new OctoElemNotFoundException("error! no se encontró el elemento con id: " + moneda.getIdMoneda());
+            throw new OctoElemNotFoundException("error! no se encontró la moneda con id: " + moneda.getIdMoneda());
         }
         return res;
     }

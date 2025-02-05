@@ -5,7 +5,7 @@ import Octo.Controlador.Sesion;
 import Octo.Modelo.JDBC.DaoTransaccionImpl;
 import Octo.Modelo.Entidad.Transaccion;
 import Octo.Vista.gui3.operaciones;
-
+import Octo.Vista.gui3.vistas;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -17,15 +17,22 @@ public class ControllerOperaciones {
     private JPanel textArea;
     private DaoTransaccionImpl daoTransaccion;
     private int cantTransacciones;
-    public ControllerOperaciones(JPanel mainPanel) {
+    private vistas views;
+    private JPanel ContentPane;
+    
+    public ControllerOperaciones(JPanel mainPanel,JPanel ContentPane, vistas views) {
         this.mainPanel = mainPanel;
+        this.ContentPane = ContentPane;
+        this.views = views;
         this.daoTransaccion = new DaoTransaccionImpl();
     }
+    
     public ActionListener getVolverActionListener() {
         return new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                CardLayout cl = (CardLayout)mainPanel.getLayout();
-                cl.show(mainPanel, "misActivos");
+               // CardLayout cl = (CardLayout)mainPanel.getLayout();
+               // cl.show(mainPanel, "misActivos");
+                showPanel("misActivos");
             }
         };
     }
@@ -41,6 +48,20 @@ public class ControllerOperaciones {
                 }
                 cantTransacciones= transacciones.size();
             }
+    }
+    public void showPanel(String name) {
+        CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
+        cardLayout.show(mainPanel, name);
+        for (Component comp : mainPanel.getComponents()) {
+            if (comp.isVisible()) {
+                Dimension preferredSize = comp.getPreferredSize();
+                mainPanel.setPreferredSize(preferredSize);
+                views.getContentPane().setPreferredSize(preferredSize);
+                views.pack();
+                views.setLocationRelativeTo(null);
+                break;
+            }
+        }
     }
 }
 

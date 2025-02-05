@@ -103,16 +103,21 @@ public class misActivos extends JPanel {
 		JScrollPane scrollPane = new JScrollPane(table);
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
 					.addComponent(lblNewLabel_4)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lblNewLabel_1)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnNewButton)
+					.addContainerGap())
+				.addComponent(separator, GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap(254, Short.MAX_VALUE)
+					.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(48)
@@ -121,26 +126,17 @@ public class misActivos extends JPanel {
 							.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(lblNewLabel_3, GroupLayout.PREFERRED_SIZE, 172, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-							.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-								.addComponent(btnNewButton_3, GroupLayout.PREFERRED_SIZE, 164, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(btnNewButton_4, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE))
-							.addComponent(scrollPane, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 351, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+							.addComponent(scrollPane, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 351, GroupLayout.PREFERRED_SIZE)
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+									.addComponent(btnNewButton_2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(btnNewButton_3, GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE))
+								.addPreferredGap(ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+									.addComponent(btnNewButton_4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(btnNewButton_PDF, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
 					.addGap(61))
-				.addComponent(separator, GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(154)
-					.addComponent(btnNewButton_2)
-					.addContainerGap(159, Short.MAX_VALUE))
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-					.addContainerGap(257, Short.MAX_VALUE)
-						.addComponent(btnNewButton_PDF)
-						.addContainerGap(159, Short.MAX_VALUE))
-					.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-							.addContainerGap(257, Short.MAX_VALUE)
-					.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -166,45 +162,46 @@ public class misActivos extends JPanel {
 					.addGap(30)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE)
 					.addGap(30)
-					.addComponent(btnNewButton_2)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnNewButton_2)
+						.addComponent(btnNewButton_PDF, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-							.addComponent(btnNewButton_PDF, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnNewButton_4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(btnNewButton_3, GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
-					.addContainerGap(55, Short.MAX_VALUE))
+						.addComponent(btnNewButton_3, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(36, Short.MAX_VALUE))
 		);
 
 		DefaultTableModel model = new DefaultTableModel(
-                new Object[][] {
-                    {new ImageIcon(misActivos.class.getResource("/imagenes/bitcoin.png")), "Bitcoin", 0.0},
-                    {new ImageIcon(misActivos.class.getResource("/imagenes/USDC.png")), "USDC", 0.0},
-                    {new ImageIcon(misActivos.class.getResource("/imagenes/ethereum.png")), "Ethereum", 0.0},
-                },
-                new String[] {
-                    "Icono", "Cripto", "Monto"
-                }
-            ) {
-                Class<?>[] columnTypes = new Class[] {
-                    ImageIcon.class, String.class, Double.class
-                };
+				new Object[][] {
+						{new ImageIcon(misActivos.class.getResource("/imagenes/bitcoin.png")), "Bitcoin", 0.0},
+						{new ImageIcon(misActivos.class.getResource("/imagenes/USDC.png")), "USDC", 0.0},
+						{new ImageIcon(misActivos.class.getResource("/imagenes/ethereum.png")), "Ethereum", 0.0},
+				},
+				new String[] {
+						"Icono", "Cripto", "Monto"
+				}
+		) {
+			Class<?>[] columnTypes = new Class[] {
+					ImageIcon.class, String.class, Double.class
+			};
 
-                @Override
-                public boolean isCellEditable(int row, int column) {
-                    return false; // Todas las celdas son no editables
-                }
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false; // Todas las celdas son no editables
+			}
 
-                @Override
-                public Class<?> getColumnClass(int columnIndex) {
-                    return columnTypes[columnIndex];
-                }
-            };
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+		};
 		this.addComponentListener(new ComponentAdapter() {
-									  @Override
-									  public void componentShown(ComponentEvent e) {
-										  controller.cargarDatosEnTabla(model,lblNewLabel_3);
-									  }
-								  });
+			@Override
+			public void componentShown(ComponentEvent e) {
+				controller.cargarDatosEnTabla(model,lblNewLabel_3);
+			}
+		});
 
 		btnNewButton_1.addActionListener(controller.getGenerarDatos(model,lblNewLabel_3));
 		btnNewButton_1.setForeground(new Color(255, 255, 255));
@@ -212,33 +209,33 @@ public class misActivos extends JPanel {
 		btnNewButton_1.setFont(new Font("Tahoma", Font.BOLD, 12));
 
 		this.table = new JTable(model);
-            table.setFont(new Font("Tahoma", Font.PLAIN, 12));
-            table.setRowHeight(100); // Ajustar altura para los iconos
-            table.setEnabled(false); // Tabla no editable
+		table.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		table.setRowHeight(100); // Ajustar altura para los iconos
+		table.setEnabled(false); // Tabla no editable
 
-            // Ordenación interactiva
-            TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
-            table.setRowSorter(sorter);
-
-
-		    DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-			centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-
-			// Aplicar el renderizador solo a las columnas de Nombre y Precio
-			table.getColumnModel().getColumn(0).setCellRenderer(new imageRenderer());//columna "imagen"
-			table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer); // Columna "Nombre"
-			table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer); // Columna "Precio"
-
-			// Ajustar ancho de las columnas
-	        table.getColumnModel().getColumn(0).setPreferredWidth(20); // Imagen
-	        table.getColumnModel().getColumn(1).setPreferredWidth(150); // Nombre
-	        table.getColumnModel().getColumn(2).setPreferredWidth(80);  // Precio
+		// Ordenación interactiva
+		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+		table.setRowSorter(sorter);
 
 
-	       	table.setFillsViewportHeight(true);
-		    table.setColumnSelectionAllowed(false);
-		    table.setCellSelectionEnabled(false);
-		    scrollPane.setViewportView(table);
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+		// Aplicar el renderizador solo a las columnas de Nombre y Precio
+		table.getColumnModel().getColumn(0).setCellRenderer(new imageRenderer());//columna "imagen"
+		table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer); // Columna "Nombre"
+		table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer); // Columna "Precio"
+
+		// Ajustar ancho de las columnas
+		table.getColumnModel().getColumn(0).setPreferredWidth(20); // Imagen
+		table.getColumnModel().getColumn(1).setPreferredWidth(150); // Nombre
+		table.getColumnModel().getColumn(2).setPreferredWidth(80);  // Precio
+
+
+		table.setFillsViewportHeight(true);
+		table.setColumnSelectionAllowed(false);
+		table.setCellSelectionEnabled(false);
+		scrollPane.setViewportView(table);
 		setLayout(groupLayout);
 		btnNewButton_PDF.addActionListener(controller.getExportarPDFListener(table));
 		this.addComponentListener(new ComponentAdapter() {

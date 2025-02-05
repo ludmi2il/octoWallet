@@ -5,7 +5,7 @@ import Octo.Servicios.AppServices.FiatConsumo;
 import Octo.Exceptions.OctoElemNotFoundException;
 import Octo.Modelo.Entidad.Moneda;
 import Octo.Modelo.JDBC.DaoTransaccionImpl;
-
+import Octo.Vista.gui3.vistas;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -19,21 +19,27 @@ import Octo.Modelo.JDBC.FactoryDao;
 public class ControllerComprita {
 
     private JPanel mainPanel;
+    private JPanel contentPane;
     private DaoTransaccionImpl daoTransaccion;
     private JTextField textField;
     private JComboBox<String> comboBox;
     private JLabel stockLabel;
     private JLabel priceLabel;
-
-    public ControllerComprita(JPanel mainPanel) {
+    private vistas views;
+    
+    public ControllerComprita(JPanel mainPanel, JPanel contentPane, vistas views) {
+    	
         this.mainPanel = mainPanel;
+        this.contentPane = contentPane;
+        this.views = views;
     }
 
     public ActionListener getCancelarActionListener() {
         return new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                CardLayout cl = (CardLayout)mainPanel.getLayout();
-                cl.show(mainPanel, "cotizacion");
+                //CardLayout cl = (CardLayout)mainPanel.getLayout();
+                //cl.show(mainPanel, "cotizacion");
+                showPanel("cotizacion");
             }
         };
     }
@@ -52,8 +58,9 @@ public class ControllerComprita {
                 try {
                     FactoryDao.getTransaccion().comprarCriptoMonedas(criptoId,fiatId ,cantidad);
                     JOptionPane.showMessageDialog(mainPanel, "Compra realizada con éxito.");
-                    CardLayout cl = (CardLayout)mainPanel.getLayout();
-                    cl.show(mainPanel, "cotizacion");
+                   //CardLayout cl = (CardLayout)mainPanel.getLayout();
+                   //cl.show(mainPanel, "cotizacion");
+                   showPanel("cotizacion");
                 } catch (OctoElemNotFoundException o) {
                     JOptionPane.showMessageDialog(mainPanel, "La compra no se pudo realizar. No tienes saldo suficiente");
                 }
@@ -96,6 +103,7 @@ public class ControllerComprita {
         try {
             double stock = Sesion.getInstance().getStockByNom(cripto);
             double price = Sesion.getInstance().getCotizacionByNom(cripto);
+            System.out.println("stock;"+ stock);
             stockLabel.setText(String.format("%.2f", stock)); // Mostrar con 2 decimales
             priceLabel.setText(String.format("%.2f", price));
         } catch (Exception e) {
@@ -119,5 +127,20 @@ public class ControllerComprita {
     }
     public void setTextField(JTextField textField) {
         this.textField = textField;
+    }
+
+    public void showPanel(String name) {
+        CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
+        cardLayout.show(mainPanel, name);
+        for (Component comp : mainPanel.getComponents()) {
+            if (comp.isVisible()) {
+                Dimension preferredSize = comp.getPreferredSize();
+                mainPanel.setPreferredSize(preferredSize);
+                views.getContentPane().setPreferredSize(preferredSize);
+                views.pack();
+                views.setLocationRelativeTo(null);
+                break;
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 package Octo.Vista.gui3;
 
+
 import javax.swing.JPanel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -23,9 +24,7 @@ public class login extends JPanel {
 	private JTextField textField;
 	private JPasswordField passwordField;
 	private JPanel mainPanel;
-	/**
-	 * Create the panel.
-	 */
+
 	public login(JPanel mainPanel, ControllerLogin controller) {
 
 		this.mainPanel=mainPanel;

@@ -9,6 +9,8 @@ public class Principal {
 
 
     public static void main(String[] args) {
+    	
+    	LookAndFeelUtil.setNimbusLookAndFeel();
         Control control = new Control();
         vistas log = control.getprinc();
         log.setTitle("OctoWallet - Billetera Virtual");
@@ -18,7 +20,6 @@ public class Principal {
         } else {
             System.err.println("No se pudo encontrar la imagen: /imagenes/pulpito.png");
         }
-
         log.setVisible(true);
 
     }

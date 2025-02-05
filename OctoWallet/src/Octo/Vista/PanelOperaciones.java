@@ -35,31 +35,7 @@ public class PanelOperaciones extends JPanel{
         }
     }
 
-    /*public static void main(String[] args) {
-        try {
-            // Configuración del Look and Feel de flatlaf
-            UIManager.setLookAndFeel(new FlatMacLightLaf());
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-
-        JFrame frame = new JFrame("Historial de Transacciones");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 200);
-
-
-        // Usar el panel con tabla
-        PanelOperaciones panel = new PanelOperaciones();
-        List<Transaccion> t = SQLManager.getInstancia().getTransaccion().listar();
-        System.out.println(t);
-        panel.cargarTransacciones(t);
-
-        frame.add(panel);
-        frame.setVisible(true);
-    }
-
-     */
-    }
+ }
 
 
 
