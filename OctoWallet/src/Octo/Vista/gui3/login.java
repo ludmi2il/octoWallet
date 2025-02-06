@@ -26,6 +26,7 @@ public class login extends JPanel {
 	private JPanel mainPanel;
 
 	public login(JPanel mainPanel, ControllerLogin controller) {
+		setBackground(new Color(255, 255, 255));
 
 		this.mainPanel=mainPanel;
 		JLabel lblNewLabel = new JLabel("OctoWallet - Bienvenido\r\n");

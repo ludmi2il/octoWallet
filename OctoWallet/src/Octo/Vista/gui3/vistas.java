@@ -18,14 +18,17 @@ public class vistas extends JFrame {
 	private vistas log = this;
 
 	public vistas() {
+		setBackground(new Color(255, 255, 255));
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 617, 560);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
 		mainPanel = new JPanel();
+		mainPanel.setBackground(new Color(255, 255, 255));
 		cardLayout = new CardLayout();
 		mainPanel.setLayout(cardLayout);
 		contentPane.setLayout(new BorderLayout());
@@ -46,9 +49,9 @@ public class vistas extends JFrame {
 		misActivos card3 = new misActivos(mainPanel, conMisActivos);
 		card3.setPreferredSize(new Dimension(480, 502));
 		operaciones card4 = new operaciones(mainPanel, conOperaciones);
-		card4.setPreferredSize(new Dimension(460, 298));
+		card4.setPreferredSize(new Dimension(470, 300));
 		cotizacion card5 = new cotizacion(mainPanel, conCotizacion);
-		card5.setPreferredSize(new Dimension(460, 470));
+		card5.setPreferredSize(new Dimension(470, 470));
 		comprita card6 = new comprita(mainPanel, conComprita);
 		card6.setPreferredSize(new Dimension(450, 300));
 		intercambio card7 = new intercambio(mainPanel, conIntercambio);

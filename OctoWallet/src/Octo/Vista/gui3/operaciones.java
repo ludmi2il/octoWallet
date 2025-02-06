@@ -18,7 +18,7 @@ public class operaciones extends JPanel {
     public operaciones(JPanel mainPanel, ControllerOperaciones controller) {
 
         this.mainPanel = mainPanel;
-        setBackground(new Color(236, 236, 236));
+        setBackground(new Color(255, 255, 255));
 
         JLabel lblTitulo = new JLabel("OctoWallet - Mis Operaciones");
         lblTitulo.setForeground(new Color(96, 96, 96));
@@ -35,7 +35,7 @@ public class operaciones extends JPanel {
         // Panel para contener las tarjetas
         JPanel panelTransacciones = new JPanel();
         panelTransacciones.setLayout(new BoxLayout(panelTransacciones, BoxLayout.Y_AXIS));
-        panelTransacciones.setBackground(new Color(236, 236, 236));
+        panelTransacciones.setBackground(new Color(244, 244, 244));
 
         // Scroll para las transacciones
         JScrollPane scrollPane = new JScrollPane(panelTransacciones);

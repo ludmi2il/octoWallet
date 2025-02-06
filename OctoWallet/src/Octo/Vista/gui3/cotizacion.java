@@ -34,6 +34,7 @@ public class cotizacion extends JPanel {
 
         JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JLabel userName = new JLabel("Juan Perez");
+        userName.setFont(new Font("Tahoma", Font.BOLD, 11));
         userName.setIcon(new ImageIcon(cotizacion.class.getResource("/imagenes/pulpito.png")));
         controller.setUserNameLabel(userName);
 

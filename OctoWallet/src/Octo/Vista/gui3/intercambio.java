@@ -25,6 +25,7 @@ public class intercambio extends JPanel {
 	 * Create the panel.
 	 */
 	public intercambio(JPanel mainPanel, ControllerIntercambio controller) {
+		setBackground(new Color(255, 255, 255));
 		this.mainPanel=mainPanel;
 		
 		JLabel lblNewLabel = new JLabel("OctoWallet - Swap");
