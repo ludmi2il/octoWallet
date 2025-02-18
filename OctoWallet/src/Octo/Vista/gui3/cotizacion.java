@@ -124,8 +124,7 @@ public class cotizacion extends JPanel {
         add(new JScrollPane(mainPanel1), BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
         this.mainPanel1= mainPanel1;
-        control = controller;
-        control.iniciarActualizaciones(this);
+        this.control=controller;
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
@@ -133,6 +132,10 @@ public class cotizacion extends JPanel {
                 actualizarCotizaciones(Sesion.getInstance().getMonedasDisponibles());
             }
         });
+    }
+    public void startSeek(){
+        control.addCotizacionView(this);
+        control.iniciarActualizaciones();
     }
     public void actualizarCotizaciones(List<Moneda> nuevasCotizaciones) {
         // Asumiendo que tienes un panel principal llamado mainPanel1 donde se muestran las cotizaciones

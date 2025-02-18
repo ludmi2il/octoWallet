@@ -1,6 +1,6 @@
 package Octo.Exceptions;
 
-public class OctoElemNotFoundException extends RuntimeException{
+public class OctoElemNotFoundException extends Exception{
 
     public OctoElemNotFoundException(String mensaje){
         super(mensaje);

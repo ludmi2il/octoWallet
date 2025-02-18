@@ -1,11 +1,15 @@
 package Octo.Servicios.AppServices;
 
 import Octo.Controlador.Utilitario.Comparadores;
+import Octo.Exceptions.OctoElemNotFoundException;
+import Octo.Exceptions.OctoServiceException;
 import Octo.Modelo.Entidad.Moneda;
 import Octo.Modelo.JDBC.FactoryDao;
 import Octo.Servicios.ApiServices.CotizacionesRequest;
 
+import javax.swing.*;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -16,7 +20,11 @@ public class CacheCryptoService {
     private static List<Moneda> cacheMonedas;
     private static String ids;
     private CacheCryptoService(){
-        cargarCache();
+        try {
+            cargarCache();
+        }catch (OctoElemNotFoundException e){
+            JOptionPane.showInputDialog("error al conseguir los valores del mercado actual de criptomnedas! intente conectarse más tarde!");
+        }
         criptosOrdenadas();
         ActivosService.darStock(cacheMonedas);
         this.cacheMonedas = monedasMVP();
@@ -43,38 +51,39 @@ public class CacheCryptoService {
                 .filter(moneda -> monedasMVP.contains(moneda.getNomenclatura().toLowerCase()))
                 .collect(Collectors.toList());
     }
-    private void cargarCache() {
+    private void cargarCache() throws OctoElemNotFoundException {
         cacheMonedas = FactoryDao.getMoneda().listar();
     }
-    private CompletableFuture<Map<String, Map<String, Double>>> obtenerCotizaciones() {
+    private Map<String, Map<String, Double>> obtenerCotizaciones() {
         // obtengo solo las monedas de tipo C sin crear casos de where en las queries
         if (ids.equals("")) {
             ids = cacheMonedas.stream().map(Moneda::getNombre).collect(Collectors.joining(","));
         }
-        return CotizacionesRequest.RequestAsync(ids); // quiero que retorne un mapa
+        try{
+            Map<String, Map<String, Double>> resp = CotizacionesRequest.RequestSync(ids); // quiero que retorne un mapa
+            return resp;
+        }catch (OctoServiceException e){
+            JOptionPane.showInputDialog(e.getMessage());
+        }
+        return Collections.emptyMap();
     }
     public void ActualizarCotizaciones() {
-        obtenerCotizaciones()
-                .thenAccept(cotizaciones -> {
-                    // Verificamos si la respuesta no está vacía
-                    if (!cotizaciones.isEmpty()) {
-                        // por cada moneda
-                        cacheMonedas.forEach(moneda -> {
-                            String nombreMoneda = moneda.getNombre().toLowerCase();
-                            if (cotizaciones.containsKey(nombreMoneda)) {
-                                // Obtengo la cotización
-                                Double cotizacion = cotizaciones.get(nombreMoneda).get("usd");
-                                moneda.setCotizacion(cotizacion); // Asignamos la cotización al objeto Moneda
-                            }
-                        });
-                        // Después de actualizar las cotizaciones,ya puedo actualizar la vista
-                        //actualizarVistaConCotizaciones(listaMonedas);
+            Map<String, Map<String, Double>> cotizaciones = obtenerCotizaciones(); // Llamada síncrona
+
+            // Verificamos si la respuesta no está vacía
+            if (!cotizaciones.isEmpty()) {
+                // Por cada moneda en caché
+                cacheMonedas.forEach(moneda -> {
+                    String nombreMoneda = moneda.getNombre().toLowerCase();
+                    if (cotizaciones.containsKey(nombreMoneda)) {
+                        // Obtengo la cotización
+                        Double cotizacion = cotizaciones.get(nombreMoneda).get("usd");
+                        moneda.setCotizacion(cotizacion); // Asignamos la cotización al objeto Moneda
                     }
-                })
-                .exceptionally(e -> {
-                    System.out.println("Error al obtener las cotizaciones: " + e.getMessage());
-                    return null;
                 });
+            } else {
+                System.out.println("No se pudieron obtener las cotizaciones.");
+            }
     }
     private void criptosOrdenadas() {
         cacheMonedas = cacheMonedas.stream().filter(moneda ->

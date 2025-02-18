@@ -4,6 +4,7 @@ package Octo.Controlador.Vistas;
 import Octo.Controlador.Sesion;
 import Octo.Controlador.Utilitario.ExportCSV;
 import Octo.Controlador.Utilitario.ExportPDF;
+import Octo.Exceptions.OctoElemNotFoundException;
 import Octo.Modelo.Entidad.Activo;
 import Octo.Modelo.Entidad.Moneda;
 import Octo.Modelo.JDBC.FactoryDao;
@@ -85,7 +86,7 @@ public class ControllerMisActivos {
     public void setUserNameLabel(JLabel label) {
         this.userNameLabel = label;
     }
-    public double obtenerBalance(){
+    public double obtenerBalance() throws OctoElemNotFoundException {
         double pesoDolar = FactoryDao.getMoneda().obtenerPorNomenclatura("ARS").getCotizacion();
         return activos.stream()
                 .mapToDouble(act -> "ARS".equals(act.getMoneda().getNomenclatura())
@@ -122,16 +123,27 @@ public class ControllerMisActivos {
                 }
                 List<String> criptosMVP = Arrays.asList("BTC", "ETH","doge");
                 List<Moneda> monedas = new ArrayList<>();
-                criptosMVP.stream().forEach(cripto -> monedas.add(FactoryDao.getMoneda().obtenerPorNomenclatura(cripto.toLowerCase())));
+                try{
+                criptosMVP.stream().forEach(cripto -> {
+                    try {
+                        monedas.add(FactoryDao.getMoneda().obtenerPorNomenclatura(cripto.toLowerCase()));
+                    } catch (OctoElemNotFoundException ex) {
+                        JOptionPane.showMessageDialog(null, ex.getMessage());
+                    }
+                });
                 activos = ActivosService.crearActivosDefault(monedas);
-                cargarDatosEnTabla(table,label);
+
+                    cargarDatosEnTabla(table,label);
+                } catch (OctoElemNotFoundException ex) {
+                   JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
                 ActivosService.darStock(monedas);
                 JOptionPane.showMessageDialog(null, "datos de prueba generados correctamente.");
 
             }
         };
     }
-        public void cargarDatosEnTabla(DefaultTableModel table, JLabel label){
+        public void cargarDatosEnTabla(DefaultTableModel table, JLabel label) throws OctoElemNotFoundException {
            activos = FactoryDao.getCrypto().listarPorId(Sesion.getInstance().getUser().getUserId());
            activos.addAll(FactoryDao.getFiat().listarPorId(Sesion.getInstance().getUser().getUserId()));
            DecimalFormat formato = new DecimalFormat("#,##0.00");

@@ -4,9 +4,9 @@ import Octo.Modelo.DAO.*;
 
 public class FactoryDao {
     private static DaoMoneda moneda = new DaoMonedaImpl(); ;
-    private static DaoPersonaImpl persona= new DaoPersonaImpl();
-    private static DaoUsuarioImpl usuario= new DaoUsuarioImpl();
-    private static DaoTransaccionImpl transaccion = new DaoTransaccionImpl();
+    private static DaoPersona persona= new DaoPersonaImpl();
+    private static DaoUsuario usuario= new DaoUsuarioImpl();
+    private static DaoTransaccion transaccion = new DaoTransaccionImpl();
     private static DaoActivoCrypto crypto = new DaoActivoCrypto();
     private static DaoActivoFiat fiat = new DaoActivoFiat();
 
@@ -25,7 +25,7 @@ public class FactoryDao {
     public static DaoActivoFiat getFiat() {
         return fiat;
     }
-    public static DaoTransaccionImpl getTransaccion() {
+    public static DaoTransaccion getTransaccion() {
         return transaccion;
     }
 }

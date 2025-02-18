@@ -104,7 +104,7 @@ public class DaoMonedaImpl implements DaoMoneda {
         return res;
     }
     @Override
-    public Moneda obtenerPorNomenclatura(String nomenclatura){
+    public Moneda obtenerPorNomenclatura(String nomenclatura) throws OctoElemNotFoundException{
         Moneda mon = null;
         try {
             String str = "SELECT * FROM MONEDA WHERE NOMENCLATURA = ?";
