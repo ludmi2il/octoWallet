@@ -65,14 +65,10 @@ public class ControllerIntercambio {
                 long criptoOriginal = Sesion.getInstance().getIdCriptotByNom(criptoACambiar);
                 long criptoEsperada = Sesion.getInstance().getIdCriptotByNom(criptoEsperadaStr);
 
-               try{
-                   FactoryDao.getTransaccion().swap(criptoOriginal, cantidad, criptoEsperada);
-                   JOptionPane.showMessageDialog(mainPanel, "Swap realizado con éxito.");
-                   //CardLayout cl = (CardLayout)mainPanel.getLayout();
-                   //cl.show(mainPanel, "misActivos");
-               }catch (OctoElemNotFoundException o) {
-                   JOptionPane.showMessageDialog(null, o.getMessage());
-               }
+                FactoryDao.getTransaccion().swap(criptoOriginal, cantidad, criptoEsperada);
+                JOptionPane.showMessageDialog(mainPanel, "Swap realizado con éxito.");
+                //CardLayout cl = (CardLayout)mainPanel.getLayout();
+                //cl.show(mainPanel, "misActivos");
             }
         };
     }

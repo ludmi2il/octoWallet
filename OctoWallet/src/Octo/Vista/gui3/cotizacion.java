@@ -126,6 +126,7 @@ public class cotizacion extends JPanel {
         add(bottomPanel, BorderLayout.SOUTH);
         this.mainPanel1= mainPanel1;
         this.control=controller;
+        startSeek();
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
@@ -136,6 +137,7 @@ public class cotizacion extends JPanel {
     }
     public void startSeek(){
         control.addCotizacionView(this);
+        control.launchUpdater();
         control.iniciarActualizaciones();
     }
     public void actualizarCotizaciones(List<Moneda> nuevasCotizaciones) {

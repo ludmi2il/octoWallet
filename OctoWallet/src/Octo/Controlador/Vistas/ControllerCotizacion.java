@@ -35,7 +35,8 @@ public class ControllerCotizacion {
             this.updater= new Actualizador(this.cachemoneda, this.c);
         }
     public void iniciarActualizaciones() {
-        updater.iniciarActualizaciones();
+
+            updater.iniciarActualizaciones();
     }
 
     public ActionListener getCerrarSesion(){
