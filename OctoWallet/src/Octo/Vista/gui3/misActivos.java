@@ -30,6 +30,7 @@ import java.awt.event.ActionEvent;
 import Octo.Controlador.Utilitario.*;
 import Octo.Controlador.*;
 import Octo.Controlador.Vistas.ControllerMisActivos;
+import Octo.Exceptions.OctoElemNotFoundException;
 import Octo.Modelo.Entidad.Activo;
 import Octo.Modelo.Entidad.Moneda;
 
@@ -199,8 +200,12 @@ public class misActivos extends JPanel {
 		this.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
-				controller.cargarDatosEnTabla(model,lblNewLabel_3);
-			}
+                try {
+                    controller.cargarDatosEnTabla(model,lblNewLabel_3);
+                } catch (OctoElemNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
 		});
 
 		btnNewButton_1.addActionListener(controller.getGenerarDatos(model,lblNewLabel_3));

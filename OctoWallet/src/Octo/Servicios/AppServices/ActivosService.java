@@ -1,6 +1,7 @@
 package Octo.Servicios.AppServices;
 
 import Octo.Controlador.Sesion;
+import Octo.Exceptions.OctoElemNotFoundException;
 import Octo.Modelo.Entidad.Activo;
 import Octo.Modelo.Entidad.Moneda;
 import Octo.Modelo.JDBC.FactoryDao;
@@ -30,8 +31,12 @@ public class ActivosService {
     public static void darStock(List<Moneda>cacheMonedas) {
         cacheMonedas.forEach(cacheMoneda ->
         {   cacheMoneda.setStock(darCantidad());
-            FactoryDao.getMoneda().
-                    actualizar(cacheMoneda);
+            try {
+                FactoryDao.getMoneda().
+                        actualizar(cacheMoneda);
+            } catch (OctoElemNotFoundException e) {
+                System.out.println(" no se pudo actualizar el stock de la moneda actual!");
+            }
         });
     }
     public static double darCantidad() { //falta ver realmente donde va a ir esto

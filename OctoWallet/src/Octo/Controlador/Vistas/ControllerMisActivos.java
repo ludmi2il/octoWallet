@@ -147,8 +147,12 @@ public class ControllerMisActivos {
            activos = FactoryDao.getCrypto().listarPorId(Sesion.getInstance().getUser().getUserId());
            activos.addAll(FactoryDao.getFiat().listarPorId(Sesion.getInstance().getUser().getUserId()));
            DecimalFormat formato = new DecimalFormat("#,##0.00");
-           label.setText("ARS $" + formato.format(obtenerBalance()));
-           table.setRowCount(0);
+           try {
+               label.setText("ARS $" + formato.format(obtenerBalance()));
+           }catch (OctoElemNotFoundException e){
+               System.out.println("no se obtiene el balance");
+           }
+            table.setRowCount(0);
             // Iterar sobre los activos para llenar la tabla
             for (Activo activo : activos) {
                 try {
