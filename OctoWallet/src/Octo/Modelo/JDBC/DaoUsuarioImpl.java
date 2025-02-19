@@ -25,7 +25,7 @@ public class DaoUsuarioImpl implements DaoUsuario{
                 st.executeUpdate(sql);
                 st.close();
             } catch (SQLException e) {
-                throw new OctoDBException("Algo inesperado sucedió con la conexion. Intente más tarde");
+                throw new OctoDBException("Algo inesperado sucedió con la conexion a la base de datos. Intente más tarde");
             }
         }
         return id;
@@ -49,7 +49,7 @@ public class DaoUsuarioImpl implements DaoUsuario{
         return usuario;
     }
     @Override
-    public boolean verificarMail(String mail) throws OctoElemNotFoundException{ // Devuelve true si no existe el mail en la BD, si no false
+    public boolean verificarMail(String mail) { // Devuelve true si no existe el mail en la BD, si no false
         boolean res = false;
         try {
             String str = "SELECT * FROM USUARIO WHERE EMAIL = ?";
@@ -61,20 +61,26 @@ public class DaoUsuarioImpl implements DaoUsuario{
             }
             st.close();
         } catch (SQLException e) {
-            throw new OctoElemNotFoundException(e.getMessage());
+            System.out.println(e.getMessage());
         }
         return res;
     }
     private User convertir(java.sql.ResultSet rs) throws SQLException {
         DaoPersona con = FactoryDao.getPersona();
-        Persona per = con.obtener(rs.getLong("ID_PERSONA"));
-        String email = rs.getString("EMAIL");
-        String contrasena = rs.getString("PASSWORD");
-        boolean aceptaTerminos = rs.getBoolean("ACEPTA_TERMINOS");
-        return new User(per.getNombres(), email, contrasena, per.getApellidos(), aceptaTerminos, rs.getLong("ID"));
+        Persona per = null;
+        try {
+            per = con.obtener(rs.getLong("ID_PERSONA"));
+            String email = rs.getString("EMAIL");
+            String contrasena = rs.getString("PASSWORD");
+            boolean aceptaTerminos = rs.getBoolean("ACEPTA_TERMINOS");
+            return new User(per.getNombres(), email, contrasena, per.getApellidos(), aceptaTerminos, rs.getLong("ID"));
+        } catch (OctoElemNotFoundException e) {
+            throw new RuntimeException("Error al obtener la persona del usuario");
+        }
+
     }
 
-    public User obtenerPorMail(String email, String contrasena) throws OctoElemNotFoundException {
+    public User obtenerPorMail(String email, String contrasena) {
         User usuario = null;
         try {
             String str = "SELECT * FROM USUARIO WHERE EMAIL = ? AND PASSWORD = ?";
@@ -87,7 +93,7 @@ public class DaoUsuarioImpl implements DaoUsuario{
             }
             st.close();
         } catch (SQLException e) {
-            throw new OctoElemNotFoundException(e.getMessage());
+            System.out.println(e.getMessage());
         }
         return usuario;
     }

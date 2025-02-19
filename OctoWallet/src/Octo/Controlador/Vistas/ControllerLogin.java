@@ -2,6 +2,8 @@ package Octo.Controlador.Vistas;
 
 import Octo.Controlador.Control;
 import Octo.Controlador.Sesion;
+import Octo.Exceptions.OctoElemNotFoundException;
+import Octo.Exceptions.OctoLoginException;
 import Octo.Modelo.Entidad.User;
 import Octo.Modelo.JDBC.FactoryDao;
 import Octo.Servicios.AppServices.CacheCryptoService;
@@ -56,22 +58,26 @@ public class ControllerLogin {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if((!textField.getText().isEmpty()) && (!passwordField.getText().isEmpty())){
-                    User a = FactoryDao.getUsuario().obtenerPorMail(textField.getText(), passwordField.getText());
-                    if (a != null) {
-                        Sesion.getInstance().setUser(a);
-                        Sesion.getInstance().setMonedasDisponibles(CacheCryptoService.getInstancia().getCacheMonedas());
-                        //CardLayout cl = (CardLayout)mainPanel.getLayout();
-                        //cl.show(mainPanel, "misActivos");
-                        showPanel("misActivos");
-
-                        JOptionPane.showMessageDialog(null, "Bienvenido/a " + a.getNombres());
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
-                    }
-                } else { JOptionPane.showMessageDialog(null, "Por favor complete los campos"); }
+                try {
+                    login();
+                    //CardLayout cl = (CardLayout)mainPanel.getLayout();
+                    //cl.show(mainPanel, "cotizacion");
+                    showPanel("misActivos");
+                } catch (OctoLoginException ex) {
+                    JOptionPane.showMessageDialog(mainPanel, ex.getMessage());
+                }
             }
         };
+    }
+    public void login() throws OctoLoginException {
+        if((textField.getText().isEmpty()) || (passwordField.getText().isEmpty())){
+            throw new OctoLoginException("Por favor complete los campos");
+        }
+        User a = FactoryDao.getUsuario().obtenerPorMail(textField.getText(), passwordField.getText());
+        if(a == null) {
+            throw new OctoLoginException("Usuario o contraseña incorrectos");
+        }
+
     }
     public void showPanel(String name) {
         CardLayout cardLayout = (CardLayout) mainPanel.getLayout();

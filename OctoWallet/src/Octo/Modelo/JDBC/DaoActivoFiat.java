@@ -130,8 +130,7 @@ public class DaoActivoFiat implements DaoActivo {
             res.close();
             st.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
+            throw new OctoElemNotFoundException("No se encontraron activos para el usuario con ID: " + id);
         }
         return activos;
     }

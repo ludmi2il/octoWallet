@@ -32,7 +32,7 @@ public class CotizacionesRequest {
                 throw new OctoServiceException("Error al obtener los precios. Código de estado: " + respuesta.statusCode());
             }
         } catch (Exception e) {
-            throw new OctoServiceException("Error de conexión con el mercado actual de criptomonedas. Intente nuevamente más tarde.", e);
+            throw new OctoServiceException("Error de conexión con el mercado actual de criptomonedas. Intente nuevamente más tarde.");
         }
     }
 

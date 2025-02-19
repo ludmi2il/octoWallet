@@ -112,8 +112,13 @@ public class DaoActivoCrypto implements DaoActivo {
     }
     private Activo convertir(ResultSet res) throws SQLException {
         Activo activo = new Activo();
+        try{
+            activo.setMoneda(FactoryDao.getMoneda().obtener(res.getLong("ID_MONEDA")));
+        } catch (OctoElemNotFoundException e) {
+            System.out.println("Error al obtener la moneda del activo");
+        }
         activo.setId(res.getLong("ID"));
-        activo.setMoneda(FactoryDao.getMoneda().obtener(res.getLong("ID_MONEDA")));
+
         activo.setSaldo(res.getDouble("CANTIDAD"));
         return activo;
     }

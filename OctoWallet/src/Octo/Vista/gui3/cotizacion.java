@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import Octo.Controlador.Sesion;
 import Octo.Controlador.Vistas.ControllerCotizacion;
+import Octo.Exceptions.OctoElemNotFoundException;
 import Octo.Modelo.Entidad.Moneda;
 import Octo.Modelo.JDBC.FactoryDao;
 
@@ -168,6 +169,8 @@ public class cotizacion extends JPanel {
                 icon = new JLabel(new ImageIcon(new ImageIcon(new URL(FactoryDao.getMoneda().obtenerPorNomenclatura(cripto.getNomenclatura()).getImagen())).getImage().getScaledInstance(32,32, Image.SCALE_SMOOTH)));
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
+            }catch (OctoElemNotFoundException e){
+                System.out.println("Error al cargar la imagen de la moneda: " + e.getMessage());
             }
             JLabel name = new JLabel(cripto.getNombre());
             name.setFont(new Font("Arial", Font.PLAIN, 14));
