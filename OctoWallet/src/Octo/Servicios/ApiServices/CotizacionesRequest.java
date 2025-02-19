@@ -1,5 +1,6 @@
 package Octo.Servicios.ApiServices;
 
+import Octo.Exceptions.OctoServiceException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -12,30 +13,32 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class CotizacionesRequest {
-    private static String URL_API =
+    private static final String URL_API =
             "https://api.coingecko.com/api/v3/simple/price?ids=*&vs_currencies=usd";
-    public  static CompletableFuture<Map<String, Map<String,Double>>> RequestAsync(String ids){
+
+    public static Map<String, Map<String, Double>> RequestSync(String ids) throws OctoServiceException {
         HttpClient cliente = HttpClient.newHttpClient();
-        HttpRequest solicitud = HttpRequest.newBuilder().uri(URI.create(URL_API.replace("*",ids))).GET().build();
-        // completableFuture para hacer solicitud asuncronica
-        CompletableFuture<HttpResponse<String>> respuestaAsync = cliente.sendAsync(solicitud, HttpResponse.BodyHandlers.ofString());
-        // manejo la respuesta cuando se complete
-        return respuestaAsync.thenApply(respuesta -> {
+        HttpRequest solicitud = HttpRequest.newBuilder()
+                .uri(URI.create(URL_API.replace("*", ids)))
+                .GET()
+                .build();
+
+        try {
+            HttpResponse<String> respuesta = cliente.send(solicitud, HttpResponse.BodyHandlers.ofString());
+
             if (respuesta.statusCode() == 200) {
                 return parsearYMostrarPrecios(respuesta.body());
             } else {
-                System.out.println("Error al obtener los precios. Código de estado: " + respuesta.statusCode());
-                return null;
+                throw new OctoServiceException("Error al obtener los precios. Código de estado: " + respuesta.statusCode());
             }
-        }).exceptionally(e -> {
-            System.out.println("Error en la solicitud: " + e.getMessage());
-            return Collections.emptyMap();
-        });
+        } catch (Exception e) {
+            throw new OctoServiceException("Error de conexión con el mercado actual de criptomonedas. Intente nuevamente más tarde.", e);
+        }
     }
-    private static Map<String, Map<String,Double>> parsearYMostrarPrecios(String cuerpoRespuesta) {
+
+    private static Map<String, Map<String, Double>> parsearYMostrarPrecios(String cuerpoRespuesta) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            // creo un map con todos los precios.
             return objectMapper.readValue(cuerpoRespuesta, new TypeReference<Map<String, Map<String, Double>>>() {});
         } catch (Exception e) {
             System.out.println("Error al parsear el JSON: " + e.getMessage());

@@ -1,6 +1,7 @@
 package Octo.Controlador.Vistas;
 
 import Octo.Controlador.Sesion;
+import Octo.Controlador.Utilitario.Actualizador;
 import Octo.Servicios.AppServices.CacheCryptoService;
 import Octo.Servicios.AppServices.DBStatus;
 import Octo.Vista.gui3.cotizacion;
@@ -19,35 +20,22 @@ public class ControllerCotizacion {
         private JPanel ContentPane;
         private CacheCryptoService cachemoneda = CacheCryptoService.getInstancia();
         private vistas views;
-
-        private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        
+        private Actualizador updater;
+        private cotizacion c;
         public ControllerCotizacion(JPanel mainPanel,JPanel ContentPane, vistas views) {
         	
             this.mainPanel = mainPanel;
             this.ContentPane = ContentPane;
             this.views = views;
-            System.out.println(Sesion.getInstance().getMonedasDisponibles());
         }
-    public void iniciarActualizaciones(cotizacion c) {
-        Runnable tareaActualizacion = () -> {
-            cachemoneda.ActualizarCotizaciones();
-            SwingUtilities.invokeLater(() -> {
-                c.actualizarCotizaciones(cachemoneda.getCacheMonedas());
-            });
-        };
-        scheduler.scheduleAtFixedRate(tareaActualizacion, 0, 20, TimeUnit.SECONDS);
-    }
-    public void detenerActualizaciones() {
-        scheduler.shutdown();
-        try {
-            if (!scheduler.awaitTermination(1, TimeUnit.SECONDS)) {
-                scheduler.shutdownNow();
-            }
-        } catch (InterruptedException e) {
-            scheduler.shutdownNow();
-            Thread.currentThread().interrupt();
+        public void addCotizacionView(cotizacion c){
+            this.c= c;
         }
+        public void launchUpdater(){
+            this.updater= new Actualizador(this.cachemoneda, this.c);
+        }
+    public void iniciarActualizaciones() {
+        updater.iniciarActualizaciones();
     }
 
     public ActionListener getCerrarSesion(){
