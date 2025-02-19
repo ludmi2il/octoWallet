@@ -84,7 +84,7 @@ public class ControllerComprita {
                         double total = cantidad / cotizacion;
                         System.out.println("Total a pagar: " + total);
                         DecimalFormat formato = new DecimalFormat("#,##0.00");
-                        label1.setText(formato.format(total) + cripto);
+                        label1.setText(formato.format(total)+  cripto);
                     } else {
                         JOptionPane.showMessageDialog(null, "Error, no se tienen datos de esa moneda.", "Error", JOptionPane.ERROR_MESSAGE);
                     }

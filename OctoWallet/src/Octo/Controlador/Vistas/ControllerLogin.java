@@ -77,6 +77,7 @@ public class ControllerLogin {
         if(a == null) {
             throw new OctoLoginException("Usuario o contraseña incorrectos");
         }
+        Sesion.getInstance().setUser(a);
 
     }
     public void showPanel(String name) {
