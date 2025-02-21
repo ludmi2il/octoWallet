@@ -4,6 +4,7 @@ package Octo.Controlador.Vistas;
 import Octo.Controlador.Sesion;
 import Octo.Controlador.Utilitario.ExportCSV;
 import Octo.Controlador.Utilitario.ExportPDF;
+import Octo.Exceptions.OctoDBException;
 import Octo.Exceptions.OctoElemNotFoundException;
 import Octo.Modelo.Entidad.Activo;
 import Octo.Modelo.Entidad.Moneda;
@@ -44,8 +45,6 @@ public class ControllerMisActivos {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-              // CardLayout cl = (CardLayout) mainPanel.getLayout();
-              // cl.show(mainPanel, "cotizacion");
                 showPanel("cotizacion");
             }
         };
@@ -66,7 +65,6 @@ public class ControllerMisActivos {
         return new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ExportPDF.printToPDF(table);
-                JOptionPane.showMessageDialog(null, "Archivo PDF exportado con éxito a la carpeta Descargas.");
             }
         };
     }
@@ -116,66 +114,68 @@ public class ControllerMisActivos {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(activos!=null) {
+                if (activos != null) {
                     activos.clear();
-                    FactoryDao.getCrypto().borrar(Sesion.getInstance().getUser().getUserId());// deberia borrar activos del usuario
-                    FactoryDao.getFiat().borrar(Sesion.getInstance().getUser().getUserId());
-                }
-                List<String> criptosMVP = Arrays.asList("BTC", "ETH","doge");
-                List<Moneda> monedas = new ArrayList<>();
-                try{
-                criptosMVP.stream().forEach(cripto -> {
                     try {
-                        monedas.add(FactoryDao.getMoneda().obtenerPorNomenclatura(cripto.toLowerCase()));
-                    } catch (OctoElemNotFoundException ex) {
+                        FactoryDao.getCrypto().borrar(Sesion.getInstance().getUser().getUserId()); // deberia borrar activos del usuario
+                        FactoryDao.getFiat().borrar(Sesion.getInstance().getUser().getUserId());
+                    } catch (OctoDBException ex) {
                         JOptionPane.showMessageDialog(null, ex.getMessage());
                     }
-                });
-                activos = ActivosService.crearActivosDefault(monedas);
-
-                    cargarDatosEnTabla(table,label);
-                } catch (OctoElemNotFoundException ex) {
-                   JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
+                List<String> criptosMVP = Arrays.asList("BTC", "ETH", "doge");
+                List<Moneda> monedas = new ArrayList<>();
+                try {
+                    criptosMVP.stream().forEach(cripto -> {
+                        try {
+                            monedas.add(FactoryDao.getMoneda().obtenerPorNomenclatura(cripto.toLowerCase()));
+                        } catch (OctoElemNotFoundException ex) {
+                            JOptionPane.showMessageDialog(null, ex.getMessage());
+                        }
+                    });
+                    activos = ActivosService.crearActivosDefault(monedas);
+                    cargarDatosEnTabla(table, label);
+                } catch (OctoElemNotFoundException | OctoDBException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
                 }
                 ActivosService.darStock(monedas);
                 JOptionPane.showMessageDialog(null, "datos de prueba generados correctamente.");
-
             }
         };
     }
-        public void cargarDatosEnTabla(DefaultTableModel table, JLabel label) throws OctoElemNotFoundException {
-           activos = FactoryDao.getCrypto().listarPorId(Sesion.getInstance().getUser().getUserId());
-           activos.addAll(FactoryDao.getFiat().listarPorId(Sesion.getInstance().getUser().getUserId()));
-           DecimalFormat formato = new DecimalFormat("#,##0.00");
-           try {
-               label.setText("ARS $" + formato.format(obtenerBalance()));
-           }catch (OctoElemNotFoundException e){
-               System.out.println("no se obtiene el balance");
-           }
+    public void cargarDatosEnTabla(DefaultTableModel table, JLabel label) throws OctoElemNotFoundException, OctoDBException {
+        try {
+            activos = FactoryDao.getCrypto().listarPorId(Sesion.getInstance().getUser().getUserId());
+            activos.addAll(FactoryDao.getFiat().listarPorId(Sesion.getInstance().getUser().getUserId()));
+            DecimalFormat formato = new DecimalFormat("#,##0.00");
+            label.setText("ARS $" + formato.format(obtenerBalance()));
             table.setRowCount(0);
             // Iterar sobre los activos para llenar la tabla
             for (Activo activo : activos) {
                 try {
                     // Determinar el icono basado en el tipo de moneda
                     ImageIcon icono;
-                        icono = new ImageIcon(
-                                new ImageIcon(new URL(activo.getMoneda().getImagen()))
-                                        .getImage()
-                                        .getScaledInstance(32, 32, Image.SCALE_SMOOTH)
-                        );
+                    icono = new ImageIcon(
+                            new ImageIcon(new URL(activo.getMoneda().getImagen()))
+                                    .getImage()
+                                    .getScaledInstance(32, 32, Image.SCALE_SMOOTH)
+                    );
 
                     // Agregar una nueva fila a la tabla con los datos del activo
-                    table.addRow(new Object[] {
+                    table.addRow(new Object[]{
                             icono,
                             activo.getMoneda().getNombre(),
                             formato.format(activo.getSaldo())
                     });
                 } catch (MalformedURLException e) {
                     // Manejo de la excepción en caso de URL mal formada
-                    throw new RuntimeException("Error al cargar la imagen de la moneda: " + e.getMessage(), e);
+                    throw new OctoElemNotFoundException("Error al cargar la imagen de la moneda: " + e.getMessage());
                 }
             }
-        };
+        } catch (OctoElemNotFoundException e) {
+            throw e;
+        }
+    }
 
     public void showPanel(String name) {
         CardLayout cardLayout = (CardLayout) mainPanel.getLayout();

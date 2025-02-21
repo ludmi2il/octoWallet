@@ -65,7 +65,7 @@ public class DaoUsuarioImpl implements DaoUsuario{
         }
         return res;
     }
-    private User convertir(java.sql.ResultSet rs) throws SQLException {
+    private User convertir(java.sql.ResultSet rs) throws OctoElemNotFoundException{
         DaoPersona con = FactoryDao.getPersona();
         Persona per = null;
         try {
@@ -74,8 +74,8 @@ public class DaoUsuarioImpl implements DaoUsuario{
             String contrasena = rs.getString("PASSWORD");
             boolean aceptaTerminos = rs.getBoolean("ACEPTA_TERMINOS");
             return new User(per.getNombres(), email, contrasena, per.getApellidos(), aceptaTerminos, rs.getLong("ID"));
-        } catch (OctoElemNotFoundException e) {
-            throw new RuntimeException("Error al obtener la persona del usuario");
+        } catch (SQLException e) {
+            throw new OctoElemNotFoundException("Error al obtener la persona del usuario");
         }
 
     }
@@ -93,6 +93,8 @@ public class DaoUsuarioImpl implements DaoUsuario{
             }
             st.close();
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (OctoElemNotFoundException e) {
             System.out.println(e.getMessage());
         }
         return usuario;

@@ -22,12 +22,12 @@ import javax.swing.JPasswordField;
 public class registro extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JTextField txtContra;
 	private JTextField textField_2;
 	private JTextField textField_3;
 	private JTextField textField_4;
     private JPanel mainPanel;
     private JPasswordField passCR1;
+    private JPasswordField passCR2;
 	/**
 	 * Create the panel.
 	 */
@@ -43,10 +43,6 @@ public class registro extends JPanel {
 		
 		JLabel contra1 = new JLabel("Contraseña:\r\n");
 		contra1.setFont(new Font("Tahoma", Font.BOLD, 12));
-		
-		txtContra = new JTextField();
-		txtContra.setColumns(10);
-		controller.setPasswordField(txtContra);
 
 		JLabel lblNewLabel_3 = new JLabel("E-Mail:\r\n");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -91,6 +87,9 @@ public class registro extends JPanel {
 		
 		passCR1 = new JPasswordField();
         controller.setPassworldFieldR(passCR1);
+		
+		passCR2 = new JPasswordField();
+        controller.setPasswordField(passCR2);
         
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
@@ -98,9 +97,9 @@ public class registro extends JPanel {
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 123, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(197, Short.MAX_VALUE))
+					.addContainerGap(317, Short.MAX_VALUE))
 				.addGroup(groupLayout.createSequentialGroup()
-					.addComponent(separator, GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
+					.addComponent(separator, GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
 					.addGap(1))
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(27)
@@ -124,12 +123,12 @@ public class registro extends JPanel {
 									.addComponent(contra1)))))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(txtContra)
+						.addComponent(passCR2)
 						.addComponent(passCR1)
 						.addComponent(textField_3)
 						.addComponent(textField_4)
 						.addComponent(textField_2))
-					.addContainerGap(232, Short.MAX_VALUE))
+					.addContainerGap(223, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -141,7 +140,7 @@ public class registro extends JPanel {
 					.addGap(33)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(contra1)
-						.addComponent(txtContra, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(passCR2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(19)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(contraR1)
@@ -149,7 +148,7 @@ public class registro extends JPanel {
 					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel_3)
-						.addComponent(textField_2))
+						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(19)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel_4)

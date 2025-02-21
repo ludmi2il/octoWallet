@@ -58,7 +58,7 @@ public class DaoActivoFiat implements DaoActivo {
         return res;
     }
     @Override
-    public Activo obtenerporIdyMoneda(long id, long idMoneda) {
+    public Activo obtenerporIdyMoneda(long id, long idMoneda) throws OctoElemNotFoundException {
         Activo activo = null;
         try {
             String str = "SELECT * FROM ACTIVO_FIAT WHERE ID_USUARIO = ? AND ID_MONEDA = ?";
@@ -68,20 +68,25 @@ public class DaoActivoFiat implements DaoActivo {
             ResultSet res = st.executeQuery();
             if (res.next()) {
                 activo = convertir(res);
+            } else {
+                throw new OctoElemNotFoundException("Activo no encontrado con ID de usuario: " + id + " y ID de moneda: " + idMoneda);
             }
+            res.close();
+            st.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new OctoElemNotFoundException("Error al obtener el activo con ID de usuario: " + id + " y ID de moneda: " + idMoneda);
         }
         return activo;
     }
 
-    public void borrar(long id) {
+
+    public void borrar(long id) throws OctoDBException {
         try {
             String str = "DELETE FROM ACTIVO_FIAT WHERE ID_USUARIO = ?";
             PreparedStatement st = Conexion.getConexion().prepareStatement(str);
             st.setLong(1, id);
 
-            int filasAfectadas = st.executeUpdate(); // Ejecutar DELETE correctamente
+            int filasAfectadas = st.executeUpdate();
 
             if (filasAfectadas == 0) {
                 System.out.println("No se encontró el activo para el usuario con ID: " + id);
@@ -91,10 +96,10 @@ public class DaoActivoFiat implements DaoActivo {
 
             st.close();
         } catch (SQLException e) {
-            throw new RuntimeException("Error al borrar activo: " + e.getMessage(), e);
+            throw new OctoDBException("Error al borrar el activo! intente nuevamente.");
         }
     }
-    public Activo obtener(String nomenclatura) {
+    public Activo obtener(String nomenclatura) throws OctoElemNotFoundException {
         Activo activo = null;
         try {
             String str = "SELECT * FROM ACTIVO_FIAT WHERE NOMENCLATURA = ?";
@@ -103,17 +108,26 @@ public class DaoActivoFiat implements DaoActivo {
             ResultSet res = st.executeQuery();
             if (res.next()) {
                 activo = convertir(res);
+            } else {
+                throw new OctoElemNotFoundException("Activo no encontrado con nomenclatura: " + nomenclatura);
             }
+            res.close();
+            st.close();
         } catch (SQLException e) {
-            throw new OctoElemNotFoundException("error! no se encontró el activo con nomenclatura: " + nomenclatura);
+            throw new OctoElemNotFoundException("Error al obtener el activo con nomenclatura: " + nomenclatura);
         }
         return activo;
     }
 
+
     private Activo convertir(ResultSet res) throws SQLException {
         Activo activo = new Activo();
         activo.setId(res.getLong("ID"));
-        activo.setMoneda(FactoryDao.getMoneda().obtener(res.getLong("ID_MONEDA")));
+        try {
+            activo.setMoneda(FactoryDao.getMoneda().obtener(res.getLong("ID_MONEDA")));
+        } catch (OctoElemNotFoundException e) {
+            throw new SQLException("Error al convertir el activo: moneda no encontrada.", e);
+        }
         activo.setSaldo(res.getDouble("CANTIDAD"));
         return activo;
     }

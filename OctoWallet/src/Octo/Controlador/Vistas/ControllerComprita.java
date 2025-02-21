@@ -1,6 +1,7 @@
 package Octo.Controlador.Vistas;
 
 import Octo.Controlador.Sesion;
+import Octo.Exceptions.OctoDBException;
 import Octo.Servicios.AppServices.FiatConsumo;
 import Octo.Exceptions.OctoElemNotFoundException;
 import Octo.Modelo.Entidad.Moneda;
@@ -55,11 +56,15 @@ public class ControllerComprita {
                 assert fiat != null;
                 long fiatId = FiatConsumo.getFiatId(fiat);
 
-                FactoryDao.getTransaccion().comprarCriptoMonedas(criptoId,fiatId ,cantidad);
-                JOptionPane.showMessageDialog(mainPanel, "Compra realizada con éxito.");
-                //CardLayout cl = (CardLayout)mainPanel.getLayout();
-                //cl.show(mainPanel, "cotizacion");
-                showPanel("cotizacion");
+                try {
+                    FactoryDao.getTransaccion().comprarCriptoMonedas(criptoId, fiatId, cantidad);
+                    JOptionPane.showMessageDialog(mainPanel, "Compra realizada con éxito.");
+                    showPanel("cotizacion");
+                } catch (OctoElemNotFoundException o) {
+                    JOptionPane.showMessageDialog(mainPanel, "La compra no se pudo realizar. No tienes saldo suficiente");
+                } catch (OctoDBException d) {
+                    JOptionPane.showMessageDialog(mainPanel, "Error en la base de datos. Intente nuevamente más tarde.");
+                }
             }
         };
     }
@@ -82,9 +87,10 @@ public class ControllerComprita {
                         Moneda moneda = monedaEncontrada.get();
                         double cotizacion = moneda.getCotizacion();
                         double total = cantidad / cotizacion;
+                        String nomenclatura = moneda.getNomenclatura();
                         System.out.println("Total a pagar: " + total);
                         DecimalFormat formato = new DecimalFormat("#,##0.00");
-                        label1.setText(formato.format(total)+  cripto);
+                        label1.setText(formato.format(total)+ " " + nomenclatura );
                     } else {
                         JOptionPane.showMessageDialog(null, "Error, no se tienen datos de esa moneda.", "Error", JOptionPane.ERROR_MESSAGE);
                     }

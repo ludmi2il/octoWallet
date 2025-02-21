@@ -48,8 +48,6 @@ public class ControllerLogin {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               // CardLayout cl = (CardLayout)mainPanel.getLayout();
-               // cl.show(mainPanel, "registro");
                 showPanel("registro");
             }
         };
@@ -60,8 +58,6 @@ public class ControllerLogin {
             public void actionPerformed(ActionEvent e) {
                 try {
                     login();
-                    //CardLayout cl = (CardLayout)mainPanel.getLayout();
-                    //cl.show(mainPanel, "cotizacion");
                     showPanel("misActivos");
                 } catch (OctoLoginException ex) {
                     JOptionPane.showMessageDialog(mainPanel, ex.getMessage());
@@ -78,7 +74,6 @@ public class ControllerLogin {
             throw new OctoLoginException("Usuario o contraseña incorrectos");
         }
         Sesion.getInstance().setUser(a);
-
     }
     public void showPanel(String name) {
         CardLayout cardLayout = (CardLayout) mainPanel.getLayout();

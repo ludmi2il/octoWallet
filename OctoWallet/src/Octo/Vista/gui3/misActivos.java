@@ -30,6 +30,7 @@ import java.awt.event.ActionEvent;
 import Octo.Controlador.Utilitario.*;
 import Octo.Controlador.*;
 import Octo.Controlador.Vistas.ControllerMisActivos;
+import Octo.Exceptions.OctoDBException;
 import Octo.Exceptions.OctoElemNotFoundException;
 import Octo.Modelo.Entidad.Activo;
 import Octo.Modelo.Entidad.Moneda;
@@ -120,24 +121,27 @@ public class misActivos extends JPanel {
 					.addContainerGap(254, Short.MAX_VALUE)
 					.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
-				.addGroup(groupLayout.createSequentialGroup()
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
 					.addGap(48)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblNewLabel_3, GroupLayout.PREFERRED_SIZE, 172, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-							.addComponent(scrollPane, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 351, GroupLayout.PREFERRED_SIZE)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-									.addComponent(btnNewButton_2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(btnNewButton_3, GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE))
-								.addPreferredGap(ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-									.addComponent(btnNewButton_4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(btnNewButton_PDF, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-					.addGap(61))
+							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 351, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap())
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(lblNewLabel_3, GroupLayout.PREFERRED_SIZE, 172, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(btnNewButton_3, GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnNewButton_4, GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE))
+								.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+									.addComponent(btnNewButton_2)
+									.addPreferredGap(ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+									.addComponent(btnNewButton_PDF)))
+							.addGap(61))))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -160,17 +164,17 @@ public class misActivos extends JPanel {
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel_2)
 						.addComponent(lblNewLabel_3))
-					.addGap(30)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE)
-					.addGap(30)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 285, GroupLayout.PREFERRED_SIZE)
+					.addGap(11)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnNewButton_2)
-						.addComponent(btnNewButton_PDF, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnNewButton_PDF, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(btnNewButton_2))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
 						.addComponent(btnNewButton_4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(btnNewButton_3, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(36, Short.MAX_VALUE))
+						.addComponent(btnNewButton_3, GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
+					.addGap(56))
 		);
 
 		DefaultTableModel model = new DefaultTableModel(
@@ -200,12 +204,12 @@ public class misActivos extends JPanel {
 		this.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
-                try {
-                    controller.cargarDatosEnTabla(model,lblNewLabel_3);
-                } catch (OctoElemNotFoundException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
+				try {
+					controller.cargarDatosEnTabla(model, lblNewLabel_3);
+				} catch (OctoElemNotFoundException | OctoDBException ex) {
+					JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
 		});
 
 		btnNewButton_1.addActionListener(controller.getGenerarDatos(model,lblNewLabel_3));

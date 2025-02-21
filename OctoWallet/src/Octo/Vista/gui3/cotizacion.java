@@ -16,7 +16,7 @@ import java.net.URL;
 import java.util.List;
 
 public class cotizacion extends JPanel {
-    
+
     private static final long serialVersionUID = 1L;
     private JPanel mainPanel;
     private JPanel mainPanel1;
@@ -197,13 +197,17 @@ public class cotizacion extends JPanel {
             buttonPanel.add(buyButton);
 
             // Swap solo para BTC y DOGE
-            if(Sesion.getInstance().getUser() != null) {
-                if (FactoryDao.getCrypto().obtenerporIdyMoneda(Sesion.getInstance().getUser().getUserId(), cripto.getIdMoneda()) != null) {
-                    JButton swapButton = new JButton("Swap");
-                    styleButton(swapButton, new Color(255, 87, 34)); // Naranja
-                    swapButton.setActionCommand(cripto.getNomenclatura());
-                    swapButton.addActionListener(control.getSwapActionListener());
-                    buttonPanel.add(swapButton);
+            if (Sesion.getInstance().getUser() != null) {
+                try {
+                    if (FactoryDao.getCrypto().obtenerporIdyMoneda(Sesion.getInstance().getUser().getUserId(), cripto.getIdMoneda()) != null) {
+                        JButton swapButton = new JButton("Swap");
+                        styleButton(swapButton, new Color(255, 87, 34)); // Naranja
+                        swapButton.setActionCommand(cripto.getNomenclatura());
+                        swapButton.addActionListener(control.getSwapActionListener());
+                        buttonPanel.add(swapButton);
+                    }
+                } catch (OctoElemNotFoundException e) {
+                    System.out.println("Error: " + e.getMessage());
                 }
             }
 

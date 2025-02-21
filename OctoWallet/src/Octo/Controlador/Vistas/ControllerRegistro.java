@@ -13,7 +13,7 @@ import Octo.Modelo.JDBC.FactoryDao;
 
 public class ControllerRegistro {
     private JTextField textField;
-    private JTextField passwordField;
+    private JPasswordField passwordField;
     private JPanel mainPanel;
     private JPanel contentPane;
     private JCheckBox chckbxNewCheckBox;
@@ -33,8 +33,6 @@ public class ControllerRegistro {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //CardLayout cl = (CardLayout)mainPanel.getLayout();
-                //cl.show(mainPanel, "login");
                 showPanel("login");
             }
         };
@@ -45,7 +43,7 @@ public class ControllerRegistro {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String email = textField.getText();
-                String password = passwordField.getText();
+                String password = new String(passwordField.getPassword());
                 String passr = new String(passR.getPassword());
                 String nombre = NombreField.getText();
                 String apellido = ApellidoField.getText();
@@ -75,7 +73,7 @@ public class ControllerRegistro {
     public void setNombre(JTextField NtextField) {
         this.NombreField = NtextField;
     }
-    public void setPasswordField(JTextField passwordField) {
+    public void setPasswordField(JPasswordField passwordField) {
         this.passwordField = passwordField;
     }
     public void setChckbxNewCheckBox(JCheckBox chckbxNewCheckBox) {

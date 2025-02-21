@@ -1,6 +1,7 @@
 package Octo.Modelo.JDBC;
 
 import Octo.Controlador.Sesion;
+import Octo.Exceptions.OctoDBException;
 import Octo.Exceptions.OctoElemNotFoundException;
 import Octo.Modelo.DAO.DaoActivo;
 import Octo.Modelo.Entidad.Activo;
@@ -43,7 +44,7 @@ public class DaoActivoCrypto implements DaoActivo {
     }
 
     @Override
-    public Activo obtenerporIdyMoneda(long idUser, long idMoneda){
+    public Activo obtenerporIdyMoneda(long idUser, long idMoneda)throws OctoElemNotFoundException {
         Activo activo = null;
         try {
             String str = "SELECT * FROM ACTIVO_CRIPTO WHERE ID_USUARIO = ? AND ID_MONEDA = ?";
@@ -55,11 +56,11 @@ public class DaoActivoCrypto implements DaoActivo {
                 activo = convertir(res);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new OctoElemNotFoundException("Error al obtener activo: " + e.getMessage());
         }
         return activo;
     }
-    public void borrar(long id) {
+    public void borrar(long id) throws OctoDBException {
         try {
             String str = "DELETE FROM ACTIVO_CRIPTO WHERE ID_USUARIO = ?";
             PreparedStatement st = Conexion.getConexion().prepareStatement(str);
@@ -75,7 +76,7 @@ public class DaoActivoCrypto implements DaoActivo {
 
             st.close();
         } catch (SQLException e) {
-            throw new RuntimeException("Error al borrar activo: " + e.getMessage(), e);
+            throw new OctoDBException("Error al borrar activo: " + e.getMessage());
         }
     }
     @Override
@@ -95,7 +96,7 @@ public class DaoActivoCrypto implements DaoActivo {
         }
         return activos;
     }
-    public int actualizarCantidad(double valor, long idUser, long idMoneda){
+    public int actualizarCantidad(double valor, long idUser, long idMoneda) throws OctoDBException {
         int res = -1;
         try{
             String sql = "UPDATE ACTIVO_CRIPTO SET CANTIDAD = CANTIDAD + ? WHERE ID_USUARIO = ? AND ID_MONEDA = ?";
@@ -106,7 +107,7 @@ public class DaoActivoCrypto implements DaoActivo {
             res = st.executeUpdate();
             st.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new OctoDBException("Error al actualizar cantidad de activo: " + e.getMessage());
         }
         return res;
     }

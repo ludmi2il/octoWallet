@@ -1,6 +1,7 @@
 package Octo.Controlador.Vistas;
 
 import Octo.Controlador.Sesion;
+import Octo.Exceptions.OctoDBException;
 import Octo.Exceptions.OctoElemNotFoundException;
 import Octo.Modelo.JDBC.FactoryDao;
 import Octo.Vista.gui3.vistas;
@@ -65,10 +66,12 @@ public class ControllerIntercambio {
                 long criptoOriginal = Sesion.getInstance().getIdCriptotByNom(criptoACambiar);
                 long criptoEsperada = Sesion.getInstance().getIdCriptotByNom(criptoEsperadaStr);
 
-                FactoryDao.getTransaccion().swap(criptoOriginal, cantidad, criptoEsperada);
-                JOptionPane.showMessageDialog(mainPanel, "Swap realizado con éxito.");
-                //CardLayout cl = (CardLayout)mainPanel.getLayout();
-                //cl.show(mainPanel, "misActivos");
+               try{
+                   FactoryDao.getTransaccion().swap(criptoOriginal, cantidad, criptoEsperada);
+                   JOptionPane.showMessageDialog(mainPanel, "Swap realizado con éxito.");
+               }catch (OctoElemNotFoundException | OctoDBException o) {
+                   JOptionPane.showMessageDialog(null, o.getMessage());
+               }
             }
         };
     }
