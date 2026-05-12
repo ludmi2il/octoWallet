@@ -1,6 +1,7 @@
 package Octo.Modelo.JDBC;
 
 import Octo.Exceptions.OctoDBException;
+import Octo.Exceptions.OctoElemNotFoundException;
 import Octo.Modelo.DAO.DaoPersona;
 import Octo.Modelo.Entidad.Persona;
 import java.sql.SQLException;
@@ -37,9 +38,10 @@ public class DaoPersonaImpl implements DaoPersona {
         }
         return id;
     }
-    public Persona obtener(long id) {
+    public Persona obtener(long id) throws OctoElemNotFoundException {
         Persona persona = null;
         try {
+
             String str = "SELECT * FROM PERSONA WHERE ID = ?";
             java.sql.PreparedStatement st = Conexion.getConexion().prepareStatement(str);
             st.setLong(1,id);
@@ -49,7 +51,7 @@ public class DaoPersonaImpl implements DaoPersona {
             }
             st.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new OctoElemNotFoundException("Error al obtener persona: " + e.getMessage());
         }
         return persona;
     }

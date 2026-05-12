@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import Octo.Controlador.Sesion;
 import Octo.Controlador.Vistas.ControllerCotizacion;
+import Octo.Exceptions.OctoElemNotFoundException;
 import Octo.Modelo.Entidad.Moneda;
 import Octo.Modelo.JDBC.FactoryDao;
 
@@ -15,7 +16,7 @@ import java.net.URL;
 import java.util.List;
 
 public class cotizacion extends JPanel {
-    
+
     private static final long serialVersionUID = 1L;
     private JPanel mainPanel;
     private JPanel mainPanel1;
@@ -125,6 +126,7 @@ public class cotizacion extends JPanel {
         add(bottomPanel, BorderLayout.SOUTH);
         this.mainPanel1= mainPanel1;
         this.control=controller;
+        startSeek();
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
@@ -135,6 +137,7 @@ public class cotizacion extends JPanel {
     }
     public void startSeek(){
         control.addCotizacionView(this);
+        control.launchUpdater();
         control.iniciarActualizaciones();
     }
     public void actualizarCotizaciones(List<Moneda> nuevasCotizaciones) {
@@ -168,6 +171,8 @@ public class cotizacion extends JPanel {
                 icon = new JLabel(new ImageIcon(new ImageIcon(new URL(FactoryDao.getMoneda().obtenerPorNomenclatura(cripto.getNomenclatura()).getImagen())).getImage().getScaledInstance(32,32, Image.SCALE_SMOOTH)));
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
+            }catch (OctoElemNotFoundException e){
+                System.out.println("Error al cargar la imagen de la moneda: " + e.getMessage());
             }
             JLabel name = new JLabel(cripto.getNombre());
             name.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -192,13 +197,17 @@ public class cotizacion extends JPanel {
             buttonPanel.add(buyButton);
 
             // Swap solo para BTC y DOGE
-            if(Sesion.getInstance().getUser() != null) {
-                if (FactoryDao.getCrypto().obtenerporIdyMoneda(Sesion.getInstance().getUser().getUserId(), cripto.getIdMoneda()) != null) {
-                    JButton swapButton = new JButton("Swap");
-                    styleButton(swapButton, new Color(255, 87, 34)); // Naranja
-                    swapButton.setActionCommand(cripto.getNomenclatura());
-                    swapButton.addActionListener(control.getSwapActionListener());
-                    buttonPanel.add(swapButton);
+            if (Sesion.getInstance().getUser() != null) {
+                try {
+                    if (FactoryDao.getCrypto().obtenerporIdyMoneda(Sesion.getInstance().getUser().getUserId(), cripto.getIdMoneda()) != null) {
+                        JButton swapButton = new JButton("Swap");
+                        styleButton(swapButton, new Color(255, 87, 34)); // Naranja
+                        swapButton.setActionCommand(cripto.getNomenclatura());
+                        swapButton.addActionListener(control.getSwapActionListener());
+                        buttonPanel.add(swapButton);
+                    }
+                } catch (OctoElemNotFoundException e) {
+                    System.out.println("Error: " + e.getMessage());
                 }
             }
 

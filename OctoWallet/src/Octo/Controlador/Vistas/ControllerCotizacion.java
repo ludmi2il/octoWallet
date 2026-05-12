@@ -35,6 +35,7 @@ public class ControllerCotizacion {
             this.updater= new Actualizador(this.cachemoneda, this.c);
         }
     public void iniciarActualizaciones() {
+        Sesion.getInstance().setMonedasDisponibles(this.cachemoneda.getCacheMonedas());
         updater.iniciarActualizaciones();
     }
 
@@ -43,8 +44,6 @@ public class ControllerCotizacion {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Sesion.getInstance().cerrarSesion();
-                //CardLayout cl = (CardLayout) mainPanel.getLayout();
-                //cl.show(mainPanel, "login");
                 showPanel("login");
             }
         };
@@ -53,8 +52,6 @@ public class ControllerCotizacion {
         public ActionListener getVolverActionListener() {
             return new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    //CardLayout cl = (CardLayout)mainPanel.getLayout();
-                    //cl.show(mainPanel, "misActivos");
                     showPanel("misActivos");
                 }
             };
@@ -63,8 +60,6 @@ public class ControllerCotizacion {
             return new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     Sesion.getInstance().setCriptoCompra(e.getActionCommand());
-                   // CardLayout cl = (CardLayout)mainPanel.getLayout();
-                    //cl.show(mainPanel, "comprita");
                     showPanel("comprita");
                 }
             };
@@ -73,8 +68,6 @@ public class ControllerCotizacion {
             return new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     Sesion.getInstance().setCriptoCompra(e.getActionCommand());
-                   //CardLayout cl = (CardLayout)mainPanel.getLayout();
-                    //cl.show(mainPanel, "intercambio");
                     showPanel("intercambio");
                 }
             };

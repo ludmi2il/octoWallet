@@ -47,9 +47,9 @@ public class vistas extends JFrame {
 		registro card2 = new registro(mainPanel, conRegistro);
 		card2.setPreferredSize(new Dimension(367, 380));
 		misActivos card3 = new misActivos(mainPanel, conMisActivos);
-		card3.setPreferredSize(new Dimension(480, 502));
+		card3.setPreferredSize(new Dimension(480, 565));
 		operaciones card4 = new operaciones(mainPanel, conOperaciones);
-		card4.setPreferredSize(new Dimension(470, 300));
+		card4.setPreferredSize(new Dimension(470, 320));
 		cotizacion card5 = new cotizacion(mainPanel, conCotizacion);
 		card5.setPreferredSize(new Dimension(470, 470));
 		comprita card6 = new comprita(mainPanel, conComprita);
